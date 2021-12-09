@@ -1,2 +1,3 @@
-# Ripperoni
+# Ripperoni (YT-DLP GUI)
+
 APROX Project: Ripperoni: A simple, elagent, and free way to rip online video and audio to your heart's content...
