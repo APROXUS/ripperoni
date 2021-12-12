@@ -38,7 +38,7 @@
             this.OutputLayout = new System.Windows.Forms.TableLayoutPanel();
             this.Metadata = new System.Windows.Forms.Button();
             this.Support = new System.Windows.Forms.Button();
-            this.Link = new System.Windows.Forms.TextBox();
+            this.Input = new System.Windows.Forms.TextBox();
             this.LocationLabel = new System.Windows.Forms.Label();
             this.Convert = new System.Windows.Forms.Button();
             this.Output = new System.Windows.Forms.TextBox();
@@ -141,7 +141,7 @@
             resources.ApplyResources(this.OutputLayout, "OutputLayout");
             this.OutputLayout.Controls.Add(this.Metadata, 2, 2);
             this.OutputLayout.Controls.Add(this.Support, 1, 2);
-            this.OutputLayout.Controls.Add(this.Link, 0, 2);
+            this.OutputLayout.Controls.Add(this.Input, 0, 2);
             this.OutputLayout.Controls.Add(this.LocationLabel, 0, 1);
             this.OutputLayout.Controls.Add(this.Convert, 2, 3);
             this.OutputLayout.Controls.Add(this.Output, 0, 3);
@@ -168,13 +168,13 @@
             this.Support.UseVisualStyleBackColor = false;
             this.Support.Click += new System.EventHandler(this.Support_Click);
             // 
-            // Link
+            // Input
             // 
-            this.Link.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.Link.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            resources.ApplyResources(this.Link, "Link");
-            this.Link.ForeColor = System.Drawing.SystemColors.Control;
-            this.Link.Name = "Link";
+            this.Input.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.Input.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.Input, "Input");
+            this.Input.ForeColor = System.Drawing.SystemColors.Control;
+            this.Input.Name = "Input";
             // 
             // LocationLabel
             // 
@@ -441,7 +441,7 @@
         private System.Windows.Forms.Button Minimize;
         private System.Windows.Forms.Button Metadata;
         private System.Windows.Forms.Button Support;
-        private System.Windows.Forms.TextBox Link;
+        private System.Windows.Forms.TextBox Input;
         private System.Windows.Forms.ComboBox Resolution;
         private System.Windows.Forms.ComboBox Elements;
         private System.Windows.Forms.TableLayoutPanel SettingsLayout;

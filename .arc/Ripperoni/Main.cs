@@ -13,7 +13,8 @@ using System.Runtime.InteropServices;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
 using YoutubeDLSharp;
-using Newtonsoft.Json;
+using YoutubeDLSharp.Options;
+using YoutubeDLSharp.Metadata;
 
 namespace Ripperoni
 {
@@ -32,7 +33,7 @@ namespace Ripperoni
 
             Format_SelectedIndexChanged(sender, e);
 
-            Link.Text = "https://youtu.be/dQw4w9WgXcQ";
+            Input.Text = "https://youtu.be/dQw4w9WgXcQ";
             Output.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
         }
 
@@ -177,7 +178,7 @@ namespace Ripperoni
                     {
                         Directory.CreateDirectory(Output.Text);
 
-                        // Start Ripping Process
+                        Rip();
                     }
                     catch
                     {
@@ -202,8 +203,38 @@ namespace Ripperoni
 
         private void Metadata_Click(object sender, EventArgs e)
         {
-            Metadata metadata = new Metadata();
+            Metadata metadata = new Metadata(Input.Text);
             metadata.ShowDialog();
+        }
+        #endregion
+
+        #region Ripper
+        private void Rip()
+        {
+            FetchData(Input.Text).Wait();
+        }
+
+        private async Task FetchData(string input)
+        {
+            var youtube = new YoutubeDL();
+            youtube.YoutubeDLPath = "ytdlp.exe";
+            youtube.FFmpegPath = "ffmpeg.exe";
+
+            var res = await youtube.RunVideoDataFetch(input);
+            VideoData video = res.Data;
+            string title = video.Title;
+            string desc = video.Description;
+            string uploader = video.Uploader;
+            long views = video.ViewCount ?? default(long);
+            DateTime date = video.UploadDate ?? default(DateTime);
+            float length = video.Duration ?? default(float);
+
+            //VideoTitle.Text = title;
+            //VideoDesc.Text = desc;
+            //VideoUploader.Text = uploader;
+            //VideoViews.Text = String.Format("{0:n0}", views);
+            //VideoLength.Text = TimeSpan.FromSeconds(length).ToString(@"hh\:mm\:ss");
+            //VideoDate.Text = date.ToString("MM/dd/yyyy");
         }
         #endregion
 

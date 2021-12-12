@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Globalization;
+
+using YoutubeDLSharp;
+using YoutubeDLSharp.Options;
+using YoutubeDLSharp.Metadata;
 
 namespace Ripperoni
 {
@@ -8,9 +13,11 @@ namespace Ripperoni
     {
         private Point mouselocation;
 
-        public Metadata()
+        public Metadata(string input)
         {
             InitializeComponent();
+
+            GetMetadata(input);
         }
 
         protected override CreateParams CreateParams
@@ -22,6 +29,29 @@ namespace Ripperoni
                 cp.ClassStyle |= CS_DROPSHADOW;
                 return cp;
             }
+        }
+
+        private async void GetMetadata(string input)
+        {
+            var youtube = new YoutubeDL();
+            youtube.YoutubeDLPath = "ytdlp.exe";
+            youtube.FFmpegPath = "ffmpeg.exe";
+
+            var res = await youtube.RunVideoDataFetch(input);
+            VideoData video = res.Data;
+            string title = video.Title;
+            string desc = video.Description;
+            string uploader = video.Uploader;
+            long views = video.ViewCount ?? default(long);
+            DateTime date = video.UploadDate ?? default(DateTime);
+            float length = video.Duration ?? default(float);
+
+            VideoTitle.Text = title;
+            VideoDesc.Text = desc;
+            VideoUploader.Text = uploader;
+            VideoViews.Text = String.Format("{0:n0}", views);
+            VideoLength.Text = TimeSpan.FromSeconds(length).ToString(@"hh\:mm\:ss");
+            VideoDate.Text = date.ToString("MM/dd/yyyy");
         }
 
         private void Title_MouseDown(object sender, MouseEventArgs e)
@@ -43,5 +73,6 @@ namespace Ripperoni
         {
             Close();
         }
+
     }
 }

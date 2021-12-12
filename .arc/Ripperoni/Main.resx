@@ -378,31 +378,31 @@
   <data name="&gt;&gt;Support.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="Link.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="Input.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="Link.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="Input.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9.25pt</value>
   </data>
-  <data name="Link.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="Input.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 23</value>
   </data>
-  <data name="Link.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="Input.Size" type="System.Drawing.Size, System.Drawing">
     <value>274, 24</value>
   </data>
-  <data name="Link.TabIndex" type="System.Int32, mscorlib">
+  <data name="Input.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
-  <data name="&gt;&gt;Link.Name" xml:space="preserve">
-    <value>Link</value>
+  <data name="&gt;&gt;Input.Name" xml:space="preserve">
+    <value>Input</value>
   </data>
-  <data name="&gt;&gt;Link.Type" xml:space="preserve">
+  <data name="&gt;&gt;Input.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;Link.Parent" xml:space="preserve">
+  <data name="&gt;&gt;Input.Parent" xml:space="preserve">
     <value>OutputLayout</value>
   </data>
-  <data name="&gt;&gt;Link.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;Input.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
   <data name="LocationLabel.AutoSize" type="System.Boolean, mscorlib">
@@ -568,7 +568,7 @@
     <value>1</value>
   </data>
   <data name="OutputLayout.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="Metadata" Row="2" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="Support" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="Link" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="LocationLabel" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="Convert" Row="3" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="Output" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="OpenFolder" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,280,Absolute,40,Absolute,80" /&gt;&lt;Rows Styles="Absolute,5,Absolute,15,Absolute,30,Absolute,30,Absolute,5" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="Metadata" Row="2" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="Support" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="Input" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="LocationLabel" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="Convert" Row="3" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="Output" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="OpenFolder" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,280,Absolute,40,Absolute,80" /&gt;&lt;Rows Styles="Absolute,5,Absolute,15,Absolute,30,Absolute,30,Absolute,5" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="FooterLayout.ColumnCount" type="System.Int32, mscorlib">
     <value>2</value>
