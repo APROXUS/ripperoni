@@ -157,9 +157,11 @@ namespace Ripperoni
 
         private void OpenFolder_Click(object sender, EventArgs e)
         {
-            CommonOpenFileDialog dialog = new CommonOpenFileDialog();
-            dialog.InitialDirectory = Output.Text;
-            dialog.IsFolderPicker = true;
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog
+            {
+                InitialDirectory = Output.Text,
+                IsFolderPicker = true
+            };
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 Output.Text = dialog.FileName;
@@ -211,23 +213,27 @@ namespace Ripperoni
         #region Ripper
         private void Rip()
         {
-            FetchData(Input.Text).Wait();
+            //FetchData().Wait();
+
+            FetchMedia().Wait();
         }
 
-        private async Task FetchData(string input)
+        private async Task FetchData()
         {
-            var youtube = new YoutubeDL();
-            youtube.YoutubeDLPath = "ytdlp.exe";
-            youtube.FFmpegPath = "ffmpeg.exe";
+            var youtube = new YoutubeDL
+            {
+                YoutubeDLPath = "ytdlp.exe",
+                FFmpegPath = "ffmpeg.exe"
+            };
 
-            var res = await youtube.RunVideoDataFetch(input);
+            var res = await youtube.RunVideoDataFetch(Input.Text);
             VideoData video = res.Data;
             string title = video.Title;
             string desc = video.Description;
             string uploader = video.Uploader;
-            long views = video.ViewCount ?? default(long);
-            DateTime date = video.UploadDate ?? default(DateTime);
-            float length = video.Duration ?? default(float);
+            long views = video.ViewCount ?? default;
+            DateTime date = video.UploadDate ?? default;
+            float length = video.Duration ?? default;
 
             //VideoTitle.Text = title;
             //VideoDesc.Text = desc;
@@ -235,6 +241,38 @@ namespace Ripperoni
             //VideoViews.Text = String.Format("{0:n0}", views);
             //VideoLength.Text = TimeSpan.FromSeconds(length).ToString(@"hh\:mm\:ss");
             //VideoDate.Text = date.ToString("MM/dd/yyyy");
+        }
+
+        private async Task FetchMedia()
+        {
+            var youtube = new YoutubeDL
+            {
+                YoutubeDLPath = "ytdlp.exe",
+                FFmpegPath = "ffmpeg.exe",
+
+                OutputFolder = Output.Text
+            };
+
+            if ((string)Elements.SelectedItem == "Video Only")
+            {
+                await youtube.RunVideoDownload(Input.Text, recodeFormat: VideoRecodeFormat.Mp4);
+            }
+            else if ((string)Elements.SelectedItem == "Audio Only")
+            {
+                await youtube.RunAudioDownload(Input.Text, AudioConversionFormat.Mp3);
+            }
+            else
+            {
+                await youtube.RunVideoDownload(Input.Text, "bestvideo+bestaudio/best", DownloadMergeFormat.Unspecified, VideoRecodeFormat.Mp4);
+            }
+
+            // // a progress handler with a callback that updates a progress bar
+            // var progress = new Progress<DownloadProgress>(p => progressBar.Value = p.Progress);
+            // // a cancellation token source used for cancelling the download
+            // // use `cts.Cancel();` to perform cancellation
+            // var cts = new CancellationTokenSource();
+            // // ...
+            // await ytdl.RunVideoDownload(Input.Text, progress: progress, ct: cts.Token);
         }
         #endregion
 
