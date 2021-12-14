@@ -32,9 +32,25 @@ namespace Ripperoni
             Format.SelectedItem = ".MP4";
 
             Format_SelectedIndexChanged(sender, e);
-
-            Input.Text = "https://youtu.be/dQw4w9WgXcQ";
+        
+            //Input.Text = "https://youtu.be/dQw4w9WgXcQ";
+            Input.Text = "https://www.youtube.com/watch?v=tPEE9ZwTmy0";
             Output.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
+
+
+            Record rec = new Record();
+            rec.ControlTitle = "Never Gonna Give You Up";
+            rec.ControlImage = @"https://i.ytimg.com/vi_webp/tPEE9ZwTmy0/sddefault.webp";
+            rec.LoadImage();            
+            tableLayoutPanel1.Controls.Add(rec);
+            //rec.Refresh();
+
+            Record rec2 = new Record();
+            tableLayoutPanel1.Controls.Add(rec2);
+
+            Record rec3 = new Record();
+            tableLayoutPanel1.Controls.Add(rec3);
+
         }
 
         protected override CreateParams CreateParams
@@ -213,12 +229,12 @@ namespace Ripperoni
         #region Ripper
         private void Rip()
         {
-            //FetchData().Wait();
+            FetchData();
 
-            FetchMedia().Wait();
+            FetchMedia();
         }
 
-        private async Task FetchData()
+        private async void FetchData()
         {
             var youtube = new YoutubeDL
             {
@@ -229,21 +245,18 @@ namespace Ripperoni
             var res = await youtube.RunVideoDataFetch(Input.Text);
             VideoData video = res.Data;
             string title = video.Title;
-            string desc = video.Description;
             string uploader = video.Uploader;
-            long views = video.ViewCount ?? default;
             DateTime date = video.UploadDate ?? default;
             float length = video.Duration ?? default;
+            string thumbnailData = video.Thumbnail;
 
             //VideoTitle.Text = title;
-            //VideoDesc.Text = desc;
             //VideoUploader.Text = uploader;
-            //VideoViews.Text = String.Format("{0:n0}", views);
             //VideoLength.Text = TimeSpan.FromSeconds(length).ToString(@"hh\:mm\:ss");
             //VideoDate.Text = date.ToString("MM/dd/yyyy");
         }
 
-        private async Task FetchMedia()
+        private async void FetchMedia()
         {
             var youtube = new YoutubeDL
             {
