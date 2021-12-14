@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.MainLayout = new System.Windows.Forms.TableLayoutPanel();
             this.HandleLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.Icon = new System.Windows.Forms.PictureBox();
             this.Title = new System.Windows.Forms.Label();
             this.Exit = new System.Windows.Forms.Button();
             this.Minimize = new System.Windows.Forms.Button();
@@ -45,6 +46,7 @@
             this.FooterLayout = new System.Windows.Forms.TableLayoutPanel();
             this.LightLine3 = new System.Windows.Forms.Panel();
             this.LightLine4 = new System.Windows.Forms.Panel();
+            this.FooterIcon = new System.Windows.Forms.PictureBox();
             this.FooterItems = new System.Windows.Forms.TableLayoutPanel();
             this.Repository = new System.Windows.Forms.Label();
             this.Settings = new System.Windows.Forms.Label();
@@ -53,6 +55,7 @@
             this.LinedLayout = new System.Windows.Forms.TableLayoutPanel();
             this.LightLine = new System.Windows.Forms.Panel();
             this.LigntLine2 = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.SettingsLayout = new System.Windows.Forms.TableLayoutPanel();
             this.Elements = new System.Windows.Forms.ComboBox();
             this.Resolution = new System.Windows.Forms.ComboBox();
@@ -60,18 +63,15 @@
             this.FormatLabel = new System.Windows.Forms.Label();
             this.ResolutionLabel = new System.Windows.Forms.Label();
             this.ElementsLabel = new System.Windows.Forms.Label();
-            this.Icon = new System.Windows.Forms.PictureBox();
-            this.FooterIcon = new System.Windows.Forms.PictureBox();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.MainLayout.SuspendLayout();
             this.HandleLayout.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Icon)).BeginInit();
             this.OutputLayout.SuspendLayout();
             this.FooterLayout.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.FooterIcon)).BeginInit();
             this.FooterItems.SuspendLayout();
             this.LinedLayout.SuspendLayout();
             this.SettingsLayout.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Icon)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.FooterIcon)).BeginInit();
             this.SuspendLayout();
             // 
             // MainLayout
@@ -96,6 +96,15 @@
             this.HandleLayout.Name = "HandleLayout";
             this.HandleLayout.MouseDown += new System.Windows.Forms.MouseEventHandler(this.HandleLayout_MouseDown);
             this.HandleLayout.MouseMove += new System.Windows.Forms.MouseEventHandler(this.HandleLayout_MouseMove);
+            // 
+            // Icon
+            // 
+            resources.ApplyResources(this.Icon, "Icon");
+            this.Icon.Image = global::Ripperoni.Properties.Resources.Pepperoni;
+            this.Icon.Name = "Icon";
+            this.Icon.TabStop = false;
+            this.Icon.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Icon_MouseDown);
+            this.Icon.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Icon_MouseMove);
             // 
             // Title
             // 
@@ -224,6 +233,14 @@
             resources.ApplyResources(this.LightLine4, "LightLine4");
             this.LightLine4.Name = "LightLine4";
             // 
+            // FooterIcon
+            // 
+            resources.ApplyResources(this.FooterIcon, "FooterIcon");
+            this.FooterIcon.Image = global::Ripperoni.Properties.Resources.aproxiconorg;
+            this.FooterIcon.Name = "FooterIcon";
+            this.FooterIcon.TabStop = false;
+            this.FooterIcon.Click += new System.EventHandler(this.FooterIcon_Click);
+            // 
             // FooterItems
             // 
             resources.ApplyResources(this.FooterItems, "FooterItems");
@@ -285,6 +302,11 @@
             this.LigntLine2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(61)))), ((int)(((byte)(61)))), ((int)(((byte)(61)))));
             resources.ApplyResources(this.LigntLine2, "LigntLine2");
             this.LigntLine2.Name = "LigntLine2";
+            // 
+            // tableLayoutPanel1
+            // 
+            resources.ApplyResources(this.tableLayoutPanel1, "tableLayoutPanel1");
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             // 
             // SettingsLayout
             // 
@@ -373,28 +395,6 @@
             this.ElementsLabel.ForeColor = System.Drawing.SystemColors.Control;
             this.ElementsLabel.Name = "ElementsLabel";
             // 
-            // Icon
-            // 
-            resources.ApplyResources(this.Icon, "Icon");
-            this.Icon.Image = global::Ripperoni.Properties.Resources.Pepperoni;
-            this.Icon.Name = "Icon";
-            this.Icon.TabStop = false;
-            this.Icon.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Icon_MouseDown);
-            this.Icon.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Icon_MouseMove);
-            // 
-            // FooterIcon
-            // 
-            resources.ApplyResources(this.FooterIcon, "FooterIcon");
-            this.FooterIcon.Image = global::Ripperoni.Properties.Resources.aproxiconorg;
-            this.FooterIcon.Name = "FooterIcon";
-            this.FooterIcon.TabStop = false;
-            this.FooterIcon.Click += new System.EventHandler(this.FooterIcon_Click);
-            // 
-            // tableLayoutPanel1
-            // 
-            resources.ApplyResources(this.tableLayoutPanel1, "tableLayoutPanel1");
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            // 
             // Main
             // 
             resources.ApplyResources(this, "$this");
@@ -407,16 +407,16 @@
             this.MainLayout.ResumeLayout(false);
             this.HandleLayout.ResumeLayout(false);
             this.HandleLayout.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Icon)).EndInit();
             this.OutputLayout.ResumeLayout(false);
             this.OutputLayout.PerformLayout();
             this.FooterLayout.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.FooterIcon)).EndInit();
             this.FooterItems.ResumeLayout(false);
             this.FooterItems.PerformLayout();
             this.LinedLayout.ResumeLayout(false);
             this.SettingsLayout.ResumeLayout(false);
             this.SettingsLayout.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Icon)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.FooterIcon)).EndInit();
             this.ResumeLayout(false);
 
         }

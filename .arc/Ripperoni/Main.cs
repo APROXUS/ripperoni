@@ -250,6 +250,8 @@ namespace Ripperoni
             float length = video.Duration ?? default;
             string thumbnailData = video.Thumbnail;
 
+            FormatData[] asdf = video.Formats;
+
             //VideoTitle.Text = title;
             //VideoUploader.Text = uploader;
             //VideoLength.Text = TimeSpan.FromSeconds(length).ToString(@"hh\:mm\:ss");
