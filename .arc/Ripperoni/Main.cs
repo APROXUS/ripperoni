@@ -138,12 +138,12 @@ namespace Ripperoni
                     Elements.SelectedItem = "Audio/Video";
 
                     Resolution.Items.Clear();
-                    Resolution.Items.Add("4320p");
-                    Resolution.Items.Add("2160p");
-                    Resolution.Items.Add("1440p");
-                    Resolution.Items.Add("1080p");
-                    Resolution.Items.Add("720p");
-                    Resolution.Items.Add("480p");
+                    Resolution.Items.Add("4320p (8K)");
+                    Resolution.Items.Add("2160p (4K)");
+                    Resolution.Items.Add("1440p (QHD)");
+                    Resolution.Items.Add("1080p (FHD)");
+                    Resolution.Items.Add("720p (HD)");
+                    Resolution.Items.Add("480p (SD)");
                     Resolution.Items.Add("360p");
                     Resolution.Items.Add("240p");
                     Resolution.Items.Add("144p");
@@ -155,8 +155,8 @@ namespace Ripperoni
                     Elements.SelectedItem = "Audio Only";
 
                     Resolution.Items.Clear();
-                    Resolution.Items.Add("None");
-                    Resolution.SelectedItem = "None";
+                    Resolution.Items.Add("Highest");
+                    Resolution.SelectedItem = "Highest";
                     break;
             }
 
