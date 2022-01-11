@@ -38,18 +38,22 @@ namespace Ripperoni
             Output.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
 
 
-            Record rec = new Record();
-            rec.ControlTitle = "Never Gonna Give You Up";
-            rec.ControlImage = @"https://i.ytimg.com/vi_webp/tPEE9ZwTmy0/sddefault.webp";
-            rec.LoadImage();            
-            tableLayoutPanel1.Controls.Add(rec);
-            //rec.Refresh();
+            //Record rec = new Record();
+            //rec.ControlTitle = "Never Gonna Give You Up";
+            ////Imazen.WebP.SimpleDecoder decoder = new Imazen.WebP.SimpleDecoder();
+            ////var bytes = File.ReadAllBytes(filename);
+            ////var bitmap = decoder.DecodeFromBytes(bytes, bytes.Length);
+            ////pictureBox1.Image = bitmap;
+            //rec.ControlImage = @"https://i.ytimg.com/vi_webp/tPEE9ZwTmy0/sddefault.webp";
+            //rec.LoadImage();            
+            //tableLayoutPanel1.Controls.Add(rec);
+            ////rec.Refresh();
 
-            Record rec2 = new Record();
-            tableLayoutPanel1.Controls.Add(rec2);
+            //Record rec2 = new Record();
+            //tableLayoutPanel1.Controls.Add(rec2);
 
-            Record rec3 = new Record();
-            tableLayoutPanel1.Controls.Add(rec3);
+            //Record rec3 = new Record();
+            //tableLayoutPanel1.Controls.Add(rec3);
 
         }
 
@@ -147,7 +151,7 @@ namespace Ripperoni
                     Resolution.Items.Add("360p");
                     Resolution.Items.Add("240p");
                     Resolution.Items.Add("144p");
-                    Resolution.SelectedItem = "1080p";
+                    Resolution.SelectedItem = "1080p (FHD)";
                     break;
                 default:
                     Elements.Items.Clear();
@@ -231,7 +235,7 @@ namespace Ripperoni
         {
             FetchData();
 
-            FetchMedia();
+            //FetchMedia();
         }
 
         private async void FetchData()
@@ -248,7 +252,7 @@ namespace Ripperoni
             string uploader = video.Uploader;
             DateTime date = video.UploadDate ?? default;
             float length = video.Duration ?? default;
-            string thumbnailData = video.Thumbnail;
+            string thumbnail = video.Thumbnail;
 
             FormatData[] asdf = video.Formats;
 
@@ -256,6 +260,8 @@ namespace Ripperoni
             //VideoUploader.Text = uploader;
             //VideoLength.Text = TimeSpan.FromSeconds(length).ToString(@"hh\:mm\:ss");
             //VideoDate.Text = date.ToString("MM/dd/yyyy");
+
+            tableLayoutPanel1.Controls.Add(new Record(thumbnail, title, uploader, TimeSpan.FromSeconds(length).ToString(@"hh\:mm\:ss"), date.ToString("MM/dd/yyyy")));
         }
 
         private async void FetchMedia()

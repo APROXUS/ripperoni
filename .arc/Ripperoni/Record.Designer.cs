@@ -30,13 +30,13 @@ namespace Ripperoni
         private void InitializeComponent()
         {
             this.RecordLayout = new System.Windows.Forms.TableLayoutPanel();
-            this.controlQuality = new System.Windows.Forms.Label();
-            this.controlLength = new System.Windows.Forms.Label();
-            this.controlAuthor = new System.Windows.Forms.Label();
-            this.controlThumbnail = new System.Windows.Forms.PictureBox();
-            this.controlTitle = new System.Windows.Forms.Label();
+            this.Date = new System.Windows.Forms.Label();
+            this.Length = new System.Windows.Forms.Label();
+            this.Author = new System.Windows.Forms.Label();
+            this.Thumbnail = new System.Windows.Forms.PictureBox();
+            this.Title = new System.Windows.Forms.Label();
             this.RecordLayout.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.controlThumbnail)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Thumbnail)).BeginInit();
             this.SuspendLayout();
             // 
             // RecordLayout
@@ -47,84 +47,84 @@ namespace Ripperoni
             this.RecordLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.RecordLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.RecordLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.RecordLayout.Controls.Add(this.controlQuality, 3, 1);
-            this.RecordLayout.Controls.Add(this.controlLength, 2, 1);
-            this.RecordLayout.Controls.Add(this.controlAuthor, 1, 1);
-            this.RecordLayout.Controls.Add(this.controlThumbnail, 0, 0);
-            this.RecordLayout.Controls.Add(this.controlTitle, 1, 0);
+            this.RecordLayout.Controls.Add(this.Date, 3, 1);
+            this.RecordLayout.Controls.Add(this.Length, 2, 1);
+            this.RecordLayout.Controls.Add(this.Author, 1, 1);
+            this.RecordLayout.Controls.Add(this.Thumbnail, 0, 0);
+            this.RecordLayout.Controls.Add(this.Title, 1, 0);
             this.RecordLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RecordLayout.Location = new System.Drawing.Point(0, 0);
             this.RecordLayout.Name = "RecordLayout";
             this.RecordLayout.RowCount = 2;
             this.RecordLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.RecordLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.RecordLayout.Size = new System.Drawing.Size(350, 75);
+            this.RecordLayout.Size = new System.Drawing.Size(380, 75);
             this.RecordLayout.TabIndex = 0;
             // 
-            // controlQuality
+            // Date
             // 
-            this.controlQuality.AutoSize = true;
-            this.controlQuality.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.controlQuality.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.controlQuality.ForeColor = System.Drawing.SystemColors.Control;
-            this.controlQuality.Location = new System.Drawing.Point(264, 37);
-            this.controlQuality.Name = "controlQuality";
-            this.controlQuality.Size = new System.Drawing.Size(83, 38);
-            this.controlQuality.TabIndex = 4;
-            this.controlQuality.Text = "Retrieving...";
-            this.controlQuality.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.Date.AutoSize = true;
+            this.Date.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Date.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.Date.ForeColor = System.Drawing.SystemColors.Control;
+            this.Date.Location = new System.Drawing.Point(288, 37);
+            this.Date.Name = "Date";
+            this.Date.Size = new System.Drawing.Size(89, 38);
+            this.Date.TabIndex = 4;
+            this.Date.Text = "Retrieving...";
+            this.Date.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // controlLength
+            // Length
             // 
-            this.controlLength.AutoSize = true;
-            this.controlLength.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.controlLength.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.controlLength.ForeColor = System.Drawing.SystemColors.Control;
-            this.controlLength.Location = new System.Drawing.Point(177, 37);
-            this.controlLength.Name = "controlLength";
-            this.controlLength.Size = new System.Drawing.Size(81, 38);
-            this.controlLength.TabIndex = 3;
-            this.controlLength.Text = "Retrieving...";
-            this.controlLength.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.Length.AutoSize = true;
+            this.Length.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Length.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.Length.ForeColor = System.Drawing.SystemColors.Control;
+            this.Length.Location = new System.Drawing.Point(193, 37);
+            this.Length.Name = "Length";
+            this.Length.Size = new System.Drawing.Size(89, 38);
+            this.Length.TabIndex = 3;
+            this.Length.Text = "Retrieving...";
+            this.Length.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // controlAuthor
+            // Author
             // 
-            this.controlAuthor.AutoSize = true;
-            this.controlAuthor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.controlAuthor.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.controlAuthor.ForeColor = System.Drawing.SystemColors.Control;
-            this.controlAuthor.Location = new System.Drawing.Point(90, 37);
-            this.controlAuthor.Name = "controlAuthor";
-            this.controlAuthor.Size = new System.Drawing.Size(81, 38);
-            this.controlAuthor.TabIndex = 2;
-            this.controlAuthor.Text = "Retrieving...";
-            this.controlAuthor.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.Author.AutoSize = true;
+            this.Author.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Author.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.Author.ForeColor = System.Drawing.SystemColors.Control;
+            this.Author.Location = new System.Drawing.Point(98, 37);
+            this.Author.Name = "Author";
+            this.Author.Size = new System.Drawing.Size(89, 38);
+            this.Author.TabIndex = 2;
+            this.Author.Text = "Retrieving...";
+            this.Author.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // controlThumbnail
+            // Thumbnail
             // 
-            this.controlThumbnail.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.controlThumbnail.Image = global::Ripperoni.Properties.Resources.Pepperoni;
-            this.controlThumbnail.Location = new System.Drawing.Point(3, 3);
-            this.controlThumbnail.Name = "controlThumbnail";
-            this.RecordLayout.SetRowSpan(this.controlThumbnail, 2);
-            this.controlThumbnail.Size = new System.Drawing.Size(81, 69);
-            this.controlThumbnail.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.controlThumbnail.TabIndex = 0;
-            this.controlThumbnail.TabStop = false;
+            this.Thumbnail.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Thumbnail.Image = global::Ripperoni.Properties.Resources.Pepperoni;
+            this.Thumbnail.Location = new System.Drawing.Point(3, 3);
+            this.Thumbnail.Name = "Thumbnail";
+            this.RecordLayout.SetRowSpan(this.Thumbnail, 2);
+            this.Thumbnail.Size = new System.Drawing.Size(89, 69);
+            this.Thumbnail.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.Thumbnail.TabIndex = 0;
+            this.Thumbnail.TabStop = false;
             // 
-            // controlTitle
+            // Title
             // 
-            this.controlTitle.AutoSize = true;
-            this.RecordLayout.SetColumnSpan(this.controlTitle, 3);
-            this.controlTitle.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.controlTitle.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.controlTitle.ForeColor = System.Drawing.SystemColors.Control;
-            this.controlTitle.Location = new System.Drawing.Point(90, 0);
-            this.controlTitle.Name = "controlTitle";
-            this.controlTitle.Size = new System.Drawing.Size(257, 37);
-            this.controlTitle.TabIndex = 1;
-            this.controlTitle.Text = "Retrieving...";
-            this.controlTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.Title.AutoSize = true;
+            this.RecordLayout.SetColumnSpan(this.Title, 3);
+            this.Title.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Title.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.Title.ForeColor = System.Drawing.SystemColors.Control;
+            this.Title.Location = new System.Drawing.Point(98, 0);
+            this.Title.Name = "Title";
+            this.Title.Size = new System.Drawing.Size(279, 37);
+            this.Title.TabIndex = 1;
+            this.Title.Text = "Retrieving...";
+            this.Title.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // Record
             // 
@@ -132,10 +132,10 @@ namespace Ripperoni
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.RecordLayout);
             this.Name = "Record";
-            this.Size = new System.Drawing.Size(350, 75);
+            this.Size = new System.Drawing.Size(380, 75);
             this.RecordLayout.ResumeLayout(false);
             this.RecordLayout.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.controlThumbnail)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Thumbnail)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -143,10 +143,10 @@ namespace Ripperoni
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel RecordLayout;
-        private System.Windows.Forms.Label controlQuality;
-        private System.Windows.Forms.Label controlLength;
-        private System.Windows.Forms.Label controlAuthor;
-        private System.Windows.Forms.PictureBox controlThumbnail;
-        private System.Windows.Forms.Label controlTitle;
+        private System.Windows.Forms.Label Date;
+        private System.Windows.Forms.Label Length;
+        private System.Windows.Forms.Label Author;
+        private System.Windows.Forms.PictureBox Thumbnail;
+        private System.Windows.Forms.Label Title;
     }
 }
