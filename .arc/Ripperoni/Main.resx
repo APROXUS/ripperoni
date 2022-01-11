@@ -948,38 +948,41 @@
   <data name="&gt;&gt;LigntLine2.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="tableLayoutPanel1.ColumnCount" type="System.Int32, mscorlib">
+  <data name="Records.AutoScroll" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="Records.ColumnCount" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
-  <data name="tableLayoutPanel1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="Records.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="tableLayoutPanel1.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="Records.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 4</value>
   </data>
-  <data name="tableLayoutPanel1.RowCount" type="System.Int32, mscorlib">
+  <data name="Records.RowCount" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
-  <data name="tableLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="Records.Size" type="System.Drawing.Size, System.Drawing">
     <value>394, 467</value>
   </data>
-  <data name="tableLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
+  <data name="Records.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <data name="&gt;&gt;tableLayoutPanel1.Name" xml:space="preserve">
-    <value>tableLayoutPanel1</value>
+  <data name="&gt;&gt;Records.Name" xml:space="preserve">
+    <value>Records</value>
   </data>
-  <data name="&gt;&gt;tableLayoutPanel1.Type" xml:space="preserve">
+  <data name="&gt;&gt;Records.Type" xml:space="preserve">
     <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tableLayoutPanel1.Parent" xml:space="preserve">
+  <data name="&gt;&gt;Records.Parent" xml:space="preserve">
     <value>LinedLayout</value>
   </data>
-  <data name="&gt;&gt;tableLayoutPanel1.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;Records.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="tableLayoutPanel1.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls /&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Percent,100,Absolute,20,Absolute,20,Absolute,20,Absolute,20,Absolute,20,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  <data name="Records.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls /&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,80" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="LinedLayout.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 80</value>
@@ -1009,7 +1012,7 @@
     <value>3</value>
   </data>
   <data name="LinedLayout.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="LightLine" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="LigntLine2" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanel1" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,1,Absolute,473,Absolute,1" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="LightLine" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="LigntLine2" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="Records" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,1,Absolute,473,Absolute,1" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="SettingsLayout.ColumnCount" type="System.Int32, mscorlib">
     <value>3</value>

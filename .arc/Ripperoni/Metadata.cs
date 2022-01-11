@@ -33,18 +33,20 @@ namespace Ripperoni
 
         private async void GetMetadata(string input)
         {
-            var youtube = new YoutubeDL();
-            youtube.YoutubeDLPath = "ytdlp.exe";
-            youtube.FFmpegPath = "ffmpeg.exe";
+            YoutubeDL youtube = new YoutubeDL
+            {
+                YoutubeDLPath = "ytdlp.exe",
+                FFmpegPath = "ffmpeg.exe"
+            };
 
             var res = await youtube.RunVideoDataFetch(input);
             VideoData video = res.Data;
             string title = video.Title;
             string desc = video.Description;
             string uploader = video.Uploader;
-            long views = video.ViewCount ?? default(long);
-            DateTime date = video.UploadDate ?? default(DateTime);
-            float length = video.Duration ?? default(float);
+            long views = video.ViewCount ?? default;
+            DateTime date = video.UploadDate ?? default;
+            float length = video.Duration ?? default;
 
             VideoTitle.Text = title;
             VideoDesc.Text = desc;

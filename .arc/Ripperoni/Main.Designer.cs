@@ -55,7 +55,7 @@
             this.LinedLayout = new System.Windows.Forms.TableLayoutPanel();
             this.LightLine = new System.Windows.Forms.Panel();
             this.LigntLine2 = new System.Windows.Forms.Panel();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.Records = new System.Windows.Forms.TableLayoutPanel();
             this.SettingsLayout = new System.Windows.Forms.TableLayoutPanel();
             this.Elements = new System.Windows.Forms.ComboBox();
             this.Resolution = new System.Windows.Forms.ComboBox();
@@ -288,7 +288,7 @@
             resources.ApplyResources(this.LinedLayout, "LinedLayout");
             this.LinedLayout.Controls.Add(this.LightLine, 0, 0);
             this.LinedLayout.Controls.Add(this.LigntLine2, 0, 2);
-            this.LinedLayout.Controls.Add(this.tableLayoutPanel1, 0, 1);
+            this.LinedLayout.Controls.Add(this.Records, 0, 1);
             this.LinedLayout.Name = "LinedLayout";
             // 
             // LightLine
@@ -303,10 +303,10 @@
             resources.ApplyResources(this.LigntLine2, "LigntLine2");
             this.LigntLine2.Name = "LigntLine2";
             // 
-            // tableLayoutPanel1
+            // Records
             // 
-            resources.ApplyResources(this.tableLayoutPanel1, "tableLayoutPanel1");
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            resources.ApplyResources(this.Records, "Records");
+            this.Records.Name = "Records";
             // 
             // SettingsLayout
             // 
@@ -456,7 +456,7 @@
         private System.Windows.Forms.Label FormatLabel;
         private System.Windows.Forms.Label ResolutionLabel;
         private System.Windows.Forms.Label ElementsLabel;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel Records;
     }
 }
 

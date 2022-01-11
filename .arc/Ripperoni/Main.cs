@@ -37,7 +37,6 @@ namespace Ripperoni
             Input.Text = "https://www.youtube.com/watch?v=tPEE9ZwTmy0";
             Output.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
 
-
             //Record rec = new Record();
             //rec.ControlTitle = "Never Gonna Give You Up";
             ////Imazen.WebP.SimpleDecoder decoder = new Imazen.WebP.SimpleDecoder();
@@ -231,14 +230,7 @@ namespace Ripperoni
         #endregion
 
         #region Ripper
-        private void Rip()
-        {
-            FetchData();
-
-            //FetchMedia();
-        }
-
-        private async void FetchData()
+        private async void Rip()
         {
             var youtube = new YoutubeDL
             {
@@ -253,15 +245,35 @@ namespace Ripperoni
             DateTime date = video.UploadDate ?? default;
             float length = video.Duration ?? default;
             string thumbnail = video.Thumbnail;
-
-            FormatData[] asdf = video.Formats;
+            //FormatData[] videos = video.Formats;
 
             //VideoTitle.Text = title;
             //VideoUploader.Text = uploader;
             //VideoLength.Text = TimeSpan.FromSeconds(length).ToString(@"hh\:mm\:ss");
             //VideoDate.Text = date.ToString("MM/dd/yyyy");
 
-            tableLayoutPanel1.Controls.Add(new Record(thumbnail, title, uploader, TimeSpan.FromSeconds(length).ToString(@"hh\:mm\:ss"), date.ToString("MM/dd/yyyy")));
+            Records.HorizontalScroll.Visible = false;
+            Records.AutoScroll = true;
+            Records.ResumeLayout();
+
+            Records.RowCount = Records.RowCount++;
+            Records.RowStyles.Add(new RowStyle(SizeType.Absolute, 80F));
+            Records.Controls.Add(
+                new Record(
+                    thumbnail, 
+                    title, 
+                    uploader, 
+                    TimeSpan.FromSeconds(length).ToString(@"hh\:mm\:ss"), 
+                    date.ToString("MM/dd/yyyy"),
+                    (string)Format.SelectedItem,
+                    (string)Resolution.SelectedItem, 
+                    (string)Elements.SelectedItem, 
+                    Input.Text, 
+                    Output.Text
+                    )
+                );
+
+            //FetchMedia();
         }
 
         private async void FetchMedia()
