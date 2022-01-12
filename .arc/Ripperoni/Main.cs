@@ -253,11 +253,12 @@ namespace Ripperoni
             //VideoDate.Text = date.ToString("MM/dd/yyyy");
 
             Records.HorizontalScroll.Visible = false;
+            Records.VerticalScroll.Visible = true;
             Records.AutoScroll = true;
             Records.ResumeLayout();
 
-            Records.RowCount = Records.RowCount++;
-            Records.RowStyles.Add(new RowStyle(SizeType.Absolute, 80F));
+            //Records.RowCount = Records.RowCount++;
+            //Records.RowStyles.Add(new RowStyle(SizeType.Absolute, 80F));
             Records.Controls.Add(
                 new Record(
                     thumbnail, 

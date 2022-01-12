@@ -951,17 +951,14 @@
   <data name="Records.AutoScroll" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="Records.ColumnCount" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
   <data name="Records.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
+  <data name="Records.FlowDirection" type="System.Windows.Forms.FlowDirection, System.Windows.Forms">
+    <value>TopDown</value>
+  </data>
   <data name="Records.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 4</value>
-  </data>
-  <data name="Records.RowCount" type="System.Int32, mscorlib">
-    <value>1</value>
   </data>
   <data name="Records.Size" type="System.Drawing.Size, System.Drawing">
     <value>394, 467</value>
@@ -969,20 +966,20 @@
   <data name="Records.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
+  <data name="Records.WrapContents" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="&gt;&gt;Records.Name" xml:space="preserve">
     <value>Records</value>
   </data>
   <data name="&gt;&gt;Records.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.FlowLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;Records.Parent" xml:space="preserve">
     <value>LinedLayout</value>
   </data>
   <data name="&gt;&gt;Records.ZOrder" xml:space="preserve">
     <value>2</value>
-  </data>
-  <data name="Records.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls /&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,80" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="LinedLayout.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 80</value>
