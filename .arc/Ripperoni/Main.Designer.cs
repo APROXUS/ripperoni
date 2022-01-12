@@ -55,6 +55,7 @@
             this.LinedLayout = new System.Windows.Forms.TableLayoutPanel();
             this.LightLine = new System.Windows.Forms.Panel();
             this.LigntLine2 = new System.Windows.Forms.Panel();
+            this.Records = new System.Windows.Forms.FlowLayoutPanel();
             this.SettingsLayout = new System.Windows.Forms.TableLayoutPanel();
             this.Elements = new System.Windows.Forms.ComboBox();
             this.Resolution = new System.Windows.Forms.ComboBox();
@@ -62,7 +63,6 @@
             this.FormatLabel = new System.Windows.Forms.Label();
             this.ResolutionLabel = new System.Windows.Forms.Label();
             this.ElementsLabel = new System.Windows.Forms.Label();
-            this.Records = new System.Windows.Forms.FlowLayoutPanel();
             this.MainLayout.SuspendLayout();
             this.HandleLayout.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Icon)).BeginInit();
@@ -303,6 +303,11 @@
             resources.ApplyResources(this.LigntLine2, "LigntLine2");
             this.LigntLine2.Name = "LigntLine2";
             // 
+            // Records
+            // 
+            resources.ApplyResources(this.Records, "Records");
+            this.Records.Name = "Records";
+            // 
             // SettingsLayout
             // 
             resources.ApplyResources(this.SettingsLayout, "SettingsLayout");
@@ -389,11 +394,6 @@
             resources.ApplyResources(this.ElementsLabel, "ElementsLabel");
             this.ElementsLabel.ForeColor = System.Drawing.SystemColors.Control;
             this.ElementsLabel.Name = "ElementsLabel";
-            // 
-            // Records
-            // 
-            resources.ApplyResources(this.Records, "Records");
-            this.Records.Name = "Records";
             // 
             // Main
             // 
