@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Globalization;
 
 using YoutubeDLSharp;
-using YoutubeDLSharp.Options;
 using YoutubeDLSharp.Metadata;
 
 namespace Ripperoni
@@ -75,6 +73,5 @@ namespace Ripperoni
         {
             Close();
         }
-
     }
 }

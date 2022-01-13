@@ -1,20 +1,9 @@
 ﻿using System;
 using System.IO;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Drawing;
 using System.Diagnostics;
 using System.Windows.Forms;
-using System.ComponentModel;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using Microsoft.WindowsAPICodePack.Dialogs;
-
-using YoutubeDLSharp;
-using YoutubeDLSharp.Options;
-using YoutubeDLSharp.Metadata;
 
 namespace Ripperoni
 {
@@ -36,24 +25,6 @@ namespace Ripperoni
             //Input.Text = "https://youtu.be/dQw4w9WgXcQ";
             Input.Text = "https://www.youtube.com/watch?v=tPEE9ZwTmy0";
             Output.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
-
-            //Record rec = new Record();
-            //rec.ControlTitle = "Never Gonna Give You Up";
-            ////Imazen.WebP.SimpleDecoder decoder = new Imazen.WebP.SimpleDecoder();
-            ////var bytes = File.ReadAllBytes(filename);
-            ////var bitmap = decoder.DecodeFromBytes(bytes, bytes.Length);
-            ////pictureBox1.Image = bitmap;
-            //rec.ControlImage = @"https://i.ytimg.com/vi_webp/tPEE9ZwTmy0/sddefault.webp";
-            //rec.LoadImage();            
-            //tableLayoutPanel1.Controls.Add(rec);
-            ////rec.Refresh();
-
-            //Record rec2 = new Record();
-            //tableLayoutPanel1.Controls.Add(rec2);
-
-            //Record rec3 = new Record();
-            //tableLayoutPanel1.Controls.Add(rec3);
-
         }
 
         protected override CreateParams CreateParams
