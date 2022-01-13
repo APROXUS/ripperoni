@@ -237,6 +237,9 @@
   <data name="&gt;&gt;Exit.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
+  <data name="Minimize.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
   <data name="Minimize.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
   </data>
@@ -253,7 +256,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="Minimize.Size" type="System.Drawing.Size, System.Drawing">
-    <value>40, 23</value>
+    <value>40, 25</value>
   </data>
   <data name="Minimize.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -708,43 +711,43 @@
   <data name="&gt;&gt;Repository.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="Settings.AutoSize" type="System.Boolean, mscorlib">
+  <data name="Folder.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="Settings.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="Folder.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="Settings.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="Folder.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 8.25pt</value>
   </data>
-  <data name="Settings.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="Folder.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="Settings.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="Folder.Location" type="System.Drawing.Point, System.Drawing">
     <value>282, 0</value>
   </data>
-  <data name="Settings.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="Folder.Size" type="System.Drawing.Size, System.Drawing">
     <value>89, 23</value>
   </data>
-  <data name="Settings.TabIndex" type="System.Int32, mscorlib">
+  <data name="Folder.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <data name="Settings.Text" xml:space="preserve">
-    <value>Open Settings</value>
+  <data name="Folder.Text" xml:space="preserve">
+    <value>Open Output</value>
   </data>
-  <data name="Settings.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+  <data name="Folder.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
   </data>
-  <data name="&gt;&gt;Settings.Name" xml:space="preserve">
-    <value>Settings</value>
+  <data name="&gt;&gt;Folder.Name" xml:space="preserve">
+    <value>Folder</value>
   </data>
-  <data name="&gt;&gt;Settings.Type" xml:space="preserve">
+  <data name="&gt;&gt;Folder.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;Settings.Parent" xml:space="preserve">
+  <data name="&gt;&gt;Folder.Parent" xml:space="preserve">
     <value>FooterItems</value>
   </data>
-  <data name="&gt;&gt;Settings.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;Folder.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
   <data name="Copyright.AutoSize" type="System.Boolean, mscorlib">
@@ -853,7 +856,7 @@
     <value>3</value>
   </data>
   <data name="FooterItems.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="Repository" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="Settings" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="Copyright" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="Website" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,25,Percent,25,Percent,25,Percent,25" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="Repository" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="Folder" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="Copyright" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="Website" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,25,Percent,25,Percent,25,Percent,25" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="FooterLayout.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -958,10 +961,13 @@
     <value>TopDown</value>
   </data>
   <data name="Records.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 4</value>
+    <value>0, 1</value>
+  </data>
+  <data name="Records.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
   </data>
   <data name="Records.Size" type="System.Drawing.Size, System.Drawing">
-    <value>394, 467</value>
+    <value>400, 473</value>
   </data>
   <data name="Records.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>

@@ -49,7 +49,7 @@
             this.FooterIcon = new System.Windows.Forms.PictureBox();
             this.FooterItems = new System.Windows.Forms.TableLayoutPanel();
             this.Repository = new System.Windows.Forms.Label();
-            this.Settings = new System.Windows.Forms.Label();
+            this.Folder = new System.Windows.Forms.Label();
             this.Copyright = new System.Windows.Forms.Label();
             this.Website = new System.Windows.Forms.Label();
             this.LinedLayout = new System.Windows.Forms.TableLayoutPanel();
@@ -127,10 +127,10 @@
             // 
             // Minimize
             // 
+            resources.ApplyResources(this.Minimize, "Minimize");
             this.Minimize.FlatAppearance.BorderSize = 0;
             this.Minimize.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(93)))), ((int)(((byte)(156)))));
             this.Minimize.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
-            resources.ApplyResources(this.Minimize, "Minimize");
             this.Minimize.ForeColor = System.Drawing.SystemColors.Control;
             this.Minimize.Name = "Minimize";
             this.Minimize.UseVisualStyleBackColor = true;
@@ -245,7 +245,7 @@
             // 
             resources.ApplyResources(this.FooterItems, "FooterItems");
             this.FooterItems.Controls.Add(this.Repository, 0, 0);
-            this.FooterItems.Controls.Add(this.Settings, 0, 0);
+            this.FooterItems.Controls.Add(this.Folder, 0, 0);
             this.FooterItems.Controls.Add(this.Copyright, 0, 0);
             this.FooterItems.Controls.Add(this.Website, 0, 0);
             this.FooterItems.Name = "FooterItems";
@@ -259,14 +259,14 @@
             this.Repository.MouseLeave += new System.EventHandler(this.Repository_MouseLeave);
             this.Repository.MouseHover += new System.EventHandler(this.Repository_MouseHover);
             // 
-            // Settings
+            // Folder
             // 
-            resources.ApplyResources(this.Settings, "Settings");
-            this.Settings.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
-            this.Settings.Name = "Settings";
-            this.Settings.Click += new System.EventHandler(this.Settings_Click);
-            this.Settings.MouseLeave += new System.EventHandler(this.Settings_MouseLeave);
-            this.Settings.MouseHover += new System.EventHandler(this.Settings_MouseHover);
+            resources.ApplyResources(this.Folder, "Folder");
+            this.Folder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            this.Folder.Name = "Folder";
+            this.Folder.Click += new System.EventHandler(this.Settings_Click);
+            this.Folder.MouseLeave += new System.EventHandler(this.Settings_MouseLeave);
+            this.Folder.MouseHover += new System.EventHandler(this.Settings_MouseHover);
             // 
             // Copyright
             // 
@@ -439,7 +439,7 @@
         private System.Windows.Forms.TableLayoutPanel FooterItems;
         private System.Windows.Forms.Label Website;
         private System.Windows.Forms.Label Repository;
-        private System.Windows.Forms.Label Settings;
+        private System.Windows.Forms.Label Folder;
         private System.Windows.Forms.Label Copyright;
         private System.Windows.Forms.ComboBox Format;
         private System.Windows.Forms.Button Convert;

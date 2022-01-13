@@ -199,7 +199,25 @@ namespace Ripperoni
                     {
                         Directory.CreateDirectory(Output.Text);
 
-                        Rip();
+                        Records.HorizontalScroll.Visible = false;
+                        Records.VerticalScroll.Visible = true;
+                        Records.AutoScroll = true;
+                        Records.ResumeLayout();
+
+                        Records.Controls.Add(
+                            new Record(
+                                (string)Format.SelectedItem,
+                                (string)Resolution.SelectedItem,
+                                (string)Elements.SelectedItem,
+                                Input.Text,
+                                Output.Text
+                                )
+                            );
+
+                        Records.HorizontalScroll.Visible = false;
+                        Records.VerticalScroll.Visible = true;
+                        Records.AutoScroll = true;
+                        Records.ResumeLayout();
                     }
                     catch
                     {
@@ -229,92 +247,18 @@ namespace Ripperoni
         }
         #endregion
 
-        #region Ripper
-        private async void Rip()
-        {
-            var youtube = new YoutubeDL
-            {
-                YoutubeDLPath = "ytdlp.exe",
-                FFmpegPath = "ffmpeg.exe"
-            };
-
-            var res = await youtube.RunVideoDataFetch(Input.Text);
-            VideoData video = res.Data;
-            string title = video.Title;
-            string uploader = video.Uploader;
-            DateTime date = video.UploadDate ?? default;
-            float length = video.Duration ?? default;
-            string thumbnail = video.Thumbnail;
-            //FormatData[] videos = video.Formats;
-
-            //VideoTitle.Text = title;
-            //VideoUploader.Text = uploader;
-            //VideoLength.Text = TimeSpan.FromSeconds(length).ToString(@"hh\:mm\:ss");
-            //VideoDate.Text = date.ToString("MM/dd/yyyy");
-
-            Records.HorizontalScroll.Visible = false;
-            Records.VerticalScroll.Visible = true;
-            Records.AutoScroll = true;
-            Records.ResumeLayout();
-
-            //Records.RowCount = Records.RowCount++;
-            //Records.RowStyles.Add(new RowStyle(SizeType.Absolute, 80F));
-            Records.Controls.Add(
-                new Record(
-                    thumbnail, 
-                    title, 
-                    uploader, 
-                    TimeSpan.FromSeconds(length).ToString(@"hh\:mm\:ss"), 
-                    date.ToString("MM/dd/yyyy"),
-                    (string)Format.SelectedItem,
-                    (string)Resolution.SelectedItem, 
-                    (string)Elements.SelectedItem, 
-                    Input.Text, 
-                    Output.Text
-                    )
-                );
-
-            //FetchMedia();
-        }
-
-        private async void FetchMedia()
-        {
-            var youtube = new YoutubeDL
-            {
-                YoutubeDLPath = "ytdlp.exe",
-                FFmpegPath = "ffmpeg.exe",
-
-                OutputFolder = Output.Text
-            };
-
-            if ((string)Elements.SelectedItem == "Video Only")
-            {
-                await youtube.RunVideoDownload(Input.Text, recodeFormat: VideoRecodeFormat.Mp4);
-            }
-            else if ((string)Elements.SelectedItem == "Audio Only")
-            {
-                await youtube.RunAudioDownload(Input.Text, AudioConversionFormat.Mp3);
-            }
-            else
-            {
-                await youtube.RunVideoDownload(Input.Text, "bestvideo+bestaudio/best", DownloadMergeFormat.Unspecified, VideoRecodeFormat.Mp4);
-            }
-
-            // // a progress handler with a callback that updates a progress bar
-            // var progress = new Progress<DownloadProgress>(p => progressBar.Value = p.Progress);
-            // // a cancellation token source used for cancelling the download
-            // // use `cts.Cancel();` to perform cancellation
-            // var cts = new CancellationTokenSource();
-            // // ...
-            // await ytdl.RunVideoDownload(Input.Text, progress: progress, ct: cts.Token);
-        }
-        #endregion
-
         #region Footer
         private void Settings_Click(object sender, EventArgs e)
         {
-            Settings settings = new Settings();
-            settings.ShowDialog();
+            Directory.CreateDirectory(Output.Text);
+
+            ProcessStartInfo info = new ProcessStartInfo
+            {
+                Arguments = Output.Text,
+                FileName = "explorer.exe"
+            };
+
+            Process.Start(info);
         }
 
         private void Repository_Click(object sender, EventArgs e)
@@ -335,7 +279,7 @@ namespace Ripperoni
         private void Settings_MouseHover(object sender, EventArgs e)
         {
             Font font = new Font("Segoe UI", 8.25f, FontStyle.Underline);
-            Settings.Font = font;
+            Folder.Font = font;
         }
 
         private void Repository_MouseHover(object sender, EventArgs e)
@@ -365,7 +309,7 @@ namespace Ripperoni
         private void Settings_MouseLeave(object sender, EventArgs e)
         {
             Font font = new Font("Segoe UI", 8.25f);
-            Settings.Font = font;
+            Folder.Font = font;
         }
         #endregion
 
