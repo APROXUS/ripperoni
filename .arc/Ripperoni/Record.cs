@@ -1,14 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Net;
-using System.Threading;
+using System.Linq;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 
 using WebPWrapper;
 
 using YoutubeDLSharp;
-using YoutubeDLSharp.Options;
 using YoutubeDLSharp.Metadata;
 
 namespace Ripperoni
@@ -39,13 +38,139 @@ namespace Ripperoni
             string thumbnail = video.Thumbnail;
             FormatData[] videos = video.Formats;
 
-            //VideoTitle.Text = title;
-            //VideoUploader.Text = uploader;
-            //VideoLength.Text = TimeSpan.FromSeconds(length).ToString(@"hh\:mm\:ss");
-            //VideoDate.Text = date.ToString("MM/dd/yyyy");
+            FormatData vrec = default;
+            string cfor = "mp4";
+            string cres = "1080p";
+            bool hres = false;
+
+            switch (fo)
+            {
+                case ".MP4":
+                    cfor = "mp4";
+                    break;
+                case ".WebM":
+                    cfor = "webm";
+                    break;
+                case ".FLV":
+                    cfor = "flv";
+                    break;
+                case ".3GP":
+                    cfor = "3gp";
+                    break;
+                case ".MOV":
+                    cfor = "mov";
+                    break;
+                case ".AVI":
+                    cfor = "avi";
+                    break;
+                case ".MP3":
+                    cfor = "mp3";
+                    break;
+                case ".WAV":
+                    cfor = "wav";
+                    break;
+                case ".AAC":
+                    cfor = "aac";
+                    break;
+                case ".OGG":
+                    cfor = "ogg";
+                    break;
+                case ".M4A":
+                    cfor = "m4a";
+                    break;
+                case ".PCM":
+                    cfor = "pcm";
+                    break;
+                default:
+                    cfor = "mp4";
+                    break;
+            }
+
+            switch (re)
+            {
+                case "4320p (8K)":
+                    cres = "4320p";
+                    break;
+                case "2160p (4K)":
+                    cres = "2160p";
+                    break;
+                case "1440p (QHD)":
+                    cres = "1440p";
+                    break;
+                case "1080p (FHD)":
+                    cres = "1080p";
+                    break;
+                case "720p (HD)":
+                    cres = "720p";
+                    break;
+                case "480p (SD)":
+                    cres = "480p";
+                    break;
+                case "360p":
+                    cres = "360p";
+                    break;
+                case "240p":
+                    cres = "240p";
+                    break;
+                case "144p":
+                    cres = "144p";
+                    break;
+                default:
+                    cres = "1080p";
+                    break;
+            }
+
+            if (videos.ToList().FindAll(v => v.Extension == cfor).Count < 1)
+            {
+                if (el == "Audio Only")
+                {
+                    videos.ToList().FindAll(v => v.Extension == "m4a").ForEach(v =>
+                    {
+                        if (!hres)
+                        {
+                            vrec = v;
+
+                            if (v.FormatNote == cres)
+                            {
+                                hres = true;
+                            }
+                        }
+                    });
+                }
+                else
+                {
+                    videos.ToList().FindAll(v => v.Extension == "mp4").ForEach(v =>
+                    {
+                        if (!hres)
+                        {
+                            vrec = v;
+
+                            if (v.FormatNote == cres)
+                            {
+                                hres = true;
+                            }
+                        }
+                    });
+                }
+            } 
+            else
+            {
+                videos.ToList().FindAll(v => v.Extension == cfor).ForEach(v =>
+                {
+                    if (!hres)
+                    {
+                        vrec = v;
+
+                        if (v.FormatNote == cres)
+                        {
+                            hres = true;
+                        }
+                    }
+                });
+            }
 
             PostMeta(
-                videos,
+                vrec.Url,
                 thumbnail,
                 title,
                 uploader,
@@ -55,22 +180,23 @@ namespace Ripperoni
             );
         }
 
-        private void PostMeta(FormatData[] vi, string th, string ti, string au, string le, string da, string fo, string re, string el, string o)
+        private void PostMeta(string vi, string th, string ti, string au, string le, string da, string fo, string re, string el, string o)
         {
-            string epoch = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
-            FileInfo file = new FileInfo(Path.GetTempPath() + "APROX Ripperoni\\Thumbnail." + epoch + ".webp");
+            //string epoch = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
+            //FileInfo file = new FileInfo(Path.GetTempPath() + "APROX Ripperoni\\Thumbnail." + epoch + ".webp");
 
-            Directory.CreateDirectory(Path.GetTempPath() + "APROX Ripperoni");
+            //Directory.CreateDirectory(Path.GetTempPath() + "APROX Ripperoni");
 
-            DownloadFileAsync(th, epoch).GetAwaiter();
+            //DownloadFileAsync(th, epoch).GetAwaiter();
 
-            while (FileLocked(file))
-            {
-                Thread.Sleep(100);
-            }
+            //while (FileLocked(file))
+            //{
+            //    Thread.Sleep(100);
+            //}
 
             Thumbnail.Invoke((MethodInvoker)delegate {
-                byte[] image = File.ReadAllBytes(Path.GetTempPath() + "APROX Ripperoni\\Thumbnail." + epoch + ".webp");
+                //byte[] image = File.ReadAllBytes(Path.GetTempPath() + "APROX Ripperoni\\Thumbnail." + epoch + ".webp");
+                byte[] image = new WebClient().DownloadData(th);
                 using (WebP webp = new WebP())
                     Thumbnail.Image = webp.Decode(image);
             });
@@ -91,10 +217,10 @@ namespace Ripperoni
                  Date.Text = da;
              });
 
-            Fetch(vi, fo, re, el, o);
+            Fetch(fo, re, el, vi, o);
         }
 
-        private void Fetch(FormatData[] vi, string fo, string re, string el, string o)
+        private void Fetch(string fo, string re, string el, string vi, string o)
         {
             // First, download the video with an incredibly fast utility:
 

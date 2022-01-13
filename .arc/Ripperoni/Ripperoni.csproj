@@ -162,6 +162,12 @@
     <AdditionalFiles Include="ffmpeg.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AdditionalFiles>
+    <Resource Include="libwebp_x64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="libwebp_x86.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Content Include="Pepperoni.ico" />
     <AdditionalFiles Include="ytdlp.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

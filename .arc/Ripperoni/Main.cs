@@ -170,11 +170,6 @@ namespace Ripperoni
                     {
                         Directory.CreateDirectory(Output.Text);
 
-                        Records.HorizontalScroll.Visible = false;
-                        Records.VerticalScroll.Visible = true;
-                        Records.AutoScroll = true;
-                        Records.ResumeLayout();
-
                         Records.Controls.Add(
                             new Record(
                                 (string)Format.SelectedItem,
@@ -185,8 +180,9 @@ namespace Ripperoni
                                 )
                             );
 
-                        Records.HorizontalScroll.Visible = false;
+                        //Records.HorizontalScroll.Visible = false;
                         Records.VerticalScroll.Visible = true;
+                        Records.HorizontalScroll.Maximum = 0;
                         Records.AutoScroll = true;
                         Records.ResumeLayout();
                     }
