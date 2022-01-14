@@ -176,52 +176,61 @@ namespace Ripperoni
                 uploader,
                 TimeSpan.FromSeconds(length).ToString(@"hh\:mm\:ss"),
                 date.ToString("MM/dd/yyyy"),
-                fo, re, el, o
+                cfor, el, o
             );
         }
 
-        private void PostMeta(string vi, string th, string ti, string au, string le, string da, string fo, string re, string el, string o)
+        private void PostMeta(string vi, string th, string ti, string au, string le, string da, string fo, string el, string o)
         {
             //string epoch = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
-            //FileInfo file = new FileInfo(Path.GetTempPath() + "APROX Ripperoni\\Thumbnail." + epoch + ".webp");
-
             //Directory.CreateDirectory(Path.GetTempPath() + "APROX Ripperoni");
 
-            //DownloadFileAsync(th, epoch).GetAwaiter();
-
-            //while (FileLocked(file))
-            //{
-            //    Thread.Sleep(100);
-            //}
-
-            Thumbnail.Invoke((MethodInvoker)delegate {
-                //byte[] image = File.ReadAllBytes(Path.GetTempPath() + "APROX Ripperoni\\Thumbnail." + epoch + ".webp");
-                byte[] image = new WebClient().DownloadData(th);
-                using (WebP webp = new WebP())
-                    Thumbnail.Image = webp.Decode(image);
-            });
+            try
+            {
+                Thumbnail.Invoke((MethodInvoker)delegate {
+                    byte[] image = new WebClient().DownloadData(th);
+                    using (WebP webp = new WebP())
+                        Thumbnail.Image = webp.Decode(image);
+                });
+            }
+            catch
+            {
+                
+            }
 
             Title.Invoke((MethodInvoker)delegate {
                  Title.Text = ti;
-             });
+            });
 
             Author.Invoke((MethodInvoker)delegate {
                  Author.Text = au;
-             });
+            });
 
             Length.Invoke((MethodInvoker)delegate {
                  Length.Text = le;
-             });
+            });
 
             Date.Invoke((MethodInvoker)delegate {
                  Date.Text = da;
-             });
+            });
 
-            Fetch(fo, re, el, vi, o);
+            Fetch(ti, fo, el, vi, o);
         }
 
-        private void Fetch(string fo, string re, string el, string vi, string o)
+        private void Fetch(string ti, string fo, string el, string vi, string o)
         {
+            Title.Invoke((MethodInvoker)delegate {
+                Title.Text = ti + " (" + FileSize(new Uri(vi)) + ")";
+            });
+
+            //Task.Factory.StartNew(() => Progress());
+
+            //await Global.Downloader.DownloadFileTaskAsync(vi, o + "\\" + ti + "." + fo);
+
+            WebClient web = new WebClient();
+            web.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgression);
+            web.DownloadFileAsync(new Uri(vi), o + "\\" + ti + "." + fo);
+
             // First, download the video with an incredibly fast utility:
 
             // The best alternative is JDownloader, which is free.
@@ -239,10 +248,13 @@ namespace Ripperoni
             //4     TalkHelper Video Converter  Windows/ Mac    Full Version
         }
 
-        private async Task DownloadFileAsync(string th, string epoch)
+        public void DownloadProgression(Object sender, DownloadProgressChangedEventArgs e)
         {
-            WebClient client = new WebClient();
-            await client.DownloadFileTaskAsync(new Uri(th), Path.GetTempPath() + "APROX Ripperoni\\Thumbnail." + epoch + ".webp");
+            Progress.Invoke((MethodInvoker)delegate
+            {
+                Progress.Style = ProgressBarStyle.Blocks;
+                Progress.Value = e.ProgressPercentage;
+            });
         }
 
         protected virtual bool FileLocked(FileInfo file)
