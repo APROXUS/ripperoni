@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Linq;
+using System.Drawing;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 
@@ -185,7 +186,7 @@ namespace Ripperoni
             //string epoch = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
             //Directory.CreateDirectory(Path.GetTempPath() + "APROX Ripperoni");
 
-            try
+            if (th.Split('.').Last().ToString() == "webp")
             {
                 Thumbnail.Invoke((MethodInvoker)delegate {
                     byte[] image = new WebClient().DownloadData(th);
@@ -193,9 +194,17 @@ namespace Ripperoni
                         Thumbnail.Image = webp.Decode(image);
                 });
             }
-            catch
+            else
             {
-                
+                byte[] image = new WebClient().DownloadData(th);
+
+                MemoryStream stream = new MemoryStream();
+                byte[] data = image;
+                stream.Write(data, 0, Convert.ToInt32(data.Length));
+                Bitmap jpeg = new Bitmap(stream, false);
+                stream.Dispose();
+
+                Thumbnail.Image = jpeg;
             }
 
             Title.Invoke((MethodInvoker)delegate {
@@ -217,19 +226,19 @@ namespace Ripperoni
             Fetch(ti, fo, el, vi, o);
         }
 
-        private void Fetch(string ti, string fo, string el, string vi, string o)
+        private async void Fetch(string ti, string fo, string el, string vi, string o)
         {
             Title.Invoke((MethodInvoker)delegate {
                 Title.Text = ti + " (" + FileSize(new Uri(vi)) + ")";
             });
 
-            //Task.Factory.StartNew(() => Progress());
+            Global.Downloader.DownloadProgressChanged += DownloadProgression;
 
-            //await Global.Downloader.DownloadFileTaskAsync(vi, o + "\\" + ti + "." + fo);
+            await Global.Downloader.DownloadFileTaskAsync(vi, o + "\\" + ti + "." + fo);
 
-            WebClient web = new WebClient();
-            web.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgression);
-            web.DownloadFileAsync(new Uri(vi), o + "\\" + ti + "." + fo);
+            //WebClient web = new WebClient();
+            //web.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgression);
+            //web.DownloadFileAsync(new Uri(vi), o + "\\" + ti + "." + fo);
 
             // First, download the video with an incredibly fast utility:
 
@@ -248,12 +257,15 @@ namespace Ripperoni
             //4     TalkHelper Video Converter  Windows/ Mac    Full Version
         }
 
-        public void DownloadProgression(Object sender, DownloadProgressChangedEventArgs e)
+        private void DownloadProgression(object sender, Downloader.DownloadProgressChangedEventArgs e)
         {
+
+            string asdf = sender.ToString();
+
             Progress.Invoke((MethodInvoker)delegate
             {
                 Progress.Style = ProgressBarStyle.Blocks;
-                Progress.Value = e.ProgressPercentage;
+                Progress.Value = (Int32)e.ProgressPercentage;
             });
         }
 

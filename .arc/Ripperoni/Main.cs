@@ -15,9 +15,12 @@ namespace Ripperoni
         {
             InitializeComponent();
         }
-
+        
         private void Main_Load(object sender, EventArgs e)
         {
+
+            if (Directory.Exists(Path.GetTempPath() + "APROX Ripperoni")) Directory.Delete(Path.GetTempPath() + "APROX Ripperoni", true);
+
             Format.SelectedItem = ".MP4";
 
             Format_SelectedIndexChanged(sender, e);
