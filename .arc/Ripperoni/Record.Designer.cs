@@ -30,7 +30,7 @@ namespace Ripperoni
         private void InitializeComponent()
         {
             this.RecordLayout = new System.Windows.Forms.TableLayoutPanel();
-            this.Date = new System.Windows.Forms.Label();
+            this.Download = new System.Windows.Forms.Label();
             this.Length = new System.Windows.Forms.Label();
             this.Author = new System.Windows.Forms.Label();
             this.Thumbnail = new System.Windows.Forms.PictureBox();
@@ -48,7 +48,7 @@ namespace Ripperoni
             this.RecordLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.RecordLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.RecordLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.RecordLayout.Controls.Add(this.Date, 3, 1);
+            this.RecordLayout.Controls.Add(this.Download, 3, 1);
             this.RecordLayout.Controls.Add(this.Length, 2, 1);
             this.RecordLayout.Controls.Add(this.Author, 1, 1);
             this.RecordLayout.Controls.Add(this.Thumbnail, 0, 0);
@@ -71,18 +71,18 @@ namespace Ripperoni
             this.RecordLayout.Size = new System.Drawing.Size(400, 60);
             this.RecordLayout.TabIndex = 0;
             // 
-            // Date
+            // Download
             // 
-            this.Date.AutoSize = true;
-            this.Date.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Date.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.Date.ForeColor = System.Drawing.SystemColors.Control;
-            this.Date.Location = new System.Drawing.Point(303, 27);
-            this.Date.Name = "Date";
-            this.Date.Size = new System.Drawing.Size(94, 27);
-            this.Date.TabIndex = 4;
-            this.Date.Text = "Retrieving...";
-            this.Date.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.Download.AutoSize = true;
+            this.Download.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Download.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.Download.ForeColor = System.Drawing.SystemColors.Control;
+            this.Download.Location = new System.Drawing.Point(303, 27);
+            this.Download.Name = "Download";
+            this.Download.Size = new System.Drawing.Size(94, 27);
+            this.Download.TabIndex = 4;
+            this.Download.Text = "Retrieving...";
+            this.Download.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // Length
             // 
@@ -167,7 +167,7 @@ namespace Ripperoni
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel RecordLayout;
-        private System.Windows.Forms.Label Date;
+        private System.Windows.Forms.Label Download;
         private System.Windows.Forms.Label Length;
         private System.Windows.Forms.Label Author;
         private System.Windows.Forms.PictureBox Thumbnail;

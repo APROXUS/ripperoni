@@ -18,8 +18,10 @@ namespace Ripperoni
         
         private void Main_Load(object sender, EventArgs e)
         {
+            Json.Read();
 
-            if (Directory.Exists(Path.GetTempPath() + "APROX Ripperoni")) Directory.Delete(Path.GetTempPath() + "APROX Ripperoni", true);
+            if (Directory.Exists(Globals.Temp)) Directory.Delete(Globals.Temp, true);
+            Directory.CreateDirectory(Globals.Temp);
 
             Format.SelectedItem = ".MP4";
 
@@ -215,10 +217,16 @@ namespace Ripperoni
             Metadata metadata = new Metadata(Input.Text);
             metadata.ShowDialog();
         }
+
+        private void Settings_Click(object sender, EventArgs e)
+        {
+            Settings settings = new Settings();
+            settings.ShowDialog();
+        }
         #endregion
 
         #region Footer
-        private void Settings_Click(object sender, EventArgs e)
+        private void Folder_Click(object sender, EventArgs e)
         {
             Directory.CreateDirectory(Output.Text);
 

@@ -36,6 +36,7 @@
             this.Exit = new System.Windows.Forms.Button();
             this.Minimize = new System.Windows.Forms.Button();
             this.OutputLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.Settings = new System.Windows.Forms.Button();
             this.Metadata = new System.Windows.Forms.Button();
             this.Support = new System.Windows.Forms.Button();
             this.Input = new System.Windows.Forms.TextBox();
@@ -140,7 +141,8 @@
             // 
             this.OutputLayout.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             resources.ApplyResources(this.OutputLayout, "OutputLayout");
-            this.OutputLayout.Controls.Add(this.Metadata, 2, 2);
+            this.OutputLayout.Controls.Add(this.Settings, 2, 2);
+            this.OutputLayout.Controls.Add(this.Metadata, 3, 2);
             this.OutputLayout.Controls.Add(this.Support, 1, 2);
             this.OutputLayout.Controls.Add(this.Input, 0, 2);
             this.OutputLayout.Controls.Add(this.LocationLabel, 0, 1);
@@ -148,6 +150,16 @@
             this.OutputLayout.Controls.Add(this.Output, 0, 3);
             this.OutputLayout.Controls.Add(this.OpenFolder, 1, 3);
             this.OutputLayout.Name = "OutputLayout";
+            // 
+            // Settings
+            // 
+            this.Settings.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            resources.ApplyResources(this.Settings, "Settings");
+            this.Settings.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.Settings.ForeColor = System.Drawing.SystemColors.Control;
+            this.Settings.Name = "Settings";
+            this.Settings.UseVisualStyleBackColor = false;
+            this.Settings.Click += new System.EventHandler(this.Settings_Click);
             // 
             // Metadata
             // 
@@ -186,6 +198,7 @@
             // Convert
             // 
             this.Convert.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.OutputLayout.SetColumnSpan(this.Convert, 2);
             resources.ApplyResources(this.Convert, "Convert");
             this.Convert.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
             this.Convert.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
@@ -264,7 +277,7 @@
             resources.ApplyResources(this.Folder, "Folder");
             this.Folder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
             this.Folder.Name = "Folder";
-            this.Folder.Click += new System.EventHandler(this.Settings_Click);
+            this.Folder.Click += new System.EventHandler(this.Folder_Click);
             this.Folder.MouseLeave += new System.EventHandler(this.Settings_MouseLeave);
             this.Folder.MouseHover += new System.EventHandler(this.Settings_MouseHover);
             // 
@@ -457,6 +470,7 @@
         private System.Windows.Forms.Label ResolutionLabel;
         private System.Windows.Forms.Label ElementsLabel;
         private System.Windows.Forms.FlowLayoutPanel Records;
+        private System.Windows.Forms.Button Settings;
     }
 }
 

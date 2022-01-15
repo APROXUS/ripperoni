@@ -2,43 +2,39 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-using YoutubeDLSharp;
-using YoutubeDLSharp.Metadata;
-
 namespace Ripperoni
 {
-    public partial class Metadata : Form
+    public partial class Settings : Form
     {
         private Point mouselocation;
-        private readonly string input;
 
-        public Metadata(string i)
+        public Settings()
         {
-            input = i;
-
             InitializeComponent();
         }
 
-        private async void Metadata_Load(object sender, EventArgs e)
+        private void Settings_Load(object sender, EventArgs e)
         {
-            YoutubeDL y = new YoutubeDL();
-            y.YoutubeDLPath = "ytdlp.exe";
+            Json.Read();
 
-            var r = await y.RunVideoDataFetch(input);
-            VideoData v = r.Data;
-            string title = v.Title;
-            string description = v.Description;
-            string uploader = v.Uploader;
-            long views = v.ViewCount ?? default;
-            DateTime date = v.UploadDate ?? default;
-            float length = v.Duration ?? default;
+            Buffer.Text = Globals.Buffer.ToString();
+            Chunks.Text = Globals.Chunks.ToString();
+            Bytes.Text = Globals.Bytes.ToString();
+            Tries.Text = Globals.Tries.ToString();
+            Timeout.Text = Globals.Timeout.ToString();
+            OnFly.Checked = Globals.OnFly;
+        }
 
-            VideoTitle.Text = title;
-            VideoDesc.Text = description;
-            VideoUploader.Text = uploader;
-            VideoViews.Text = String.Format("{0:n0}", views);
-            VideoLength.Text = TimeSpan.FromSeconds(length).ToString(@"hh\:mm\:ss");
-            VideoDate.Text = date.ToString("MM/dd/yyyy");
+        private void Save()
+        {
+            Globals.Buffer = Int32.Parse(Buffer.Text);
+            Globals.Chunks = Int32.Parse(Chunks.Text);
+            Globals.Bytes = Int64.Parse(Bytes.Text);
+            Globals.Tries = Int32.Parse(Tries.Text);
+            Globals.Timeout = Int32.Parse(Timeout.Text);
+            Globals.OnFly = OnFly.Checked;
+
+            Json.Write();
         }
 
         #region Handle Bar
@@ -70,6 +66,8 @@ namespace Ripperoni
 
         private void Exit_Click(object sender, EventArgs e)
         {
+            Save();
+
             Close();
         }
         #endregion

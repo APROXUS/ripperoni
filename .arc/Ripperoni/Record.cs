@@ -3,11 +3,12 @@ using System.IO;
 using System.Net;
 using System.Linq;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 
+using Downloader;
 using WebPWrapper;
-
 using YoutubeDLSharp;
 using YoutubeDLSharp.Metadata;
 
@@ -15,140 +16,161 @@ namespace Ripperoni
 {
     public partial class Record : UserControl
     {
-        public Record(string fo, string re, string el, string i, string o)
+        private readonly string input;
+        private readonly string output;
+
+        private readonly string format;
+        private readonly string resolution;
+        private readonly string elements;
+
+        private string title;
+        private string uploader;
+        private float length;
+        private string thumbnail;
+        private FormatData[] formats;
+
+        private FormatData real_record = default;
+        private string real_format = "mp4";
+        private string real_resolution = "1080p";
+        private bool has_resolution = false;
+
+        private string video;
+        private string temp;
+        private string size;
+
+        public Record(string f, string r, string e, string i, string o)
         {
+            input = i;
+            output = o;
+
+            format = f;
+            resolution = r;
+            elements = e;
+
             InitializeComponent();
 
-            Task.Factory.StartNew(() => GetMeta(fo, re, el, i, o));
+            Task.Factory.StartNew(() => GetMetadata());
         }
 
-        private async void GetMeta(string fo, string re, string el, string i, string o)
+        #region Main Thread
+        private async void GetMetadata()
         {
-            var youtube = new YoutubeDL
-            {
-                YoutubeDLPath = "ytdlp.exe",
-                FFmpegPath = "ffmpeg.exe"
-            };
+            var y = new YoutubeDL();
+            y.YoutubeDLPath = "ytdlp.exe";
 
-            var res = await youtube.RunVideoDataFetch(i);
-            VideoData video = res.Data;
-            string title = video.Title;
-            string uploader = video.Uploader;
-            DateTime date = video.UploadDate ?? default;
-            float length = video.Duration ?? default;
-            string thumbnail = video.Thumbnail;
-            FormatData[] videos = video.Formats;
+            var r = await y.RunVideoDataFetch(input);
+            VideoData v = r.Data;
+            title = v.Title;
+            uploader = v.Uploader;
+            length = v.Duration ?? default;
+            thumbnail = v.Thumbnail;
+            formats = v.Formats;
 
-            FormatData vrec = default;
-            string cfor = "mp4";
-            string cres = "1080p";
-            bool hres = false;
-
-            switch (fo)
+            switch (format)
             {
                 case ".MP4":
-                    cfor = "mp4";
+                    real_format = "mp4";
                     break;
                 case ".WebM":
-                    cfor = "webm";
+                    real_format = "webm";
                     break;
                 case ".FLV":
-                    cfor = "flv";
+                    real_format = "flv";
                     break;
                 case ".3GP":
-                    cfor = "3gp";
+                    real_format = "3gp";
                     break;
                 case ".MOV":
-                    cfor = "mov";
+                    real_format = "mov";
                     break;
                 case ".AVI":
-                    cfor = "avi";
+                    real_format = "avi";
                     break;
                 case ".MP3":
-                    cfor = "mp3";
+                    real_format = "mp3";
                     break;
                 case ".WAV":
-                    cfor = "wav";
+                    real_format = "wav";
                     break;
                 case ".AAC":
-                    cfor = "aac";
+                    real_format = "aac";
                     break;
                 case ".OGG":
-                    cfor = "ogg";
+                    real_format = "ogg";
                     break;
                 case ".M4A":
-                    cfor = "m4a";
+                    real_format = "m4a";
                     break;
                 case ".PCM":
-                    cfor = "pcm";
+                    real_format = "pcm";
                     break;
                 default:
-                    cfor = "mp4";
+                    real_format = "mp4";
                     break;
             }
 
-            switch (re)
+            switch (resolution)
             {
                 case "4320p (8K)":
-                    cres = "4320p";
+                    real_resolution = "4320p";
                     break;
                 case "2160p (4K)":
-                    cres = "2160p";
+                    real_resolution = "2160p";
                     break;
                 case "1440p (QHD)":
-                    cres = "1440p";
+                    real_resolution = "1440p";
                     break;
                 case "1080p (FHD)":
-                    cres = "1080p";
+                    real_resolution = "1080p";
                     break;
                 case "720p (HD)":
-                    cres = "720p";
+                    real_resolution = "720p";
                     break;
                 case "480p (SD)":
-                    cres = "480p";
+                    real_resolution = "480p";
                     break;
                 case "360p":
-                    cres = "360p";
+                    real_resolution = "360p";
                     break;
                 case "240p":
-                    cres = "240p";
+                    real_resolution = "240p";
                     break;
                 case "144p":
-                    cres = "144p";
+                    real_resolution = "144p";
                     break;
                 default:
-                    cres = "1080p";
+                    real_resolution = "1080p";
                     break;
             }
 
-            if (videos.ToList().FindAll(v => v.Extension == cfor).Count < 1)
+            if (formats.ToList().FindAll(d => d.Extension == real_format).Count < 1)
             {
-                if (el == "Audio Only")
+                if (elements == "Audio Only")
                 {
-                    videos.ToList().FindAll(v => v.Extension == "m4a").ForEach(v =>
+                    formats.ToList().FindAll(d => d.Extension == "m4a").ForEach(d =>
                     {
-                        if (!hres)
+                        if (!has_resolution)
                         {
-                            vrec = v;
+                            real_record = d;
 
-                            if (v.FormatNote == cres)
+                            if (d.FormatNote == real_resolution)
                             {
-                                hres = true;
+                                has_resolution = true;
                             }
                         }
                     });
                 }
                 else
                 {
-                    videos.ToList().FindAll(v => v.Extension == "mp4").ForEach(v =>
+                    formats.ToList().FindAll(d => d.Extension == "mp4").ForEach(d =>
                     {
-                        if (!hres)
+                        if (!has_resolution)
                         {
-                            vrec = v;
+                            real_record = d;
 
-                            if (v.FormatNote == cres)
+                            if (d.FormatNote == real_resolution)
                             {
-                                hres = true;
+                                has_resolution = true;
                             }
                         }
                     });
@@ -156,111 +178,153 @@ namespace Ripperoni
             } 
             else
             {
-                videos.ToList().FindAll(v => v.Extension == cfor).ForEach(v =>
+                formats.ToList().FindAll(d => d.Extension == real_format).ForEach(d =>
                 {
-                    if (!hres)
+                    if (!has_resolution)
                     {
-                        vrec = v;
+                        real_record = d;
 
-                        if (v.FormatNote == cres)
+                        if (d.FormatNote == real_resolution)
                         {
-                            hres = true;
+                            has_resolution = true;
                         }
                     }
                 });
             }
 
-            PostMeta(
-                vrec.Url,
-                thumbnail,
-                title,
-                uploader,
-                TimeSpan.FromSeconds(length).ToString(@"hh\:mm\:ss"),
-                date.ToString("MM/dd/yyyy"),
-                cfor, el, o
-            );
+            video = real_record.Url;
+
+            PostMetadata();
         }
 
-        private void PostMeta(string vi, string th, string ti, string au, string le, string da, string fo, string el, string o)
+        private void PostMetadata()
         {
-            //string epoch = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
-            //Directory.CreateDirectory(Path.GetTempPath() + "APROX Ripperoni");
-
-            if (th.Split('.').Last().ToString() == "webp")
+            if (thumbnail.Split('.').Last().ToString() == "webp")
             {
                 Thumbnail.Invoke((MethodInvoker)delegate {
-                    byte[] image = new WebClient().DownloadData(th);
-                    using (WebP webp = new WebP())
-                        Thumbnail.Image = webp.Decode(image);
+                    byte[] i = new WebClient().DownloadData(thumbnail);
+                    using (WebP w = new WebP())
+                        Thumbnail.Image = w.Decode(i);
                 });
             }
             else
             {
-                byte[] image = new WebClient().DownloadData(th);
+                byte[] i = new WebClient().DownloadData(thumbnail);
 
-                MemoryStream stream = new MemoryStream();
-                byte[] data = image;
-                stream.Write(data, 0, Convert.ToInt32(data.Length));
-                Bitmap jpeg = new Bitmap(stream, false);
-                stream.Dispose();
+                MemoryStream s = new MemoryStream();
+                byte[] d = i;
+                s.Write(d, 0, Convert.ToInt32(d.Length));
+                Bitmap j = new Bitmap(s, false);
+                s.Dispose();
 
-                Thumbnail.Image = jpeg;
+                Thumbnail.Image = j;
             }
 
             Title.Invoke((MethodInvoker)delegate {
-                 Title.Text = ti;
+                 Title.Text = title;
             });
 
             Author.Invoke((MethodInvoker)delegate {
-                 Author.Text = au;
+                 Author.Text = uploader;
             });
 
             Length.Invoke((MethodInvoker)delegate {
-                 Length.Text = le;
+                 Length.Text = TimeSpan.FromSeconds(length).ToString(@"hh\:mm\:ss");
             });
 
-            Date.Invoke((MethodInvoker)delegate {
-                 Date.Text = da;
-            });
-
-            Fetch(ti, fo, el, vi, o);
+            GetVideo();
         }
 
-        private async void Fetch(string ti, string fo, string el, string vi, string o)
+        private async void GetVideo()
         {
+            temp = Globals.Temp + "\\" + title + "." + DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString() + "." + real_format;
+
+            size = FileSize(new Uri(video));
+
             Title.Invoke((MethodInvoker)delegate {
-                Title.Text = ti + " (" + FileSize(new Uri(vi)) + ")";
+                Title.Text = title + " (" + size + ")";
             });
 
-            Global.Downloader.DownloadProgressChanged += DownloadProgression;
+            Json.Read();
 
-            await Global.Downloader.DownloadFileTaskAsync(vi, o + "\\" + ti + "." + fo);
+            DownloadConfiguration DownloadOption = new DownloadConfiguration()
+            {
+                BufferBlockSize = Globals.Buffer,
+                ChunkCount = Globals.Chunks,
+                MaximumBytesPerSecond = Globals.Bytes,
+                MaxTryAgainOnFailover = Globals.Tries,
+                OnTheFlyDownload = Globals.OnFly,
+                ParallelDownload = true,
+                TempDirectory = Globals.Temp,
+                Timeout = Globals.Timeout,
+                RequestConfiguration =
+                {
+                    Accept = "*/*",
+                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                    CookieContainer =  new CookieContainer(),
+                    Headers = new WebHeaderCollection(),
+                    KeepAlive = false,
+                    ProtocolVersion = HttpVersion.Version11,
+                    UseDefaultCredentials = false,
+                    UserAgent = $"DownloaderSample/{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}"
+                }
+            };
 
-            //WebClient web = new WebClient();
-            //web.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgression);
-            //web.DownloadFileAsync(new Uri(vi), o + "\\" + ti + "." + fo);
+            DownloadService Downloader = new DownloadService(DownloadOption);
 
-            // First, download the video with an incredibly fast utility:
+            Downloader.DownloadProgressChanged += DownloadProgression;
 
-            // The best alternative is JDownloader, which is free.
-            // Other great apps like Multithreaded Download Manager
-            // are DownThemAll (Free, Open Source), Free Download Manage (Free),
-            // Internet Download Manager (Paid) and aria2 (Free, Open Source).
+            await Downloader.DownloadFileTaskAsync(video, temp);
 
+            PostVideo();
+        }
+
+        private void PostVideo()
+        {
             // Second, convert the downloaded file to the requested format:
 
             //7 Great Open Source Converter Software on Windows & Mac – Free Download
-            //Rank  Software Name               Supported OS     Offline Version
+            //Rank  Software Name               Supported OS    Offline Version
             //1.    Handbrake                   Windows / Mac   Full Version
             //2.    TEncoder Video Converter    Windows         Free Version
             //3.    FFmpeg                      Windows / Mac   Free Version
             //4     TalkHelper Video Converter  Windows/ Mac    Full Version
         }
+        #endregion
 
+        #region Auxiliary
+        protected virtual bool FileLocked(FileInfo f)
+        {
+            try
+            {
+                using (FileStream s = f.Open(FileMode.Open, FileAccess.Read, FileShare.None))
+                {
+                    s.Close();
+                }
+            }
+            catch (IOException) { return true; }
+
+            return false;
+        }
+
+        private static string FileSize(Uri u)
+        {
+            var w = HttpWebRequest.Create(u);
+            w.Method = "HEAD";
+
+            using (var r = w.GetResponse())
+            {
+                var f = r.Headers.Get("Content-Length");
+                var m = Math.Round(Convert.ToDouble(f) / 1024.0 / 1024.0, 2);
+                return m + " MB";
+            }
+        }
         private void DownloadProgression(object sender, Downloader.DownloadProgressChangedEventArgs e)
         {
-
-            string asdf = sender.ToString();
+            Download.Invoke((MethodInvoker)delegate
+            {
+                Download.Text = Math.Round(Convert.ToDouble(e.ReceivedBytesSize) / 1024.0 / 1024.0, 2) + " / " + size;
+            });
 
             Progress.Invoke((MethodInvoker)delegate
             {
@@ -268,66 +332,6 @@ namespace Ripperoni
                 Progress.Value = (Int32)e.ProgressPercentage;
             });
         }
-
-        protected virtual bool FileLocked(FileInfo file)
-        {
-            try
-            {
-                using (FileStream stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None))
-                {
-                    stream.Close();
-                }
-            }
-            catch (IOException)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        private static string FileSize(Uri uriPath)
-        {
-            var webRequest = HttpWebRequest.Create(uriPath);
-            webRequest.Method = "HEAD";
-
-            using (var webResponse = webRequest.GetResponse())
-            {
-                var fileSize = webResponse.Headers.Get("Content-Length");
-                var fileSizeInMegaByte = Math.Round(Convert.ToDouble(fileSize) / 1024.0 / 1024.0, 2);
-                return fileSizeInMegaByte + " MB";
-            }
-        }
-
-        //private async void Fetch(string fo, string re, string el, string i, string o)
-        //{
-        //    var youtube = new YoutubeDL
-        //    {
-        //        YoutubeDLPath = "ytdlp.exe",
-        //        FFmpegPath = "ffmpeg.exe",
-        //        OutputFolder = o
-        //    };
-
-        //    if (el == "Video Only")
-        //    {
-        //        await youtube.RunVideoDownload(i, recodeFormat: VideoRecodeFormat.Mp4);
-        //    }
-        //    else if (el == "Audio Only")
-        //    {
-        //        await youtube.RunAudioDownload(i, AudioConversionFormat.Mp3);
-        //    }
-        //    else
-        //    {
-        //        await youtube.RunVideoDownload(i, "bestvideo+bestaudio/best", DownloadMergeFormat.Unspecified, VideoRecodeFormat.Mp4);
-        //    }
-
-        //    // // a progress handler with a callback that updates a progress bar
-        //    // var progress = new Progress<DownloadProgress>(p => progressBar.Value = p.Progress);
-        //    // // a cancellation token source used for cancelling the download
-        //    // // use `cts.Cancel();` to perform cancellation
-        //    // var cts = new CancellationTokenSource();
-        //    // // ...
-        //    // await ytdl.RunVideoDownload(Input.Text, progress: progress, ct: cts.Token);
-        //}
+        #endregion
     }
 }

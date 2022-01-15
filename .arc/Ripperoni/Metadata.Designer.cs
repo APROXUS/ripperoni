@@ -341,6 +341,7 @@ namespace Ripperoni
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Metadata";
+            this.Load += new System.EventHandler(this.Metadata_Load);
             this.MetadataLayout.ResumeLayout(false);
             this.HandleLayout.ResumeLayout(false);
             this.HandleLayout.PerformLayout();
