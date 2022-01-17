@@ -5,7 +5,7 @@ using System.Linq;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 
 using Downloader;
 using WebPWrapper;
@@ -16,47 +16,74 @@ namespace Ripperoni
 {
     public partial class Record : UserControl
     {
-        private readonly string input;
-        private readonly string output;
+        private readonly DownloadService download;
 
+        private readonly string input;
         private readonly string format;
         private readonly string resolution;
         private readonly string elements;
+        private readonly string epoch;
 
-        private string title;
+        public string title;
         private string uploader;
         private float length;
         private string thumbnail;
-        private FormatData[] formats;
+        public FormatData[] formats;
 
         private FormatData real_record = default;
-        private string real_format = "mp4";
-        private string real_resolution = "1080p";
-        private bool has_resolution = false;
+        public string real_format = "mp4";
+        private int real_resolution = 1920;
+        public string down_format = "mp4";
 
         private string video;
         private string temp;
         private string size;
 
-        public Record(string f, string r, string e, string i, string o)
+        public Record(string f, string r, string e, string i, string m)
         {
             input = i;
-            output = o;
-
             format = f;
             resolution = r;
             elements = e;
+            epoch = m;
 
             InitializeComponent();
 
-            Task.Factory.StartNew(() => GetMetadata());
+            DownloadConfiguration DownloadOption = new DownloadConfiguration()
+            {
+                BufferBlockSize = Globals.Buffer,
+                ChunkCount = Globals.Chunks,
+                MaximumBytesPerSecond = Globals.Bytes,
+                MaxTryAgainOnFailover = Globals.Tries,
+                OnTheFlyDownload = Globals.OnFly,
+                ParallelDownload = true,
+                TempDirectory = Globals.Temp,
+                Timeout = Globals.Timeout,
+                RequestConfiguration =
+                {
+                    Accept = "*/*",
+                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                    CookieContainer =  new CookieContainer(),
+                    Headers = new WebHeaderCollection(),
+                    KeepAlive = false,
+                    ProtocolVersion = HttpVersion.Version11,
+                    UseDefaultCredentials = false,
+                    UserAgent = $"DownloaderSample/{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}"
+                }
+            };
+
+            download = new DownloadService(DownloadOption);
+
+            download.DownloadProgressChanged += DownloadProgression;
+
+            GetMetadata();
         }
 
         #region Main Thread
         private async void GetMetadata()
         {
             var y = new YoutubeDL();
-            y.YoutubeDLPath = "ytdlp.exe";
+            y.YoutubeDLPath = "DownloaderP.exe";
 
             var r = await y.RunVideoDataFetch(input);
             VideoData v = r.Data;
@@ -112,84 +139,82 @@ namespace Ripperoni
             switch (resolution)
             {
                 case "4320p (8K)":
-                    real_resolution = "4320p";
+                    real_resolution = 4320;
                     break;
                 case "2160p (4K)":
-                    real_resolution = "2160p";
+                    real_resolution = 2160;
                     break;
                 case "1440p (QHD)":
-                    real_resolution = "1440p";
+                    real_resolution = 1440;
                     break;
                 case "1080p (FHD)":
-                    real_resolution = "1080p";
+                    real_resolution = 1080;
                     break;
                 case "720p (HD)":
-                    real_resolution = "720p";
+                    real_resolution = 720;
                     break;
                 case "480p (SD)":
-                    real_resolution = "480p";
+                    real_resolution = 480;
                     break;
                 case "360p":
-                    real_resolution = "360p";
+                    real_resolution = 360;
                     break;
                 case "240p":
-                    real_resolution = "240p";
+                    real_resolution = 240;
                     break;
                 case "144p":
-                    real_resolution = "144p";
+                    real_resolution = 144;
                     break;
                 default:
-                    real_resolution = "1080p";
+                    real_resolution = 1080;
                     break;
             }
 
-            if (formats.ToList().FindAll(d => d.Extension == real_format).Count < 1)
+            if (elements == "Audio Only")
             {
-                if (elements == "Audio Only")
+                if (formats.ToList().FindAll(d => d.Extension == real_format).Count < 1)
                 {
                     formats.ToList().FindAll(d => d.Extension == "m4a").ForEach(d =>
                     {
-                        if (!has_resolution)
-                        {
-                            real_record = d;
-
-                            if (d.FormatNote == real_resolution)
-                            {
-                                has_resolution = true;
-                            }
-                        }
+                        down_format = "m4a";
+                        real_record = d;
                     });
                 }
                 else
                 {
-                    formats.ToList().FindAll(d => d.Extension == "mp4").ForEach(d =>
+                    formats.ToList().FindAll(d => d.Extension == real_format).ForEach(d =>
                     {
-                        if (!has_resolution)
-                        {
-                            real_record = d;
-
-                            if (d.FormatNote == real_resolution)
-                            {
-                                has_resolution = true;
-                            }
-                        }
+                        down_format = real_format;
+                        real_record = d;
                     });
                 }
-            } 
+            }
             else
             {
-                formats.ToList().FindAll(d => d.Extension == real_format).ForEach(d =>
+                if (formats.ToList().FindAll(d => d.Extension == real_format).Count < 1)
                 {
-                    if (!has_resolution)
-                    {
-                        real_record = d;
+                    List<int> l = new List<int>() { 0 };
+                    l = formats.ToList().FindAll(d => d.Extension == real_format).Select(d => d.Height ?? 0).ToList();
+                    int scoped = l.Min(i => (Math.Abs(real_resolution - i), i)).i;
 
-                        if (d.FormatNote == real_resolution)
-                        {
-                            has_resolution = true;
-                        }
-                    }
-                });
+                    formats.ToList().FindAll(d => d.Height == scoped).ForEach(d =>
+                    {
+                        down_format = "mp4";
+                        real_record = d;
+                    });
+                }
+                else
+                {
+                    List<int> l = new List<int>() { 0 };
+                    l = formats.ToList().FindAll(d => d.Extension == real_format).Select(d => d.Height ?? 0).ToList();
+                    int scoped = l.Min(i => (Math.Abs(real_resolution - i), i)).i;
+
+                    formats.ToList().FindAll(d => d.Height == scoped).ForEach(d =>
+                    {
+                        down_format = real_format;
+                        real_record = d;
+                    });
+                }
             }
 
             video = real_record.Url;
@@ -232,12 +257,12 @@ namespace Ripperoni
                  Length.Text = TimeSpan.FromSeconds(length).ToString(@"hh\:mm\:ss");
             });
 
-            GetVideo();
+            GetMedia();
         }
 
-        private async void GetVideo()
+        private async void GetMedia()
         {
-            temp = Globals.Temp + "\\" + title + "." + DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString() + "." + real_format;
+            temp = Globals.Temp + "\\" + title + "." + epoch + "." + real_format;
 
             size = FileSize(new Uri(video));
 
@@ -247,48 +272,7 @@ namespace Ripperoni
 
             Json.Read();
 
-            DownloadConfiguration DownloadOption = new DownloadConfiguration()
-            {
-                BufferBlockSize = Globals.Buffer,
-                ChunkCount = Globals.Chunks,
-                MaximumBytesPerSecond = Globals.Bytes,
-                MaxTryAgainOnFailover = Globals.Tries,
-                OnTheFlyDownload = Globals.OnFly,
-                ParallelDownload = true,
-                TempDirectory = Globals.Temp,
-                Timeout = Globals.Timeout,
-                RequestConfiguration =
-                {
-                    Accept = "*/*",
-                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
-                    CookieContainer =  new CookieContainer(),
-                    Headers = new WebHeaderCollection(),
-                    KeepAlive = false,
-                    ProtocolVersion = HttpVersion.Version11,
-                    UseDefaultCredentials = false,
-                    UserAgent = $"DownloaderSample/{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}"
-                }
-            };
-
-            DownloadService Downloader = new DownloadService(DownloadOption);
-
-            Downloader.DownloadProgressChanged += DownloadProgression;
-
-            await Downloader.DownloadFileTaskAsync(video, temp);
-
-            PostVideo();
-        }
-
-        private void PostVideo()
-        {
-            // Second, convert the downloaded file to the requested format:
-
-            //7 Great Open Source Converter Software on Windows & Mac – Free Download
-            //Rank  Software Name               Supported OS    Offline Version
-            //1.    Handbrake                   Windows / Mac   Full Version
-            //2.    TEncoder Video Converter    Windows         Free Version
-            //3.    FFmpeg                      Windows / Mac   Free Version
-            //4     TalkHelper Video Converter  Windows/ Mac    Full Version
+            await download.DownloadFileTaskAsync(video, temp);
         }
         #endregion
 
@@ -319,6 +303,7 @@ namespace Ripperoni
                 return m + " MB";
             }
         }
+
         private void DownloadProgression(object sender, Downloader.DownloadProgressChangedEventArgs e)
         {
             Download.Invoke((MethodInvoker)delegate

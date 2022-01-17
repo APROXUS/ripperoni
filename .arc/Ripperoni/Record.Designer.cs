@@ -46,8 +46,8 @@ namespace Ripperoni
             this.RecordLayout.ColumnCount = 4;
             this.RecordLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.RecordLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.RecordLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.RecordLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.RecordLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15F));
+            this.RecordLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
             this.RecordLayout.Controls.Add(this.Download, 3, 1);
             this.RecordLayout.Controls.Add(this.Length, 2, 1);
             this.RecordLayout.Controls.Add(this.Author, 1, 1);
@@ -62,12 +62,6 @@ namespace Ripperoni
             this.RecordLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45F));
             this.RecordLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45F));
             this.RecordLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.RecordLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.RecordLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.RecordLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.RecordLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.RecordLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.RecordLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.RecordLayout.Size = new System.Drawing.Size(400, 60);
             this.RecordLayout.TabIndex = 0;
             // 
@@ -77,9 +71,9 @@ namespace Ripperoni
             this.Download.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Download.Font = new System.Drawing.Font("Segoe UI", 8.25F);
             this.Download.ForeColor = System.Drawing.SystemColors.Control;
-            this.Download.Location = new System.Drawing.Point(303, 27);
+            this.Download.Location = new System.Drawing.Point(263, 27);
             this.Download.Name = "Download";
-            this.Download.Size = new System.Drawing.Size(94, 27);
+            this.Download.Size = new System.Drawing.Size(134, 27);
             this.Download.TabIndex = 4;
             this.Download.Text = "Retrieving...";
             this.Download.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -92,9 +86,9 @@ namespace Ripperoni
             this.Length.ForeColor = System.Drawing.SystemColors.Control;
             this.Length.Location = new System.Drawing.Point(203, 27);
             this.Length.Name = "Length";
-            this.Length.Size = new System.Drawing.Size(94, 27);
+            this.Length.Size = new System.Drawing.Size(54, 27);
             this.Length.TabIndex = 3;
-            this.Length.Text = "Retrieving...";
+            this.Length.Text = "--:--:--";
             this.Length.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // Author
@@ -152,6 +146,7 @@ namespace Ripperoni
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.Controls.Add(this.RecordLayout);
             this.DoubleBuffered = true;
             this.Margin = new System.Windows.Forms.Padding(0, 5, 0, 5);

@@ -51,6 +51,8 @@ namespace Ripperoni
             this.Buffer = new System.Windows.Forms.TextBox();
             this.OnFly = new System.Windows.Forms.CheckBox();
             this.BufferLabel = new System.Windows.Forms.Label();
+            this.TempLabel = new System.Windows.Forms.Label();
+            this.Temp = new System.Windows.Forms.TextBox();
             this.SettingsLayout.SuspendLayout();
             this.HandleLayout.SuspendLayout();
             this.SuspendLayout();
@@ -60,7 +62,7 @@ namespace Ripperoni
             this.SettingsLayout.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(27)))), ((int)(((byte)(27)))), ((int)(((byte)(27)))));
             this.SettingsLayout.ColumnCount = 1;
             this.SettingsLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.SettingsLayout.Controls.Add(this.OnFlyLabel, 0, 16);
+            this.SettingsLayout.Controls.Add(this.OnFlyLabel, 0, 19);
             this.SettingsLayout.Controls.Add(this.TimeoutLabel, 0, 13);
             this.SettingsLayout.Controls.Add(this.TriesLabel, 0, 10);
             this.SettingsLayout.Controls.Add(this.BytesLabel, 0, 7);
@@ -76,13 +78,15 @@ namespace Ripperoni
             this.SettingsLayout.Controls.Add(this.LightLine, 0, 3);
             this.SettingsLayout.Controls.Add(this.HandleLayout, 0, 0);
             this.SettingsLayout.Controls.Add(this.Buffer, 0, 2);
-            this.SettingsLayout.Controls.Add(this.OnFly, 0, 17);
+            this.SettingsLayout.Controls.Add(this.OnFly, 0, 20);
             this.SettingsLayout.Controls.Add(this.BufferLabel, 0, 1);
+            this.SettingsLayout.Controls.Add(this.TempLabel, 0, 16);
+            this.SettingsLayout.Controls.Add(this.Temp, 0, 17);
             this.SettingsLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SettingsLayout.Location = new System.Drawing.Point(0, 0);
             this.SettingsLayout.Margin = new System.Windows.Forms.Padding(0);
             this.SettingsLayout.Name = "SettingsLayout";
-            this.SettingsLayout.RowCount = 18;
+            this.SettingsLayout.RowCount = 21;
             this.SettingsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.SettingsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
             this.SettingsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
@@ -101,7 +105,11 @@ namespace Ripperoni
             this.SettingsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.SettingsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
             this.SettingsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
-            this.SettingsLayout.Size = new System.Drawing.Size(250, 350);
+            this.SettingsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.SettingsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
+            this.SettingsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this.SettingsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.SettingsLayout.Size = new System.Drawing.Size(250, 404);
             this.SettingsLayout.TabIndex = 0;
             // 
             // OnFlyLabel
@@ -110,7 +118,7 @@ namespace Ripperoni
             this.OnFlyLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.OnFlyLabel.Font = new System.Drawing.Font("Segoe UI", 8.25F);
             this.OnFlyLabel.ForeColor = System.Drawing.SystemColors.Control;
-            this.OnFlyLabel.Location = new System.Drawing.Point(3, 295);
+            this.OnFlyLabel.Location = new System.Drawing.Point(3, 349);
             this.OnFlyLabel.Name = "OnFlyLabel";
             this.OnFlyLabel.Size = new System.Drawing.Size(244, 27);
             this.OnFlyLabel.TabIndex = 19;
@@ -181,6 +189,7 @@ namespace Ripperoni
             this.Timeout.Name = "Timeout";
             this.Timeout.Size = new System.Drawing.Size(238, 22);
             this.Timeout.TabIndex = 12;
+            this.Timeout.Text = "Retrieving...";
             // 
             // Tries
             // 
@@ -194,6 +203,7 @@ namespace Ripperoni
             this.Tries.Name = "Tries";
             this.Tries.Size = new System.Drawing.Size(238, 22);
             this.Tries.TabIndex = 10;
+            this.Tries.Text = "Retrieving...";
             // 
             // Bytes
             // 
@@ -207,6 +217,7 @@ namespace Ripperoni
             this.Bytes.Name = "Bytes";
             this.Bytes.Size = new System.Drawing.Size(238, 22);
             this.Bytes.TabIndex = 9;
+            this.Bytes.Text = "Retrieving...";
             // 
             // Chunks
             // 
@@ -220,6 +231,7 @@ namespace Ripperoni
             this.Chunks.Name = "Chunks";
             this.Chunks.Size = new System.Drawing.Size(238, 22);
             this.Chunks.TabIndex = 8;
+            this.Chunks.Text = "Retrieving...";
             // 
             // LightLine5
             // 
@@ -334,6 +346,7 @@ namespace Ripperoni
             this.Buffer.Name = "Buffer";
             this.Buffer.Size = new System.Drawing.Size(238, 22);
             this.Buffer.TabIndex = 1;
+            this.Buffer.Text = "Retrieving...";
             // 
             // OnFly
             // 
@@ -344,7 +357,7 @@ namespace Ripperoni
             this.OnFly.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.OnFly.Font = new System.Drawing.Font("Segoe UI", 8.25F);
             this.OnFly.ForeColor = System.Drawing.SystemColors.Control;
-            this.OnFly.Location = new System.Drawing.Point(6, 322);
+            this.OnFly.Location = new System.Drawing.Point(6, 376);
             this.OnFly.Margin = new System.Windows.Forms.Padding(6, 0, 6, 3);
             this.OnFly.Name = "OnFly";
             this.OnFly.Size = new System.Drawing.Size(238, 25);
@@ -365,12 +378,39 @@ namespace Ripperoni
             this.BufferLabel.Text = "Maximum buffer size (bytes/integer):";
             this.BufferLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // TempLabel
+            // 
+            this.TempLabel.AutoSize = true;
+            this.TempLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TempLabel.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.TempLabel.ForeColor = System.Drawing.SystemColors.Control;
+            this.TempLabel.Location = new System.Drawing.Point(3, 295);
+            this.TempLabel.Name = "TempLabel";
+            this.TempLabel.Size = new System.Drawing.Size(244, 27);
+            this.TempLabel.TabIndex = 20;
+            this.TempLabel.Text = "Temperary Directory (valid path):";
+            this.TempLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // Temp
+            // 
+            this.Temp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.Temp.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Temp.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Temp.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.Temp.ForeColor = System.Drawing.SystemColors.Control;
+            this.Temp.Location = new System.Drawing.Point(6, 322);
+            this.Temp.Margin = new System.Windows.Forms.Padding(6, 0, 6, 3);
+            this.Temp.Name = "Temp";
+            this.Temp.Size = new System.Drawing.Size(238, 22);
+            this.Temp.TabIndex = 21;
+            this.Temp.Text = "Retrieving...";
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(27)))), ((int)(((byte)(27)))));
-            this.ClientSize = new System.Drawing.Size(250, 350);
+            this.ClientSize = new System.Drawing.Size(250, 404);
             this.Controls.Add(this.SettingsLayout);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -411,5 +451,7 @@ namespace Ripperoni
         private System.Windows.Forms.Label TriesLabel;
         private System.Windows.Forms.Label BytesLabel;
         private System.Windows.Forms.Label ChunksLabel;
+        private System.Windows.Forms.Label TempLabel;
+        private System.Windows.Forms.TextBox Temp;
     }
 }

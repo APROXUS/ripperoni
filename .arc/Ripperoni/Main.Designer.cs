@@ -469,7 +469,7 @@
         private System.Windows.Forms.Label FormatLabel;
         private System.Windows.Forms.Label ResolutionLabel;
         private System.Windows.Forms.Label ElementsLabel;
-        private System.Windows.Forms.FlowLayoutPanel Records;
+        public System.Windows.Forms.FlowLayoutPanel Records;
         private System.Windows.Forms.Button Settings;
     }
 }

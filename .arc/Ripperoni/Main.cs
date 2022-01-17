@@ -5,6 +5,11 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
+using Downloader;
+using WebPWrapper;
+using YoutubeDLSharp;
+using YoutubeDLSharp.Metadata;
+
 namespace Ripperoni
 {
     public partial class Main : Form
@@ -14,24 +19,31 @@ namespace Ripperoni
         public Main()
         {
             InitializeComponent();
+
+            Json.Read();
+
+            if (Directory.Exists(Globals.Temp))
+            {
+                Directory.Delete(Globals.Temp, true);
+            }
+
+            Directory.CreateDirectory(Globals.Temp);
         }
         
         private void Main_Load(object sender, EventArgs e)
         {
-            Json.Read();
-
-            if (Directory.Exists(Globals.Temp)) Directory.Delete(Globals.Temp, true);
-            Directory.CreateDirectory(Globals.Temp);
-
             Format.SelectedItem = ".MP4";
-
             Format_SelectedIndexChanged(sender, e);
-        
-            //Input.Text = "https://youtu.be/dQw4w9WgXcQ";
-            Input.Text = "https://www.youtube.com/watch?v=tPEE9ZwTmy0";
+
+            Input.Text = "https://youtu.be/dQw4w9WgXcQ";
+            //Input.Text = "https://www.youtube.com/watch?v=tPEE9ZwTmy0";
+            //Input.Text = "https://vimeo.com/660521773";
+            //Input.Text = "https://vimeo.com/666109154";
+
             Output.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
         }
 
+        #region Handle Bar...
         protected override CreateParams CreateParams
         {
             get
@@ -43,7 +55,6 @@ namespace Ripperoni
             }
         }
 
-        #region Handle Bar
         private void Exit_Click(object sender, EventArgs e)
         {
             ExitProcess();
@@ -100,7 +111,7 @@ namespace Ripperoni
         }
         #endregion
 
-        #region Main UI
+        #region Upper UI...
         private void Format_SelectedIndexChanged(object sender, EventArgs e)
         {
             switch (Format.SelectedItem)
@@ -149,6 +160,25 @@ namespace Ripperoni
                     break;
             }
         }
+        #endregion
+
+        #region Lower UI...
+        private void Support_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://ytdl-org.github.io/youtube-dl/supportedsites.html");
+        }
+
+        private void Settings_Click(object sender, EventArgs e)
+        {
+            Settings settings = new Settings();
+            settings.ShowDialog();
+        }
+
+        private void Metadata_Click(object sender, EventArgs e)
+        {
+            Metadata metadata = new Metadata(Input.Text);
+            metadata.ShowDialog();
+        }
 
         private void OpenFolder_Click(object sender, EventArgs e)
         {
@@ -167,65 +197,35 @@ namespace Ripperoni
         {
             if (Path.IsPathRooted(Output.Text))
             {
-                try
-                {
-                    Path.GetFullPath(Output.Text);
+                Directory.CreateDirectory(Output.Text);
 
-                    try
-                    {
-                        Directory.CreateDirectory(Output.Text);
+                Records.VerticalScroll.Visible = true;
+                Records.HorizontalScroll.Maximum = 0;
+                Records.AutoScroll = true;
+                Records.ResumeLayout();
 
-                        Records.Controls.Add(
-                            new Record(
-                                (string)Format.SelectedItem,
-                                (string)Resolution.SelectedItem,
-                                (string)Elements.SelectedItem,
-                                Input.Text,
-                                Output.Text
-                                )
-                            );
-
-                        //Records.HorizontalScroll.Visible = false;
-                        Records.VerticalScroll.Visible = true;
-                        Records.HorizontalScroll.Maximum = 0;
-                        Records.AutoScroll = true;
-                        Records.ResumeLayout();
-                    }
-                    catch
-                    {
-                        ErrorProcess("Could not create directory...", "Error");
-                    }
-                }
-                catch
-                {
-                    ErrorProcess("Please enter a valid path...", "Error");
-                }
+                Processor p = new Processor();
+                p.Process(Input.Text, Output.Text, (string)Format.SelectedItem, (string)Resolution.SelectedItem, (string)Elements.SelectedItem);
             }
-            else
-            {
-                ErrorProcess("Please enter a global path...", "Error");
-            }
-        }
-
-        private void Support_Click(object sender, EventArgs e)
-        {
-            Process.Start("https://ytdl-org.github.io/youtube-dl/supportedsites.html");
-        }
-
-        private void Metadata_Click(object sender, EventArgs e)
-        {
-            Metadata metadata = new Metadata(Input.Text);
-            metadata.ShowDialog();
-        }
-
-        private void Settings_Click(object sender, EventArgs e)
-        {
-            Settings settings = new Settings();
-            settings.ShowDialog();
         }
         #endregion
 
-        #region Footer
+        #region Footer UI...
+        private void FooterIcon_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://www.aprox.us/");
+        }
+
+        private void Website_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://www.aprox.us/service/ripperoni");
+        }
+
+        private void Repository_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://www.github.com/aproxus/ripperoni");
+        }
+
         private void Folder_Click(object sender, EventArgs e)
         {
             Directory.CreateDirectory(Output.Text);
@@ -239,33 +239,7 @@ namespace Ripperoni
             Process.Start(info);
         }
 
-        private void Repository_Click(object sender, EventArgs e)
-        {
-            Process.Start("https://www.github.com/aproxus/ripperoni");
-        }
-
-        private void Website_Click(object sender, EventArgs e)
-        {
-            Process.Start("https://www.aprox.us/service/ripperoni");
-        }
-
-        private void FooterIcon_Click(object sender, EventArgs e)
-        {
-            Process.Start("https://www.aprox.us/");
-        }
-
-        private void Settings_MouseHover(object sender, EventArgs e)
-        {
-            Font font = new Font("Segoe UI", 8.25f, FontStyle.Underline);
-            Folder.Font = font;
-        }
-
-        private void Repository_MouseHover(object sender, EventArgs e)
-        {
-            Font font = new Font("Segoe UI", 8.25f, FontStyle.Underline);
-            Repository.Font = font;
-        }
-
+        #region Hover Effect...
         private void Website_MouseHover(object sender, EventArgs e)
         {
             Font font = new Font("Segoe UI", 8.25f, FontStyle.Underline);
@@ -278,10 +252,22 @@ namespace Ripperoni
             Website.Font = font;
         }
 
+        private void Repository_MouseHover(object sender, EventArgs e)
+        {
+            Font font = new Font("Segoe UI", 8.25f, FontStyle.Underline);
+            Repository.Font = font;
+        }
+
         private void Repository_MouseLeave(object sender, EventArgs e)
         {
             Font font = new Font("Segoe UI", 8.25f);
             Repository.Font = font;
+        }
+
+        private void Settings_MouseHover(object sender, EventArgs e)
+        {
+            Font font = new Font("Segoe UI", 8.25f, FontStyle.Underline);
+            Folder.Font = font;
         }
 
         private void Settings_MouseLeave(object sender, EventArgs e)
@@ -290,8 +276,9 @@ namespace Ripperoni
             Folder.Font = font;
         }
         #endregion
+        #endregion
 
-        #region Auxiliary
+        #region Auxiliary...
         private void ErrorProcess(string m, string t)
         {
             MessageBox.Show(m, t, MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -307,5 +294,69 @@ namespace Ripperoni
             Close();
         }
         #endregion
+    }
+
+    public class Processor
+    {
+        private Main m;
+
+        private string epoch_primary;
+        private string epoch_secondary;
+        private string epoch_tertiary;
+
+        private string input;
+        private string output;
+        private string format;
+        private string resolution;
+        private string elements;
+
+        private string title;
+        private FormatData[] formats;
+
+        private string real_format = "mp4";
+        private string down_format = "mp4";
+
+        public void Process(string i, string o, string f, string r, string e)
+        {
+            m = new Main();
+
+            input = i;
+            output = o;
+            format = f;
+            resolution = r;
+            elements = e;
+
+            epoch_primary = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
+            UseRecord();
+
+            epoch_secondary = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
+            UseAdditional();
+
+            epoch_tertiary = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
+            UseProcessing();
+        }
+
+        private void UseRecord()
+        {
+            Record r = new Record(format, resolution, elements, input, epoch_primary);
+            m.Records.Controls.Add(r);
+
+            title = r.title;
+            formats = r.formats;
+            real_format = r.real_format;
+            down_format = r.down_format;
+        }
+
+        private void UseAdditional()
+        {
+            Additional a = new Additional(formats, title, epoch_secondary);
+            m.Records.Controls.Add(a);
+        }
+
+        private void UseProcessing()
+        {
+            Processing p = new Processing(formats, title, epoch_tertiary);
+            m.Records.Controls.Add(p);
+        }
     }
 }

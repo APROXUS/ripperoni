@@ -22,6 +22,7 @@ namespace Ripperoni
             Bytes.Text = Globals.Bytes.ToString();
             Tries.Text = Globals.Tries.ToString();
             Timeout.Text = Globals.Timeout.ToString();
+            Temp.Text = Globals.Temp;
             OnFly.Checked = Globals.OnFly;
         }
 
@@ -32,12 +33,13 @@ namespace Ripperoni
             Globals.Bytes = Int64.Parse(Bytes.Text);
             Globals.Tries = Int32.Parse(Tries.Text);
             Globals.Timeout = Int32.Parse(Timeout.Text);
+            Globals.Temp = Temp.Text;
             Globals.OnFly = OnFly.Checked;
 
             Json.Write();
         }
 
-        #region Handle Bar
+        #region Handle Bar...
         protected override CreateParams CreateParams
         {
             get

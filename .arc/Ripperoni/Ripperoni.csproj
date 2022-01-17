@@ -89,6 +89,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Additional.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Additional.Designer.cs">
+      <DependentUpon>Additional.cs</DependentUpon>
+    </Compile>
     <Compile Include="Globals.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
@@ -101,6 +107,12 @@
     </Compile>
     <Compile Include="Metadata.Designer.cs">
       <DependentUpon>Metadata.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Processing.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Processing.Designer.cs">
+      <DependentUpon>Processing.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -122,6 +134,9 @@
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
     <Compile Include="WebPWrapper.cs" />
+    <EmbeddedResource Include="Additional.resx">
+      <DependentUpon>Additional.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Main.en.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
@@ -145,7 +160,7 @@
     <None Include="..\.editorconfig">
       <Link>.editorconfig</Link>
     </None>
-    <None Include="firewall.bat">
+    <None Include="Firewall.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
@@ -175,9 +190,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <AdditionalFiles Include="ffmpeg.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </AdditionalFiles>
     <AdditionalFiles Include="libwebp_x64.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AdditionalFiles>
@@ -185,7 +197,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AdditionalFiles>
     <Content Include="Pepperoni.ico" />
-    <AdditionalFiles Include="ytdlp.exe">
+    <AdditionalFiles Include="DownloaderP.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AdditionalFiles>
     <None Include="Resources\aproxiconorg.png" />

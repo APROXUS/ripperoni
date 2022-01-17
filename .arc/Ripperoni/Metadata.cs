@@ -22,7 +22,7 @@ namespace Ripperoni
         private async void Metadata_Load(object sender, EventArgs e)
         {
             YoutubeDL y = new YoutubeDL();
-            y.YoutubeDLPath = "ytdlp.exe";
+            y.YoutubeDLPath = "DownloaderP.exe";
 
             var r = await y.RunVideoDataFetch(input);
             VideoData v = r.Data;
