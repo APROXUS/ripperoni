@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Net;
 using System.Linq;
-using System.Threading;
 using System.Reflection;
 using System.Windows.Forms;
-using System.Threading.Tasks;
 
 using Downloader;
 using YoutubeDLSharp.Metadata;
@@ -16,6 +14,7 @@ namespace Ripperoni
         private readonly FormatData[] formats;
         private readonly string title;
         private readonly string epoch;
+        private readonly Processor process;
 
         private readonly DownloadService download;
 
@@ -24,16 +23,14 @@ namespace Ripperoni
         private string size;
         private string temp;
 
-        private bool downloading;
-        private bool swapping;
-
-        public Additional(FormatData[] f, string t, string e)
+        public Additional(Processor p, FormatData[] f, string t, string e)
         {
-            downloading = true;
-
             formats = f;
             title = t;
             epoch = e;
+            process = p;
+
+            p.done_primary = false;
 
             InitializeComponent();
 
@@ -64,8 +61,6 @@ namespace Ripperoni
 
             download.DownloadProgressChanged += DownloadProgression;
 
-            Task.Factory.StartNew(() => Swapping());
-
             GetMedia();
         }
 
@@ -83,15 +78,13 @@ namespace Ripperoni
 
             size = FileSize(new Uri(video));
 
-            Title.Invoke((MethodInvoker)delegate {
-                Title.Text = title + " (Audio)";
-            });
+            Title.Text = "(Audio) " + title.Truncate(38);
 
             Json.Read();
 
             await download.DownloadFileTaskAsync(video, temp);
 
-            downloading = false;
+            process.done_secondary = true;
         }
         #endregion
 
@@ -111,41 +104,15 @@ namespace Ripperoni
 
         private void DownloadProgression(object sender, Downloader.DownloadProgressChangedEventArgs e)
         {
-            if (!swapping)
+            Status.Invoke((MethodInvoker)delegate
             {
-                Status.Invoke((MethodInvoker)delegate
-                {
-                    Status.Text = "[" + Math.Round(Convert.ToDouble(e.ReceivedBytesSize) / 1024.0 / 1024.0, 2) + " / " + size + "]:";
-                });
-            }
+                Status.Text = "[" + Math.Round(Convert.ToDouble(e.ReceivedBytesSize) / 1024.0 / 1024.0, 2) + " / " + size + "]:";
+            });
 
             Progress.Invoke((MethodInvoker)delegate
             {
                 Progress.Style = ProgressBarStyle.Blocks;
                 Progress.Value = (Int32)e.ProgressPercentage;
-            });
-        }
-
-        private void Swapping ()
-        {
-            while (downloading)
-            {
-                swapping = !swapping;
-
-                if (swapping)
-                {
-                    Status.Invoke((MethodInvoker)delegate
-                    {
-                        Status.Text = "[Audio]:";
-                    });
-                }
-
-                Thread.Sleep(1000);
-            }
-
-            Status.Invoke((MethodInvoker)delegate
-            {
-                Status.Text = "[Audio]:";
             });
         }
         #endregion

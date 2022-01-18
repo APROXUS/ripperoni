@@ -86,8 +86,9 @@ namespace Ripperoni
             this.Title.Font = new System.Drawing.Font("Segoe UI", 8.25F);
             this.Title.ForeColor = System.Drawing.SystemColors.Control;
             this.Title.Location = new System.Drawing.Point(103, 0);
+            this.Title.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.Title.Name = "Title";
-            this.Title.Size = new System.Drawing.Size(294, 20);
+            this.Title.Size = new System.Drawing.Size(297, 20);
             this.Title.TabIndex = 2;
             this.Title.Text = "Retrieving...";
             this.Title.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;

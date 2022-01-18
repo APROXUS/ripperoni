@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Drawing;
+using System.Threading;
 using System.Diagnostics;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
 using Downloader;
@@ -57,6 +59,13 @@ namespace Ripperoni
 
         private void Exit_Click(object sender, EventArgs e)
         {
+            if (Directory.Exists(Globals.Temp))
+            {
+                Directory.Delete(Globals.Temp, true);
+            }
+
+            Directory.CreateDirectory(Globals.Temp);
+
             ExitProcess();
         }
 
@@ -204,8 +213,16 @@ namespace Ripperoni
                 Records.AutoScroll = true;
                 Records.ResumeLayout();
 
+                Main m = this;
+
+                string input = Input.Text;
+                string output = Output.Text;
+                string format = (string)Format.SelectedItem;
+                string resolution = (string)Resolution.SelectedItem;
+                string elements = (string)Elements.SelectedItem;
+
                 Processor p = new Processor();
-                p.Process(Input.Text, Output.Text, (string)Format.SelectedItem, (string)Resolution.SelectedItem, (string)Elements.SelectedItem);
+                Task.Factory.StartNew(() => p.Process(m, input, output, format, resolution, elements));
             }
         }
         #endregion
@@ -279,10 +296,10 @@ namespace Ripperoni
         #endregion
 
         #region Auxiliary...
-        private void ErrorProcess(string m, string t)
-        {
-            MessageBox.Show(m, t, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        }
+        //private void ErrorProcess(string m, string t)
+        //{
+        //    MessageBox.Show(m, t, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        //}
         
         private void MinimizeProcess()
         {
@@ -310,15 +327,18 @@ namespace Ripperoni
         private string resolution;
         private string elements;
 
-        private string title;
-        private FormatData[] formats;
+        public string title;
+        public FormatData[] formats;
+        public string real_format = "mp4";
+        public string down_format = "mp4";
 
-        private string real_format = "mp4";
-        private string down_format = "mp4";
+        public bool done_primary = false;
+        public bool done_secondary = false;
+        public bool done_tertiary = false;
 
-        public void Process(string i, string o, string f, string r, string e)
+        public void Process(Main t, string i, string o, string f, string r, string e)
         {
-            m = new Main();
+            m = t;
 
             input = i;
             output = o;
@@ -329,34 +349,88 @@ namespace Ripperoni
             epoch_primary = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
             UseRecord();
 
-            epoch_secondary = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
-            UseAdditional();
+            if (elements == "Audio/Video")
+            {
+                epoch_secondary = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
+                UseAdditional();
+            }
 
-            epoch_tertiary = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
-            UseProcessing();
+            if (elements == "Audio/Video" || real_format != down_format)
+            {
+                epoch_tertiary = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
+                UseProcessing();
+            }
+
+            PostMedia();
         }
 
         private void UseRecord()
         {
-            Record r = new Record(format, resolution, elements, input, epoch_primary);
-            m.Records.Controls.Add(r);
+            m.Records.Invoke((MethodInvoker)delegate {
+                m.Records.Controls.Add(new Record(this, format, resolution, elements, input, epoch_primary));
+            });
 
-            title = r.title;
-            formats = r.formats;
-            real_format = r.real_format;
-            down_format = r.down_format;
+            while (!done_primary)
+            {
+                Thread.Sleep(100);
+            }
         }
 
         private void UseAdditional()
         {
-            Additional a = new Additional(formats, title, epoch_secondary);
-            m.Records.Controls.Add(a);
+            m.Records.Invoke((MethodInvoker)delegate {
+                m.Records.Controls.Add(new Additional(this, formats, title, epoch_secondary));
+            });
+
+            while (!done_secondary)
+            {
+                Thread.Sleep(100);
+            }
         }
 
         private void UseProcessing()
         {
-            Processing p = new Processing(formats, title, epoch_tertiary);
-            m.Records.Controls.Add(p);
+            m.Records.Invoke((MethodInvoker)delegate
+            {
+                m.Records.Controls.Add(new Processing(this, epoch_primary, epoch_secondary, elements, real_format, down_format, title, epoch_tertiary));
+            });
+
+            while (!done_tertiary)
+            {
+                Thread.Sleep(100);
+            }
+        }
+
+        private void PostMedia()
+        {
+            string source;
+            string destination;
+
+            if (elements == "Audio/Video" || real_format != down_format)
+            {
+                source = Globals.Temp + "\\" + title + "." + epoch_tertiary + "." + real_format;
+            }
+            else
+            {
+                source = Globals.Temp + "\\" + title + "." + epoch_primary + "." + real_format;
+            }
+
+            destination = output + "\\" + title + "." + real_format;
+
+            File.Move(source, destination);
+
+            if (elements == "Audio/Video")
+            {
+                File.Delete(Globals.Temp + "\\" + title + "." + epoch_secondary + ".m4a");
+                File.Delete(Globals.Temp + "\\" + title + "." + epoch_tertiary + "." + real_format);
+            }
+
+            if (real_format != down_format)
+            {
+                File.Delete(Globals.Temp + "\\" + title + "." + epoch_tertiary + "." + real_format);
+            }
+
+            File.Delete(Globals.Temp + "\\" + title + "." + epoch_primary + "." + down_format);
         }
     }
 }

@@ -23,6 +23,7 @@ namespace Ripperoni
         private readonly string resolution;
         private readonly string elements;
         private readonly string epoch;
+        private readonly Processor process;
 
         public string title;
         private string uploader;
@@ -39,13 +40,16 @@ namespace Ripperoni
         private string temp;
         private string size;
 
-        public Record(string f, string r, string e, string i, string m)
+        public Record(Processor p, string f, string r, string e, string i, string m)
         {
             input = i;
             format = f;
             resolution = r;
             elements = e;
             epoch = m;
+            process = p;
+
+            p.done_primary = false;
 
             InitializeComponent();
 
@@ -246,11 +250,11 @@ namespace Ripperoni
             }
 
             Title.Invoke((MethodInvoker)delegate {
-                 Title.Text = title;
+                 Title.Text = title.Truncate(89);
             });
 
             Author.Invoke((MethodInvoker)delegate {
-                 Author.Text = uploader;
+                 Author.Text = uploader.Truncate(15);
             });
 
             Length.Invoke((MethodInvoker)delegate {
@@ -262,7 +266,7 @@ namespace Ripperoni
 
         private async void GetMedia()
         {
-            temp = Globals.Temp + "\\" + title + "." + epoch + "." + real_format;
+            temp = Globals.Temp + "\\" + title + "." + epoch + "." + down_format;
 
             size = FileSize(new Uri(video));
 
@@ -273,6 +277,13 @@ namespace Ripperoni
             Json.Read();
 
             await download.DownloadFileTaskAsync(video, temp);
+
+            process.title = title;
+            process.formats = formats;
+            process.real_format = real_format;
+            process.down_format = down_format;
+
+            process.done_primary = true;
         }
         #endregion
 

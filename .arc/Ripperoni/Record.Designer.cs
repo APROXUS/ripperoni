@@ -76,7 +76,7 @@ namespace Ripperoni
             this.Download.Size = new System.Drawing.Size(134, 27);
             this.Download.TabIndex = 4;
             this.Download.Text = "Retrieving...";
-            this.Download.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.Download.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Length
             // 
