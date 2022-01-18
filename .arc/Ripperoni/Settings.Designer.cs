@@ -53,6 +53,8 @@ namespace Ripperoni
             this.BufferLabel = new System.Windows.Forms.Label();
             this.TempLabel = new System.Windows.Forms.Label();
             this.Temp = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.Firewall = new System.Windows.Forms.Button();
             this.SettingsLayout.SuspendLayout();
             this.HandleLayout.SuspendLayout();
             this.SuspendLayout();
@@ -82,11 +84,13 @@ namespace Ripperoni
             this.SettingsLayout.Controls.Add(this.BufferLabel, 0, 1);
             this.SettingsLayout.Controls.Add(this.TempLabel, 0, 16);
             this.SettingsLayout.Controls.Add(this.Temp, 0, 17);
+            this.SettingsLayout.Controls.Add(this.label1, 0, 22);
+            this.SettingsLayout.Controls.Add(this.Firewall, 0, 23);
             this.SettingsLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SettingsLayout.Location = new System.Drawing.Point(0, 0);
             this.SettingsLayout.Margin = new System.Windows.Forms.Padding(0);
             this.SettingsLayout.Name = "SettingsLayout";
-            this.SettingsLayout.RowCount = 21;
+            this.SettingsLayout.RowCount = 24;
             this.SettingsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.SettingsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
             this.SettingsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
@@ -108,19 +112,20 @@ namespace Ripperoni
             this.SettingsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.SettingsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
             this.SettingsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
-            this.SettingsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.SettingsLayout.Size = new System.Drawing.Size(250, 404);
+            this.SettingsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.SettingsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
+            this.SettingsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this.SettingsLayout.Size = new System.Drawing.Size(250, 458);
             this.SettingsLayout.TabIndex = 0;
             // 
             // OnFlyLabel
             // 
             this.OnFlyLabel.AutoSize = true;
-            this.OnFlyLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.OnFlyLabel.Font = new System.Drawing.Font("Segoe UI", 8.25F);
             this.OnFlyLabel.ForeColor = System.Drawing.SystemColors.Control;
             this.OnFlyLabel.Location = new System.Drawing.Point(3, 349);
             this.OnFlyLabel.Name = "OnFlyLabel";
-            this.OnFlyLabel.Size = new System.Drawing.Size(244, 27);
+            this.OnFlyLabel.Size = new System.Drawing.Size(219, 13);
             this.OnFlyLabel.TabIndex = 19;
             this.OnFlyLabel.Text = "Cache in memory (requires enough RAM):";
             this.OnFlyLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -360,7 +365,7 @@ namespace Ripperoni
             this.OnFly.Location = new System.Drawing.Point(6, 376);
             this.OnFly.Margin = new System.Windows.Forms.Padding(6, 0, 6, 3);
             this.OnFly.Name = "OnFly";
-            this.OnFly.Size = new System.Drawing.Size(238, 25);
+            this.OnFly.Size = new System.Drawing.Size(238, 23);
             this.OnFly.TabIndex = 13;
             this.OnFly.Text = "Enabled?";
             this.OnFly.UseVisualStyleBackColor = true;
@@ -405,12 +410,41 @@ namespace Ripperoni
             this.Temp.TabIndex = 21;
             this.Temp.Text = "Retrieving...";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.label1.ForeColor = System.Drawing.SystemColors.Control;
+            this.label1.Location = new System.Drawing.Point(3, 403);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(244, 27);
+            this.label1.TabIndex = 22;
+            this.label1.Text = "Having issues downloading Youtube videos:";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // Firewall
+            // 
+            this.Firewall.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.Firewall.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.Firewall.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Firewall.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.Firewall.ForeColor = System.Drawing.SystemColors.Control;
+            this.Firewall.Location = new System.Drawing.Point(6, 430);
+            this.Firewall.Margin = new System.Windows.Forms.Padding(6, 0, 6, 6);
+            this.Firewall.Name = "Firewall";
+            this.Firewall.Size = new System.Drawing.Size(73, 22);
+            this.Firewall.TabIndex = 23;
+            this.Firewall.Text = "Fix Youtube Firewall";
+            this.Firewall.UseVisualStyleBackColor = false;
+            this.Firewall.Click += new System.EventHandler(this.Firewall_Click);
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(27)))), ((int)(((byte)(27)))));
-            this.ClientSize = new System.Drawing.Size(250, 404);
+            this.ClientSize = new System.Drawing.Size(250, 458);
             this.Controls.Add(this.SettingsLayout);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -453,5 +487,7 @@ namespace Ripperoni
         private System.Windows.Forms.Label ChunksLabel;
         private System.Windows.Forms.Label TempLabel;
         private System.Windows.Forms.TextBox Temp;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button Firewall;
     }
 }

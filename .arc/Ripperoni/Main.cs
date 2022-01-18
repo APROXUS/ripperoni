@@ -392,7 +392,7 @@ namespace Ripperoni
         {
             m.Records.Invoke((MethodInvoker)delegate
             {
-                m.Records.Controls.Add(new Processing(this, epoch_primary, epoch_secondary, elements, real_format, down_format, title, epoch_tertiary));
+                m.Records.Controls.Add(new Processing(this, epoch_primary, epoch_secondary, real_format, down_format, title, epoch_tertiary));
             });
 
             while (!done_tertiary)
@@ -417,6 +417,7 @@ namespace Ripperoni
 
             destination = output + "\\" + title + "." + real_format;
 
+            File.Delete(destination);
             File.Move(source, destination);
 
             if (elements == "Audio/Video")

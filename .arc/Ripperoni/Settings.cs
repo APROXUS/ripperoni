@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace Ripperoni
@@ -37,6 +38,16 @@ namespace Ripperoni
             Globals.OnFly = OnFly.Checked;
 
             Json.Write();
+        }
+
+        private void Firewall_Click(object sender, EventArgs e)
+        {
+            ProcessStartInfo f = new ProcessStartInfo("Firewall.bat")
+            {
+                UseShellExecute = true,
+                Verb = "runas"
+            };
+            Process.Start(f);
         }
 
         #region Handle Bar...

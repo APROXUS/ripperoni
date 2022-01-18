@@ -198,7 +198,7 @@ namespace Ripperoni
                 if (formats.ToList().FindAll(d => d.Extension == real_format).Count < 1)
                 {
                     List<int> l = new List<int>() { 0 };
-                    l = formats.ToList().FindAll(d => d.Extension == real_format).Select(d => d.Height ?? 0).ToList();
+                    l = formats.ToList().FindAll(d => d.Extension == "mp4").Select(d => d.Height ?? 0).ToList();
                     int scoped = l.Min(i => (Math.Abs(real_resolution - i), i)).i;
 
                     formats.ToList().FindAll(d => d.Height == scoped).ForEach(d =>

@@ -9,3 +9,6 @@ fltmc >nul 2>&1 && (
 ) || (
 	echo Error: No administrator rights...
 )
+
+echo Closing in 5 seconds...
+PING localhost -n 6 >NUL

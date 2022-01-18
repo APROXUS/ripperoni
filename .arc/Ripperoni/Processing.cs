@@ -1,10 +1,6 @@
-﻿using System;
-using System.Net;
-using System.Linq;
-using System.Threading;
-using System.Reflection;
-using System.Windows.Forms;
-using System.Threading.Tasks;
+﻿using System.Windows.Forms;
+
+using Javi.FFmpeg;
 
 namespace Ripperoni
 {
@@ -12,9 +8,10 @@ namespace Ripperoni
     {
         private readonly string first_epoch;
         private readonly string second_epoch;
-        private readonly string second_format;
 
-        private readonly string elements;
+        private string first_file;
+        private string second_file;
+
         private readonly string real_format;
         private readonly string down_format;
         private readonly string title;
@@ -23,18 +20,17 @@ namespace Ripperoni
 
         private string temp_multiplex;
         private string temp_convert;
-        private int progress = 0;
+        private readonly int progress = 0;
         private readonly int steps = 0;
-        private readonly int step = 0;
+        private int step = 0;
 
-        public Processing(Processor p, string e1, string e2, string l, string r, string d, string t, string e)
+        public Processing(Processor p, string e1, string e2, string r, string d, string t, string e)
         {
             first_epoch = e1;
             second_epoch = e2;
 
             if (!string.IsNullOrEmpty(e2))
             {
-                second_format = "m4a";
                 steps++;
             }
 
@@ -43,7 +39,6 @@ namespace Ripperoni
                 steps++;
             }
 
-            elements = l;
             real_format = r;
             down_format = d;
             title = t;
@@ -54,6 +49,8 @@ namespace Ripperoni
 
             InitializeComponent();
 
+            Progression();
+
             ProcessMedia();
         }
 
@@ -63,53 +60,127 @@ namespace Ripperoni
             temp_multiplex = Globals.Temp + "\\" + title + "." + epoch + "." + down_format;
             temp_convert = Globals.Temp + "\\" + title + "." + epoch + "." + real_format;
 
-            Title.Invoke((MethodInvoker)delegate {
-                Title.Text = title + " (Audio)";
-            });
+            Title.Text = "(Processing) " + title;
 
             Json.Read();
 
+            first_file = Globals.Temp + "\\" + title + "." + first_epoch + "." + down_format;
+
             if (!string.IsNullOrEmpty(second_epoch))
             {
+                second_file = Globals.Temp + "\\" + title + "." + second_epoch + ".m4a";
+
+                step++;
+
                 Multiplex();
+
+                first_file = temp_multiplex;
             }
+
+            Progression();
 
             if (real_format != down_format)
             {
+                step++;
+
                 Convert();
             }
+
+            Progression();
 
             process.done_tertiary = true;
         }
 
         private void Multiplex()
         {
+            using (var ffmpeg = new FFmpeg(@"FFmpeg.exe"))
+            {
+                string i1 = first_file; string i2 = second_file; string o = temp_multiplex;
 
+                string c;
+
+                switch (real_format)
+                {
+                    case "webm":
+                        c = string.Format($"-i \"{i1}\"  -i \"{i2}\" -c:v copy -c:a libvorbis \"{o}\"");
+                        break;
+                    default:
+                        c = string.Format($"-i \"{i1}\" -i \"{i2}\" -c:v copy -c:a aac \"{o}\"");
+                        break;
+                }
+
+                ffmpeg.Run(i1, o, c);
+            }
         }
 
         private void Convert()
         {
+            using (var ffmpeg = new FFmpeg(@"FFmpeg.exe"))
+            {
+                string i = first_file; string o = temp_convert;
 
+                string c;
+
+                switch (real_format)
+                {
+                    case "webm":
+                        c = string.Format($"-i \"{i}\" -c:v vp9 -c:a libvorbis \"{o}\"");
+                        break;
+                    case "flv":
+                        c = string.Format($"-i \"{i}\" -c:v libx264 -ar 22050 -crf 28 \"{o}\"");
+                        break;
+                    case "mov":
+                            c = string.Format($"-i \"{i}\" -f mov \"{o}\"");
+                    break;
+                    case "mp3":
+                        c = string.Format($"-i \"{i}\" -c:a libmp3lame \"{o}\"");
+                        break;
+                    case "wav":
+                        c = string.Format($"-i \"{i}\" -c:a pcm_s16le \"{o}\"");
+                        break;
+                    case "ogg":
+                        c = string.Format($"-i \"{i}\" -c:a libvorbis \"{o}\"");
+                        break;
+                    case "pcm":
+                        c = string.Format($"-i \"{i}\" -c:a pcm_s16le -f s16le -ac 1 -ar 16000 \"{o}\"");
+                        break;
+                    default:
+                        c = string.Format($"-i \"{i}\" -c:v copy -c:a copy \"{o}\"");
+                        break;
+                }
+
+                ffmpeg.Run(i, o, c);
+            }
         }
         #endregion
 
         #region Auxiliary
-        private void Progression(int e)
+        //private void Progression(int e)
+        //{
+        //    Status.Invoke((MethodInvoker)delegate
+        //    {
+        //        Status.Text = "[Step " + step + "/" + steps + "]:";
+        //    });
+
+        //    progress = e;
+
+        //    int total = (progress + ((step - 1) * 100)) / steps;
+
+        //    Progress.Invoke((MethodInvoker)delegate
+        //    {
+        //        Progress.Style = ProgressBarStyle.Blocks;
+        //        Progress.Value = total;
+        //    });
+        //}
+
+        private void Progression()
         {
-            Status.Invoke((MethodInvoker)delegate
-            {
-                Status.Text = "[Step " + step + "/" + steps + "]:";
-            });
+            Status.Text = "[Step " + step + "/" + steps + "]:";
 
-            progress = e;
+            int total = (step * 100) / (steps) + (progress * 0);
 
-            int total = (progress + ((step - 1) * 100)) / steps;
-
-            Progress.Invoke((MethodInvoker)delegate
-            {
-                Progress.Style = ProgressBarStyle.Blocks;
-                Progress.Value = total;
-            });
+            Progress.Style = ProgressBarStyle.Blocks;
+            Progress.Value = total;
         }
         #endregion
     }
