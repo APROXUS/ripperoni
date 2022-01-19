@@ -166,7 +166,7 @@
     <value>True</value>
   </data>
   <data name="Title.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI, 9.75pt</value>
+    <value>Segoe UI, 9pt</value>
   </data>
   <data name="Title.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -181,7 +181,7 @@
     <value>1</value>
   </data>
   <data name="Title.Text" xml:space="preserve">
-    <value>APROX Ripperoni</value>
+    <value>APROX Ripperoni (0.9.1)</value>
   </data>
   <data name="Title.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>

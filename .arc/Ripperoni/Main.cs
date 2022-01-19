@@ -2,14 +2,13 @@
 using System.IO;
 using System.Drawing;
 using System.Threading;
+using System.Reflection;
 using System.Diagnostics;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
-using Downloader;
-using WebPWrapper;
-using YoutubeDLSharp;
+using Squirrel;
 using YoutubeDLSharp.Metadata;
 
 namespace Ripperoni
@@ -21,6 +20,12 @@ namespace Ripperoni
         public Main()
         {
             InitializeComponent();
+
+            Assembly a = Assembly.GetExecutingAssembly();
+            FileVersionInfo v = FileVersionInfo.GetVersionInfo(a.Location);
+            Title.Text = $"APROX Ripperoni ({v})";
+
+            CheckForUpdates();
 
             Json.Read();
 
@@ -43,6 +48,14 @@ namespace Ripperoni
             //Input.Text = "https://vimeo.com/666109154";
 
             Output.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
+        }
+
+        private async void CheckForUpdates()
+        {
+            using (var mgr = new UpdateManager("C:\\Github\\aprox-ripperoni\\Releases"))
+            {
+                await mgr.UpdateApp();
+            }
         }
 
         #region Handle Bar...
