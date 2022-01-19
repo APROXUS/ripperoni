@@ -152,6 +152,7 @@ namespace Ripperoni
             this.Margin = new System.Windows.Forms.Padding(0, 5, 0, 5);
             this.Name = "Record";
             this.Size = new System.Drawing.Size(400, 60);
+            this.Load += new System.EventHandler(this.Record_Load);
             this.RecordLayout.ResumeLayout(false);
             this.RecordLayout.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Thumbnail)).EndInit();

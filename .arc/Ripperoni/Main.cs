@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Drawing;
 using System.Threading;
 using System.Reflection;
@@ -8,7 +9,7 @@ using System.Windows.Forms;
 using System.Threading.Tasks;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
-using Squirrel;
+using Newtonsoft.Json;
 using YoutubeDLSharp.Metadata;
 
 namespace Ripperoni
@@ -16,47 +17,111 @@ namespace Ripperoni
     public partial class Main : Form
     {
         private Point mouselocation;
+        private string updater;
+        private bool update;
 
         public Main()
         {
             InitializeComponent();
 
-            Assembly a = Assembly.GetExecutingAssembly();
-            FileVersionInfo v = FileVersionInfo.GetVersionInfo(a.Location);
-            Title.Text = $"APROX Ripperoni ({v})";
-
-            CheckForUpdates();
-
             Json.Read();
 
-            if (Directory.Exists(Globals.Temp))
+            try
             {
-                Directory.Delete(Globals.Temp, true);
-            }
+                if (Directory.Exists(Globals.Temp))
+                {
+                    Directory.Delete(Globals.Temp, true);
+                }
 
-            Directory.CreateDirectory(Globals.Temp);
+                Directory.CreateDirectory(Globals.Temp);
+            }
+            catch
+            {
+                Utilities.Error("Could not create a temperary directory...", "Error", true);
+            }
         }
         
         private void Main_Load(object sender, EventArgs e)
         {
-            Format.SelectedItem = ".MP4";
-            Format_SelectedIndexChanged(sender, e);
+            try
+            {
+                Title.Text = $"APROX Ripperoni ({Assembly.GetExecutingAssembly().GetName().Version})";
 
-            Input.Text = "https://youtu.be/dQw4w9WgXcQ";
-            //Input.Text = "https://www.youtube.com/watch?v=tPEE9ZwTmy0";
-            //Input.Text = "https://vimeo.com/660521773";
-            //Input.Text = "https://vimeo.com/666109154";
+                Size = new Size(400, 670);
 
-            Output.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
+                Format.SelectedItem = ".MP4";
+                Format_SelectedIndexChanged(sender, e);
+
+                Input.Text = "https://youtu.be/dQw4w9WgXcQ";
+                //Input.Text = "https://www.youtube.com/watch?v=tPEE9ZwTmy0";
+                //Input.Text = "https://vimeo.com/660521773";
+                //Input.Text = "https://vimeo.com/666109154";
+
+                Output.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
+            }
+            catch
+            {
+                Utilities.Error("Could not apply default properties...", "Error", true);
+            }
+
+            Task.Factory.StartNew(() => CheckForUpdates());
         }
 
-        private async void CheckForUpdates()
+        private class Current
         {
-            using (var mgr = new UpdateManager("C:\\Github\\aprox-ripperoni\\Releases"))
+            public int Major { get; set; }
+            public int Minor { get; set; }
+            public int Build { get; set; }
+            public int Revision { get; set; }
+            public string Url { get; set; }
+        }
+
+        #region Update...
+        private void CheckForUpdates()
+        {
+            try
             {
-                await mgr.UpdateApp();
+                if (Utilities.Internet())
+                {
+                    string manifest = "https://cdn.aprox.us/app/ripperoni/current.json";
+
+                    if (Utilities.Exists(manifest))
+                    {
+                        string json;
+                        using (StreamReader sr = new StreamReader(WebRequest.Create(manifest).GetResponse().GetResponseStream()))
+                        {
+                            json = sr.ReadToEnd();
+                        }
+
+                        Current current = JsonConvert.DeserializeObject<Current>(json);
+
+                        if (current.Revision > Assembly.GetExecutingAssembly().GetName().Version.Revision)
+                        {
+                            Title.Text = Title.Text + " > " + current.Revision;
+
+                            Update(current);
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                Utilities.Error("Could not check for updates...", "Error", false);
             }
         }
+
+        private void Update(Current current)
+        {
+            updater = Path.GetTempPath() + "APROX TEMP/Ripperoni.exe";
+
+            using (var c = new WebClient())
+            {
+                c.DownloadFile(current.Url, updater);
+            }
+
+            update = true;
+        }
+        #endregion
 
         #region Handle Bar...
         protected override CreateParams CreateParams
@@ -72,12 +137,24 @@ namespace Ripperoni
 
         private void Exit_Click(object sender, EventArgs e)
         {
-            if (Directory.Exists(Globals.Temp))
+            try
             {
-                Directory.Delete(Globals.Temp, true);
+                if (Directory.Exists(Globals.Temp))
+                {
+                    Directory.Delete(Globals.Temp, true);
+                }
+
+                Directory.CreateDirectory(Globals.Temp);
+            }
+            catch
+            {
+                Utilities.Error("Could not create a temperary directory...", "Error", false);
             }
 
-            Directory.CreateDirectory(Globals.Temp);
+            if (update)
+            {
+                Process.Start(updater, "-silent");
+            }
 
             ExitProcess();
         }
@@ -98,7 +175,7 @@ namespace Ripperoni
             {
                 int dx = e.Location.X - mouselocation.X;
                 int dy = e.Location.Y - mouselocation.Y;
-                this.Location = new Point(this.Location.X + dx, this.Location.Y + dy);
+                Location = new Point(Location.X + dx, Location.Y + dy);
             }
         }
 
@@ -113,7 +190,7 @@ namespace Ripperoni
             {
                 int dx = e.Location.X - mouselocation.X;
                 int dy = e.Location.Y - mouselocation.Y;
-                this.Location = new Point(this.Location.X + dx, this.Location.Y + dy);
+                Location = new Point(Location.X + dx, Location.Y + dy);
             }
         }
 
@@ -128,7 +205,7 @@ namespace Ripperoni
             {
                 int dx = e.Location.X - mouselocation.X;
                 int dy = e.Location.Y - mouselocation.Y;
-                this.Location = new Point(this.Location.X + dx, this.Location.Y + dy);
+                Location = new Point(Location.X + dx, Location.Y + dy);
             }
         }
         #endregion
@@ -136,50 +213,57 @@ namespace Ripperoni
         #region Upper UI...
         private void Format_SelectedIndexChanged(object sender, EventArgs e)
         {
-            switch (Format.SelectedItem)
+            try
             {
-                case ".MP4":
-                case ".WebM":
-                case ".FLV":
-                case ".3GP":
-                case ".MOV":
-                case ".AVI":
-                    Elements.Items.Clear();
-                    Elements.Items.Add("Audio/Video");
-                    Elements.Items.Add("Video Only");
-                    Elements.SelectedItem = "Audio/Video";
+                switch (Format.SelectedItem)
+                {
+                    case ".MP4":
+                    case ".WebM":
+                    case ".FLV":
+                    case ".3GP":
+                    case ".MOV":
+                    case ".AVI":
+                        Elements.Items.Clear();
+                        Elements.Items.Add("Audio/Video");
+                        Elements.Items.Add("Video Only");
+                        Elements.SelectedItem = "Audio/Video";
 
-                    Resolution.Items.Clear();
-                    Resolution.Items.Add("4320p (8K)");
-                    Resolution.Items.Add("2160p (4K)");
-                    Resolution.Items.Add("1440p (QHD)");
-                    Resolution.Items.Add("1080p (FHD)");
-                    Resolution.Items.Add("720p (HD)");
-                    Resolution.Items.Add("480p (SD)");
-                    Resolution.Items.Add("360p");
-                    Resolution.Items.Add("240p");
-                    Resolution.Items.Add("144p");
-                    Resolution.SelectedItem = "1080p (FHD)";
-                    break;
-                default:
-                    Elements.Items.Clear();
-                    Elements.Items.Add("Audio Only");
-                    Elements.SelectedItem = "Audio Only";
+                        Resolution.Items.Clear();
+                        Resolution.Items.Add("4320p (8K)");
+                        Resolution.Items.Add("2160p (4K)");
+                        Resolution.Items.Add("1440p (QHD)");
+                        Resolution.Items.Add("1080p (FHD)");
+                        Resolution.Items.Add("720p (HD)");
+                        Resolution.Items.Add("480p (SD)");
+                        Resolution.Items.Add("360p");
+                        Resolution.Items.Add("240p");
+                        Resolution.Items.Add("144p");
+                        Resolution.SelectedItem = "1080p (FHD)";
+                        break;
+                    default:
+                        Elements.Items.Clear();
+                        Elements.Items.Add("Audio Only");
+                        Elements.SelectedItem = "Audio Only";
 
-                    Resolution.Items.Clear();
-                    Resolution.Items.Add("Highest");
-                    Resolution.SelectedItem = "Highest";
-                    break;
+                        Resolution.Items.Clear();
+                        Resolution.Items.Add("Highest");
+                        Resolution.SelectedItem = "Highest";
+                        break;
+                }
+
+                switch (Format.SelectedItem)
+                {
+                    case "-- Video --":
+                        Format.SelectedItem = ".MP4";
+                        break;
+                    case "-- Audio --":
+                        Format.SelectedItem = ".MP3";
+                        break;
+                }
             }
-
-            switch (Format.SelectedItem)
+            catch
             {
-                case "-- Video --":
-                    Format.SelectedItem = ".MP4";
-                    break;
-                case "-- Audio --":
-                    Format.SelectedItem = ".MP3";
-                    break;
+                Utilities.Error("Could not update combo boxes...", "Error", false);
             }
         }
         #endregion
@@ -187,55 +271,108 @@ namespace Ripperoni
         #region Lower UI...
         private void Support_Click(object sender, EventArgs e)
         {
-            Process.Start("https://ytdl-org.github.io/youtube-dl/supportedsites.html");
+            try
+            {
+                Process.Start("https://ytdl-org.github.io/youtube-dl/supportedsites.html");
+            }
+            catch
+            {
+                Utilities.Error("Could not open external website in browser...", "Error", false);
+            }
         }
 
         private void Settings_Click(object sender, EventArgs e)
         {
-            Settings settings = new Settings();
-            settings.ShowDialog();
+            try
+            {
+                Settings settings = new Settings();
+                settings.ShowDialog();
+            }
+            catch
+            {
+                Utilities.Error("Could not open settings window...", "Error", false);
+            }
         }
 
         private void Metadata_Click(object sender, EventArgs e)
         {
-            Metadata metadata = new Metadata(Input.Text);
-            metadata.ShowDialog();
+            try
+            {
+                Metadata metadata = new Metadata(Input.Text);
+                metadata.ShowDialog();
+            }
+            catch
+            {
+                Utilities.Error("Could not open metadata window...", "Error", false);
+            }
         }
 
         private void OpenFolder_Click(object sender, EventArgs e)
         {
-            CommonOpenFileDialog dialog = new CommonOpenFileDialog
+            try
             {
-                InitialDirectory = Output.Text,
-                IsFolderPicker = true
-            };
-            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+                CommonOpenFileDialog dialog = new CommonOpenFileDialog
+                {
+                    InitialDirectory = Output.Text,
+                    IsFolderPicker = true
+                };
+                if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+                {
+                    Output.Text = dialog.FileName;
+                }
+            }
+            catch
             {
-                Output.Text = dialog.FileName;
+                Utilities.Error("Could not open file explorer selector...", "Error", false);
             }
         }
 
         private void Convert_Click(object sender, EventArgs e)
         {
-            if (Path.IsPathRooted(Output.Text))
+            if (Utilities.Internet())
             {
-                Directory.CreateDirectory(Output.Text);
+                if (Uri.IsWellFormedUriString(Input.Text, UriKind.Absolute))
+                {
+                    if (Input.Text.Split(':')[0].ToLower() == "http" || Input.Text.Split(':')[0].ToLower() == "https")
+                    {
+                        if (Path.IsPathRooted(Output.Text))
+                        {
+                            Directory.CreateDirectory(Output.Text);
 
-                Records.VerticalScroll.Visible = true;
-                Records.HorizontalScroll.Maximum = 0;
-                Records.AutoScroll = true;
-                Records.ResumeLayout();
+                            Records.VerticalScroll.Visible = true;
+                            Records.HorizontalScroll.Maximum = 0;
+                            Records.AutoScroll = true;
+                            Records.ResumeLayout();
 
-                Main m = this;
+                            Main m = this;
 
-                string input = Input.Text;
-                string output = Output.Text;
-                string format = (string)Format.SelectedItem;
-                string resolution = (string)Resolution.SelectedItem;
-                string elements = (string)Elements.SelectedItem;
+                            string input = Input.Text;
+                            string output = Output.Text;
+                            string format = (string)Format.SelectedItem;
+                            string resolution = (string)Resolution.SelectedItem;
+                            string elements = (string)Elements.SelectedItem;
 
-                Processor p = new Processor();
-                Task.Factory.StartNew(() => p.Process(m, input, output, format, resolution, elements));
+                            Processor p = new Processor();
+                            Task.Factory.StartNew(() => p.Process(m, input, output, format, resolution, elements));
+                        }
+                        else
+                        {
+                            Utilities.Error("[Output] Not a valid output path and must be rooted...", "Error", false);
+                        }
+                    }
+                    else
+                    {
+                        Utilities.Error("[Input] Not a valid HTTP/HTTPS url...", "Error", false);
+                    }
+                }
+                else
+                {
+                    Utilities.Error("[Input] Not a valid URL...", "Error", false);
+                }
+            }
+            else
+            {
+                Utilities.Error("You are not currently connected to the internet...", "Internet Connectivity", false);
             }
         }
         #endregion
@@ -243,30 +380,58 @@ namespace Ripperoni
         #region Footer UI...
         private void FooterIcon_Click(object sender, EventArgs e)
         {
-            Process.Start("https://www.aprox.us/");
+            try 
+            {
+                Process.Start("https://www.aprox.us/");
+            }
+            catch
+            {
+                Utilities.Error("Could not open external website in browser...", "Error", false);
+            }
         }
 
         private void Website_Click(object sender, EventArgs e)
         {
-            Process.Start("https://www.aprox.us/service/ripperoni");
+            try
+            {
+                Process.Start("https://www.aprox.us/service/ripperoni");
+            }
+            catch
+            {
+                Utilities.Error("Could not open external website in browser...", "Error", false);
+            }
         }
 
         private void Repository_Click(object sender, EventArgs e)
         {
-            Process.Start("https://www.github.com/aproxus/ripperoni");
+            try
+            {
+                Process.Start("https://www.github.com/aproxus/ripperoni");
+            }
+            catch
+            {
+                Utilities.Error("Could not open external website in browser...", "Error", false);
+            }
         }
 
         private void Folder_Click(object sender, EventArgs e)
         {
-            Directory.CreateDirectory(Output.Text);
-
-            ProcessStartInfo info = new ProcessStartInfo
+            try
             {
-                Arguments = Output.Text,
-                FileName = "explorer.exe"
-            };
+                Directory.CreateDirectory(Output.Text);
 
-            Process.Start(info);
+                ProcessStartInfo info = new ProcessStartInfo
+                {
+                    Arguments = Output.Text,
+                    FileName = "explorer.exe"
+                };
+
+                Process.Start(info);
+            }
+            catch
+            {
+                Utilities.Error("Could not open file explorer...", "Error", false);
+            }
         }
 
         #region Hover Effect...
@@ -309,14 +474,16 @@ namespace Ripperoni
         #endregion
 
         #region Auxiliary...
-        //private void ErrorProcess(string m, string t)
-        //{
-        //    MessageBox.Show(m, t, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        //}
-        
         private void MinimizeProcess()
         {
-            WindowState = FormWindowState.Minimized;
+            try
+            {
+                WindowState = FormWindowState.Minimized;
+            }
+            catch
+            {
+                Utilities.Error("Could not minimize the window...", "Error", false);
+            }
         }
 
         private void ExitProcess()
@@ -351,27 +518,34 @@ namespace Ripperoni
 
         public void Process(Main t, string i, string o, string f, string r, string e)
         {
-            m = t;
-
-            input = i;
-            output = o;
-            format = f;
-            resolution = r;
-            elements = e;
-
-            epoch_primary = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
-            UseRecord();
-
-            if (elements == "Audio/Video")
+            try
             {
-                epoch_secondary = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
-                UseAdditional();
+                m = t;
+
+                input = i;
+                output = o;
+                format = f;
+                resolution = r;
+                elements = e;
+
+                epoch_primary = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
+                UseRecord();
+
+                if (elements == "Audio/Video")
+                {
+                    epoch_secondary = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
+                    UseAdditional();
+                }
+
+                if (elements == "Audio/Video" || real_format != down_format)
+                {
+                    epoch_tertiary = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
+                    UseProcessing();
+                }
             }
-
-            if (elements == "Audio/Video" || real_format != down_format)
+            catch
             {
-                epoch_tertiary = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
-                UseProcessing();
+                Utilities.Error("Could not set Processor variables...", "Error", true);
             }
 
             PostMedia();
@@ -379,38 +553,59 @@ namespace Ripperoni
 
         private void UseRecord()
         {
-            m.Records.Invoke((MethodInvoker)delegate {
-                m.Records.Controls.Add(new Record(this, format, resolution, elements, input, epoch_primary));
-            });
-
-            while (!done_primary)
+            try
             {
-                Thread.Sleep(100);
+                m.Records.Invoke((MethodInvoker)delegate {
+                    m.Records.Controls.Add(new Record(this, format, resolution, elements, input, epoch_primary));
+                });
+
+                while (!done_primary)
+                {
+                    Thread.Sleep(100);
+                }
+            }
+            catch
+            {
+                Utilities.Error("Could not invoke Record Controller...", "Error", true);
             }
         }
 
         private void UseAdditional()
         {
-            m.Records.Invoke((MethodInvoker)delegate {
-                m.Records.Controls.Add(new Additional(this, formats, title, epoch_secondary));
-            });
-
-            while (!done_secondary)
+            try
             {
-                Thread.Sleep(100);
+                m.Records.Invoke((MethodInvoker)delegate {
+                    m.Records.Controls.Add(new Additional(this, formats, title, epoch_secondary));
+                });
+
+                while (!done_secondary)
+                {
+                    Thread.Sleep(100);
+                }
+            }
+            catch
+            {
+                Utilities.Error("Could not invoke Additional Controller...", "Error", true);
             }
         }
 
         private void UseProcessing()
         {
-            m.Records.Invoke((MethodInvoker)delegate
+            try
             {
-                m.Records.Controls.Add(new Processing(this, epoch_primary, epoch_secondary, real_format, down_format, title, epoch_tertiary));
-            });
+                m.Records.Invoke((MethodInvoker)delegate
+                {
+                    m.Records.Controls.Add(new Processing(this, epoch_primary, epoch_secondary, real_format, down_format, title, epoch_tertiary));
+                });
 
-            while (!done_tertiary)
+                while (!done_tertiary)
+                {
+                    Thread.Sleep(100);
+                }
+            }
+            catch
             {
-                Thread.Sleep(100);
+                Utilities.Error("Could not invoke Processing Controller...", "Error", true);
             }
         }
 
@@ -419,32 +614,46 @@ namespace Ripperoni
             string source;
             string destination;
 
-            if (elements == "Audio/Video" || real_format != down_format)
+            try
             {
-                source = Globals.Temp + "\\" + title + "." + epoch_tertiary + "." + real_format;
+                if (elements == "Audio/Video" || real_format != down_format)
+                {
+                    source = Globals.Temp + "\\" + title + "." + epoch_tertiary + "." + real_format;
+                }
+                else
+                {
+                    source = Globals.Temp + "\\" + title + "." + epoch_primary + "." + real_format;
+                }
+
+                destination = output + "\\" + title + "." + real_format;
+
+                File.Delete(destination);
+                File.Move(source, destination);
             }
-            else
+            catch
             {
-                source = Globals.Temp + "\\" + title + "." + epoch_primary + "." + real_format;
-            }
-
-            destination = output + "\\" + title + "." + real_format;
-
-            File.Delete(destination);
-            File.Move(source, destination);
-
-            if (elements == "Audio/Video")
-            {
-                File.Delete(Globals.Temp + "\\" + title + "." + epoch_secondary + ".m4a");
-                File.Delete(Globals.Temp + "\\" + title + "." + epoch_tertiary + "." + real_format);
-            }
-
-            if (real_format != down_format)
-            {
-                File.Delete(Globals.Temp + "\\" + title + "." + epoch_tertiary + "." + real_format);
+                Utilities.Error("Could not transfer completed files...", "Error", false);
             }
 
-            File.Delete(Globals.Temp + "\\" + title + "." + epoch_primary + "." + down_format);
+            try
+            {
+                if (elements == "Audio/Video")
+                {
+                    File.Delete(Globals.Temp + "\\" + title + "." + epoch_secondary + ".m4a");
+                    File.Delete(Globals.Temp + "\\" + title + "." + epoch_tertiary + "." + real_format);
+                }
+
+                if (real_format != down_format)
+                {
+                    File.Delete(Globals.Temp + "\\" + title + "." + epoch_tertiary + "." + real_format);
+                }
+
+                File.Delete(Globals.Temp + "\\" + title + "." + epoch_primary + "." + down_format);
+            }
+            catch
+            {
+                Utilities.Error("Could not delete temperary files...", "Error", false);
+            }
         }
     }
 }

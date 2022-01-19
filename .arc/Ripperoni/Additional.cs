@@ -59,18 +59,37 @@ namespace Ripperoni
 
             download = new DownloadService(DownloadOption);
 
-            download.DownloadProgressChanged += DownloadProgression;
+            try
+            {
+                download.DownloadProgressChanged += DownloadProgression;
+            }
+            catch
+            {
+                Utilities.Error("Could not create progress event listener...", "Error", false);
+            }
 
             GetMedia();
         }
 
-        #region Main Thread
-        private async void GetMedia() {
+        private void Additional_Load(object sender, EventArgs e)
+        {
+            Size = new System.Drawing.Size(400, 25);
+        }
 
-            formats.ToList().FindAll(d => d.Extension == "m4a").ForEach(d =>
+        #region Main Thread
+        private async void GetMedia()
+        {
+            try
             {
-                record = d;
-            });
+                formats.ToList().FindAll(d => d.Extension == "m4a").ForEach(d =>
+                {
+                    record = d;
+                });
+            }
+            catch
+            {
+                Utilities.Error("Could not find a viable or valid media record...", "Error", true);
+            }
 
             video = record.Url;
 
@@ -78,11 +97,18 @@ namespace Ripperoni
 
             size = FileSize(new Uri(video));
 
-            Title.Text = "(Audio) " + title.Truncate(38);
+            Title.Text = "(Audio) " + title.Truncate(42);
 
             Json.Read();
 
-            await download.DownloadFileTaskAsync(video, temp);
+            try
+            {
+                await download.DownloadFileTaskAsync(video, temp);
+            }
+            catch
+            {
+                Utilities.Error("Could not download required files (primary)...", "Error", true);
+            }
 
             process.done_secondary = true;
         }
@@ -91,29 +117,46 @@ namespace Ripperoni
         #region Auxiliary
         private static string FileSize(Uri u)
         {
-            var w = HttpWebRequest.Create(u);
-            w.Method = "HEAD";
-
-            using (var r = w.GetResponse())
+            try
             {
-                var f = r.Headers.Get("Content-Length");
-                var m = Math.Round(Convert.ToDouble(f) / 1024.0 / 1024.0, 2);
-                return m + " MB";
+                var w = HttpWebRequest.Create(u);
+                w.Method = "HEAD";
+
+                using (var r = w.GetResponse())
+                {
+                    var f = r.Headers.Get("Content-Length");
+                    var m = Math.Round(Convert.ToDouble(f) / 1024.0 / 1024.0, 2);
+                    return m + " MB";
+                }
             }
+            catch
+            {
+                Utilities.Error("Could not compute the size of remote files...", "Error", false);
+            }
+
+            return 0 + " MB";
         }
 
         private void DownloadProgression(object sender, Downloader.DownloadProgressChangedEventArgs e)
         {
-            Status.Invoke((MethodInvoker)delegate
+            try
             {
-                Status.Text = "[" + Math.Round(Convert.ToDouble(e.ReceivedBytesSize) / 1024.0 / 1024.0, 2) + " / " + size + "]:";
-            });
+                Status.Invoke((MethodInvoker)delegate
+                {
+                    Status.Text = "[" + Math.Round(Convert.ToDouble(e.ReceivedBytesSize) / 1024.0 / 1024.0, 2) + " / " + size + "]:";
+                });
 
-            Progress.Invoke((MethodInvoker)delegate
+                Progress.Invoke((MethodInvoker)delegate
+                {
+                    Progress.Style = ProgressBarStyle.Blocks;
+                    Progress.Value = (Int32)e.ProgressPercentage;
+                });
+
+            }
+            catch
             {
-                Progress.Style = ProgressBarStyle.Blocks;
-                Progress.Value = (Int32)e.ProgressPercentage;
-            });
+                Utilities.Error("Could not invoke UI controls on progress event...", "Error", false);
+            }
         }
         #endregion
     }

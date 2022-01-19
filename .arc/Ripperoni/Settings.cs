@@ -16,38 +16,61 @@ namespace Ripperoni
 
         private void Settings_Load(object sender, EventArgs e)
         {
+            Size = new Size(250, 458);
+
             Json.Read();
 
-            Buffer.Text = Globals.Buffer.ToString();
-            Chunks.Text = Globals.Chunks.ToString();
-            Bytes.Text = Globals.Bytes.ToString();
-            Tries.Text = Globals.Tries.ToString();
-            Timeout.Text = Globals.Timeout.ToString();
-            Temp.Text = Globals.Temp;
-            OnFly.Checked = Globals.OnFly;
+            try
+            {
+                Buffer.Text = Globals.Buffer.ToString();
+                Chunks.Text = Globals.Chunks.ToString();
+                Bytes.Text = Globals.Bytes.ToString();
+                Tries.Text = Globals.Tries.ToString();
+                Timeout.Text = Globals.Timeout.ToString();
+                Temp.Text = Globals.Temp;
+                OnFly.Checked = Globals.OnFly;
+            }
+            catch
+            {
+                Utilities.Error("Could not get global variables...", "Error", false);
+            }
         }
 
         private void Save()
         {
-            Globals.Buffer = Int32.Parse(Buffer.Text);
-            Globals.Chunks = Int32.Parse(Chunks.Text);
-            Globals.Bytes = Int64.Parse(Bytes.Text);
-            Globals.Tries = Int32.Parse(Tries.Text);
-            Globals.Timeout = Int32.Parse(Timeout.Text);
-            Globals.Temp = Temp.Text;
-            Globals.OnFly = OnFly.Checked;
+            try
+            {
+                Globals.Buffer = Int32.Parse(Buffer.Text);
+                Globals.Chunks = Int32.Parse(Chunks.Text);
+                Globals.Bytes = Int64.Parse(Bytes.Text);
+                Globals.Tries = Int32.Parse(Tries.Text);
+                Globals.Timeout = Int32.Parse(Timeout.Text);
+                Globals.Temp = Temp.Text;
+                Globals.OnFly = OnFly.Checked;
 
-            Json.Write();
+                Json.Write();
+            }
+            catch
+            {
+                Utilities.Error("Could not post global variables...", "Error", false);
+            }
         }
 
         private void Firewall_Click(object sender, EventArgs e)
         {
-            ProcessStartInfo f = new ProcessStartInfo("Firewall.bat")
+            try
             {
-                UseShellExecute = true,
-                Verb = "runas"
-            };
-            Process.Start(f);
+                ProcessStartInfo f = new ProcessStartInfo("Firewall.bat")
+                {
+                    UseShellExecute = true,
+                    Verb = "runas"
+                };
+                Process.Start(f);
+            }
+            catch
+            {
+                Utilities.Error("Could not open external priviledged batch script...", "Error", false);
+            }
         }
 
         #region Handle Bar...

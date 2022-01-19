@@ -21,24 +21,37 @@ namespace Ripperoni
 
         private async void Metadata_Load(object sender, EventArgs e)
         {
-            YoutubeDL y = new YoutubeDL();
-            y.YoutubeDLPath = "DownloaderP.exe";
+            Size = new Size(300, 450);
 
-            var r = await y.RunVideoDataFetch(input);
-            VideoData v = r.Data;
-            string title = v.Title;
-            string description = v.Description;
-            string uploader = v.Uploader;
-            long views = v.ViewCount ?? default;
-            DateTime date = v.UploadDate ?? default;
-            float length = v.Duration ?? default;
+            Utilities.ForceInternet();
 
-            VideoTitle.Text = title;
-            VideoDesc.Text = description;
-            VideoUploader.Text = uploader;
-            VideoViews.Text = String.Format("{0:n0}", views);
-            VideoLength.Text = TimeSpan.FromSeconds(length).ToString(@"hh\:mm\:ss");
-            VideoDate.Text = date.ToString("MM/dd/yyyy");
+            try
+            {
+                YoutubeDL y = new YoutubeDL
+                {
+                    YoutubeDLPath = "DownloaderP.exe"
+                };
+
+                var r = await y.RunVideoDataFetch(input);
+                VideoData v = r.Data;
+                string title = v.Title;
+                string description = v.Description;
+                string uploader = v.Uploader;
+                long views = v.ViewCount ?? default;
+                DateTime date = v.UploadDate ?? default;
+                float length = v.Duration ?? default;
+
+                VideoTitle.Text = title;
+                VideoDesc.Text = description;
+                VideoUploader.Text = uploader;
+                VideoViews.Text = String.Format("{0:n0}", views);
+                VideoLength.Text = TimeSpan.FromSeconds(length).ToString(@"hh\:mm\:ss");
+                VideoDate.Text = date.ToString("MM/dd/yyyy");
+            }
+            catch
+            {
+                Utilities.Error($"Could not retrieve information about the inputted URL ({input})...", "Error", false);
+            }
         }
 
         #region Handle Bar
@@ -64,7 +77,7 @@ namespace Ripperoni
             {
                 int dx = e.Location.X - mouselocation.X;
                 int dy = e.Location.Y - mouselocation.Y;
-                this.Location = new Point(this.Location.X + dx, this.Location.Y + dy);
+                Location = new Point(Location.X + dx, Location.Y + dy);
             }
         }
 

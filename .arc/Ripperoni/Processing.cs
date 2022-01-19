@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using System.Threading.Tasks;
 
 using Javi.FFmpeg;
 
@@ -54,13 +55,18 @@ namespace Ripperoni
             ProcessMedia();
         }
 
+        private void Processing_Load(object sender, System.EventArgs e)
+        {
+            Size = new System.Drawing.Size(400, 25);
+        }
+
         #region Main Thread
-        private void ProcessMedia()
+        private async void ProcessMedia()
         {
             temp_multiplex = Globals.Temp + "\\" + title + "." + epoch + "." + down_format;
             temp_convert = Globals.Temp + "\\" + title + "." + epoch + "." + real_format;
 
-            Title.Text = "(Processing) " + title;
+            Title.Text = "(Processing) " + title.Truncate(38);
 
             Json.Read();
 
@@ -71,19 +77,19 @@ namespace Ripperoni
                 second_file = Globals.Temp + "\\" + title + "." + second_epoch + ".m4a";
 
                 step++;
+                Progression();
 
-                Multiplex();
+                await Task.Run(() => Multiplex());
 
                 first_file = temp_multiplex;
             }
 
-            Progression();
-
             if (real_format != down_format)
             {
                 step++;
+                Progression();
 
-                Convert();
+                await Task.Run(() => Convert());
             }
 
             Progression();
@@ -93,63 +99,77 @@ namespace Ripperoni
 
         private void Multiplex()
         {
-            using (var ffmpeg = new FFmpeg(@"FFmpeg.exe"))
+            try
             {
-                string i1 = first_file; string i2 = second_file; string o = temp_multiplex;
-
-                string c;
-
-                switch (real_format)
+                using (var ffmpeg = new FFmpeg(@"FFmpeg.exe"))
                 {
-                    case "webm":
-                        c = string.Format($"-i \"{i1}\"  -i \"{i2}\" -c:v copy -c:a libvorbis \"{o}\"");
-                        break;
-                    default:
-                        c = string.Format($"-i \"{i1}\" -i \"{i2}\" -c:v copy -c:a aac \"{o}\"");
-                        break;
-                }
+                    string i1 = first_file; string i2 = second_file; string o = temp_multiplex;
 
-                ffmpeg.Run(i1, o, c);
+                    string c;
+
+                    switch (real_format)
+                    {
+                        case "webm":
+                            c = string.Format($"-i \"{i1}\"  -i \"{i2}\" -c:v copy -c:a libvorbis \"{o}\"");
+                            break;
+                        default:
+                            c = string.Format($"-i \"{i1}\" -i \"{i2}\" -c:v copy -c:a aac \"{o}\"");
+                            break;
+                    }
+
+                    ffmpeg.Run(i1, o, c);
+                }
+            }
+            catch
+            {
+                Utilities.Error("Could not run FFmpeg process without error (Multiplexer)...", "Error", true);
             }
         }
 
         private void Convert()
         {
-            using (var ffmpeg = new FFmpeg(@"FFmpeg.exe"))
+            try
             {
-                string i = first_file; string o = temp_convert;
-
-                string c;
-
-                switch (real_format)
+                using (var ffmpeg = new FFmpeg(@"FFmpeg.exe"))
                 {
-                    case "webm":
-                        c = string.Format($"-i \"{i}\" -c:v vp9 -c:a libvorbis \"{o}\"");
-                        break;
-                    case "flv":
-                        c = string.Format($"-i \"{i}\" -c:v libx264 -ar 22050 -crf 28 \"{o}\"");
-                        break;
-                    case "mov":
-                            c = string.Format($"-i \"{i}\" -f mov \"{o}\"");
-                    break;
-                    case "mp3":
-                        c = string.Format($"-i \"{i}\" -c:a libmp3lame \"{o}\"");
-                        break;
-                    case "wav":
-                        c = string.Format($"-i \"{i}\" -c:a pcm_s16le \"{o}\"");
-                        break;
-                    case "ogg":
-                        c = string.Format($"-i \"{i}\" -c:a libvorbis \"{o}\"");
-                        break;
-                    case "pcm":
-                        c = string.Format($"-i \"{i}\" -c:a pcm_s16le -f s16le -ac 1 -ar 16000 \"{o}\"");
-                        break;
-                    default:
-                        c = string.Format($"-i \"{i}\" -c:v copy -c:a copy \"{o}\"");
-                        break;
-                }
+                    string i = first_file; string o = temp_convert;
 
-                ffmpeg.Run(i, o, c);
+                    string c;
+
+                    switch (real_format)
+                    {
+                        case "webm":
+                            c = string.Format($"-i \"{i}\" -c:v vp9 -c:a libvorbis \"{o}\"");
+                            break;
+                        case "flv":
+                            c = string.Format($"-i \"{i}\" -c:v libx264 -ar 22050 -crf 28 \"{o}\"");
+                            break;
+                        case "mov":
+                            c = string.Format($"-i \"{i}\" -f mov \"{o}\"");
+                            break;
+                        case "mp3":
+                            c = string.Format($"-i \"{i}\" -c:a libmp3lame \"{o}\"");
+                            break;
+                        case "wav":
+                            c = string.Format($"-i \"{i}\" -c:a pcm_s16le \"{o}\"");
+                            break;
+                        case "ogg":
+                            c = string.Format($"-i \"{i}\" -c:a libvorbis \"{o}\"");
+                            break;
+                        case "pcm":
+                            c = string.Format($"-i \"{i}\" -c:a pcm_s16le -f s16le -ac 1 -ar 16000 \"{o}\"");
+                            break;
+                        default:
+                            c = string.Format($"-i \"{i}\" -c:v copy -c:a copy \"{o}\"");
+                            break;
+                    }
+
+                    ffmpeg.Run(i, o, c);
+                }
+            }
+            catch
+            {
+                Utilities.Error("Could not run FFmpeg process without error (Converter)...", "Error", true);
             }
         }
         #endregion
@@ -157,30 +177,44 @@ namespace Ripperoni
         #region Auxiliary
         //private void Progression(int e)
         //{
-        //    Status.Invoke((MethodInvoker)delegate
+        //    try
         //    {
-        //        Status.Text = "[Step " + step + "/" + steps + "]:";
-        //    });
+        //        Status.Invoke((MethodInvoker)delegate
+        //        {
+        //            Status.Text = "[Step " + step + "/" + steps + "]:";
+        //        });
 
-        //    progress = e;
+        //        progress = e;
 
-        //    int total = (progress + ((step - 1) * 100)) / steps;
+        //        int total = (progress + ((step - 1) * 100)) / steps;
 
-        //    Progress.Invoke((MethodInvoker)delegate
+        //        Progress.Invoke((MethodInvoker)delegate
+        //        {
+        //            Progress.Style = ProgressBarStyle.Blocks;
+        //            Progress.Value = total;
+        //        });
+        //    }
+        //    catch
         //    {
-        //        Progress.Style = ProgressBarStyle.Blocks;
-        //        Progress.Value = total;
-        //    });
+        //        Utilities.Error("Could not invoke UI controls on progress event...", "Error", false);
+        //    }
         //}
 
         private void Progression()
         {
-            Status.Text = "[Step " + step + "/" + steps + "]:";
+            try
+            {
+                Status.Text = "[Step " + step + "/" + steps + "]:";
 
-            int total = (step * 100) / (steps) + (progress * 0);
+                int total = (step * 100) / (steps) + (progress * 0);
 
-            Progress.Style = ProgressBarStyle.Blocks;
-            Progress.Value = total;
+                Progress.Style = ProgressBarStyle.Blocks;
+                Progress.Value = total;
+            }
+            catch
+            {
+                Utilities.Error("Could not invoke UI controls on progress event...", "Error", false);
+            }
         }
         #endregion
     }

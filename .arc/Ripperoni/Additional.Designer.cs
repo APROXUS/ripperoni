@@ -101,6 +101,7 @@ namespace Ripperoni
             this.Margin = new System.Windows.Forms.Padding(0, 5, 0, 5);
             this.Name = "Additional";
             this.Size = new System.Drawing.Size(400, 25);
+            this.Load += new System.EventHandler(this.Additional_Load);
             this.AdditionalLayout.ResumeLayout(false);
             this.AdditionalLayout.PerformLayout();
             this.ResumeLayout(false);
