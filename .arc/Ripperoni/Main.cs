@@ -67,6 +67,7 @@ namespace Ripperoni
             Task.Factory.StartNew(() => CheckForUpdates());
         }
 
+        #region Update...
         private class Current
         {
             public int Major { get; set; }
@@ -76,7 +77,6 @@ namespace Ripperoni
             public string Url { get; set; }
         }
 
-        #region Update...
         private void CheckForUpdates()
         {
             try
@@ -112,6 +112,8 @@ namespace Ripperoni
 
         private void Update(Current current)
         {
+            Directory.CreateDirectory(Path.GetTempPath() + "APROX TEMP");
+
             updater = Path.GetTempPath() + "APROX TEMP/Ripperoni.exe";
 
             using (var c = new WebClient())
