@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.MainLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.Progress = new System.Windows.Forms.ProgressBar();
             this.HandleLayout = new System.Windows.Forms.TableLayoutPanel();
             this.Icon = new System.Windows.Forms.PictureBox();
             this.Title = new System.Windows.Forms.Label();
@@ -79,12 +80,18 @@
             // 
             this.MainLayout.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             resources.ApplyResources(this.MainLayout, "MainLayout");
+            this.MainLayout.Controls.Add(this.Progress, 0, 1);
             this.MainLayout.Controls.Add(this.HandleLayout, 0, 0);
-            this.MainLayout.Controls.Add(this.OutputLayout, 0, 3);
-            this.MainLayout.Controls.Add(this.FooterLayout, 0, 4);
-            this.MainLayout.Controls.Add(this.LinedLayout, 0, 2);
-            this.MainLayout.Controls.Add(this.SettingsLayout, 0, 1);
+            this.MainLayout.Controls.Add(this.OutputLayout, 0, 4);
+            this.MainLayout.Controls.Add(this.FooterLayout, 0, 5);
+            this.MainLayout.Controls.Add(this.LinedLayout, 0, 3);
+            this.MainLayout.Controls.Add(this.SettingsLayout, 0, 2);
             this.MainLayout.Name = "MainLayout";
+            // 
+            // Progress
+            // 
+            resources.ApplyResources(this.Progress, "Progress");
+            this.Progress.Name = "Progress";
             // 
             // HandleLayout
             // 
@@ -471,6 +478,7 @@
         private System.Windows.Forms.Label ElementsLabel;
         public System.Windows.Forms.FlowLayoutPanel Records;
         private System.Windows.Forms.Button Settings;
+        private System.Windows.Forms.ProgressBar Progress;
     }
 }
 

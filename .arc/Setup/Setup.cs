@@ -42,9 +42,15 @@ namespace Setup
 
             try
             {
-                while (Process.GetProcessesByName("Ripperoni").Length > 0)
+                int expected = 0;
+
+                if (silent) expected = 1;
+
+                while (Process.GetProcessesByName("Ripperoni").Length > expected)
                 {
                     Error("You must close all instances of Ripperoni before installing...", false);
+
+                    System.Threading.Thread.Sleep(100);
                 }
             }
             catch

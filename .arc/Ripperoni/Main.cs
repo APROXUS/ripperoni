@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Threading.Tasks;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
+using Downloader;
 using Newtonsoft.Json;
 using YoutubeDLSharp.Metadata;
 
@@ -16,6 +17,7 @@ namespace Ripperoni
 {
     public partial class Main : Form
     {
+        private DownloadService download;
         private Point mouselocation;
         private string updater;
         private bool update;
@@ -45,7 +47,11 @@ namespace Ripperoni
         {
             try
             {
-                Title.Text = $"APROX Ripperoni ({Assembly.GetExecutingAssembly().GetName().Version})";
+                string assembly =  $"{Assembly.GetExecutingAssembly().GetName().Version.Major}." +
+                    $"{Assembly.GetExecutingAssembly().GetName().Version.Minor}." +
+                    $"{Assembly.GetExecutingAssembly().GetName().Version.Build}." +
+                    $"{Assembly.GetExecutingAssembly().GetName().Version.Revision:X}";
+                Title.Text = $"APROX Ripperoni ({assembly})";
 
                 Size = new Size(400, 670);
 
@@ -73,7 +79,6 @@ namespace Ripperoni
             public int Major { get; set; }
             public int Minor { get; set; }
             public int Build { get; set; }
-            public int Revision { get; set; }
             public string Url { get; set; }
         }
 
@@ -95,9 +100,9 @@ namespace Ripperoni
 
                         Current current = JsonConvert.DeserializeObject<Current>(json);
 
-                        if (current.Revision > Assembly.GetExecutingAssembly().GetName().Version.Revision)
+                        if (current.Build > Assembly.GetExecutingAssembly().GetName().Version.Build)
                         {
-                            Title.Text = Title.Text + " > " + current.Revision;
+                            Title.Text = $"{Title.Text} > ({current.Major}.{current.Minor}.{current.Build})";
 
                             Update(current);
                         }
@@ -110,18 +115,65 @@ namespace Ripperoni
             }
         }
 
-        private void Update(Current current)
+        private async void Update(Current current)
         {
+            DownloadConfiguration DownloadOption = new DownloadConfiguration()
+            {
+                BufferBlockSize = Globals.Buffer,
+                ChunkCount = Globals.Chunks,
+                MaximumBytesPerSecond = Globals.Bytes,
+                MaxTryAgainOnFailover = Globals.Tries,
+                OnTheFlyDownload = Globals.OnFly,
+                ParallelDownload = true,
+                TempDirectory = Globals.Temp,
+                Timeout = Globals.Timeout,
+                RequestConfiguration =
+                {
+                    Accept = "*/*",
+                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                    CookieContainer =  new CookieContainer(),
+                    Headers = new WebHeaderCollection(),
+                    KeepAlive = false,
+                    ProtocolVersion = HttpVersion.Version11,
+                    UseDefaultCredentials = false,
+                    UserAgent = $"DownloaderSample/{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}"
+                }
+            };
+
+            download = new DownloadService(DownloadOption);
+
+            download.DownloadProgressChanged += Progression;
+
             Directory.CreateDirectory(Path.GetTempPath() + "APROX TEMP");
 
             updater = Path.GetTempPath() + "APROX TEMP/Ripperoni.exe";
 
-            using (var c = new WebClient())
+            try
             {
-                c.DownloadFile(current.Url, updater);
+                await download.DownloadFileTaskAsync(current.Url, updater);
+            }
+            catch
+            {
+                Utilities.Error("Could not download required files (primary)...", "Error", true);
             }
 
             update = true;
+        }
+
+        private void Progression(object sender, Downloader.DownloadProgressChangedEventArgs e)
+        {
+            try
+            {
+                Progress.Invoke((MethodInvoker)delegate
+                {
+                    Progress.Style = ProgressBarStyle.Blocks;
+                    Progress.Value = (Int32)e.ProgressPercentage;
+                });
+            }
+            catch
+            {
+                Utilities.Error("Could not invoke UI controls on progress event...", "Error", false);
+            }
         }
         #endregion
 
