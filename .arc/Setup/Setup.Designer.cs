@@ -58,7 +58,7 @@ namespace Setup
             this.Progress.ForeColor = System.Drawing.Color.Lime;
             this.Progress.Location = new System.Drawing.Point(6, 31);
             this.Progress.Margin = new System.Windows.Forms.Padding(6, 6, 6, 17);
-            this.Progress.MarqueeAnimationSpeed = 25;
+            this.Progress.MarqueeAnimationSpeed = 10;
             this.Progress.Name = "Progress";
             this.Progress.Size = new System.Drawing.Size(268, 2);
             this.Progress.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
@@ -81,7 +81,7 @@ namespace Setup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Black;
+            this.BackColor = System.Drawing.Color.Gray;
             this.ClientSize = new System.Drawing.Size(280, 50);
             this.Controls.Add(this.SetupLayout);
             this.DoubleBuffered = true;
@@ -92,7 +92,7 @@ namespace Setup
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Ripperoni Setup";
             this.TopMost = true;
-            this.TransparencyKey = System.Drawing.Color.Black;
+            this.TransparencyKey = System.Drawing.Color.Gray;
             this.SetupLayout.ResumeLayout(false);
             this.SetupLayout.PerformLayout();
             this.ResumeLayout(false);

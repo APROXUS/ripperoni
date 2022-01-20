@@ -102,7 +102,7 @@ namespace Ripperoni
             {
                 var y = new YoutubeDL
                 {
-                    YoutubeDLPath = "DownloaderP.exe"
+                    YoutubeDLPath = Globals.Real + "DownloaderP.exe"
                 };
 
                 var r = await y.RunVideoDataFetch(input);

@@ -101,7 +101,7 @@ namespace Ripperoni
         {
             try
             {
-                using (var ffmpeg = new FFmpeg(@"FFmpeg.exe"))
+                using (var ffmpeg = new FFmpeg(Globals.Real + @"FFmpeg.exe"))
                 {
                     string i1 = first_file; string i2 = second_file; string o = temp_multiplex;
 
@@ -130,7 +130,7 @@ namespace Ripperoni
         {
             try
             {
-                using (var ffmpeg = new FFmpeg(@"FFmpeg.exe"))
+                using (var ffmpeg = new FFmpeg(Globals.Real + @"FFmpeg.exe"))
                 {
                     string i = first_file; string o = temp_convert;
 

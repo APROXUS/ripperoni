@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 using System.Windows.Forms;
 
@@ -15,9 +16,9 @@ namespace Ripperoni
         {
             try
             {
-                if (File.Exists("Config.json"))
+                if (File.Exists(Globals.Real + "Config.json"))
                 {
-                    string json = File.ReadAllText("config.json");
+                    string json = File.ReadAllText(Globals.Real + "Config.json");
 
                     JObject token = JObject.Parse(json);
                     Globals.Buffer = (int)token["Buffer"];
@@ -44,7 +45,7 @@ namespace Ripperoni
         {
             try
             {
-                StreamWriter sw = new StreamWriter("Config.json");
+                StreamWriter sw = new StreamWriter(Globals.Real + "Config.json");
                 using (JsonWriter w = new JsonTextWriter(sw))
                 {
                     w.Formatting = Formatting.Indented;
@@ -81,7 +82,7 @@ namespace Ripperoni
             }
         }
     }
-
+    
     public static class Globals
     {
         public static int Buffer { get; set; } = 10240;
@@ -91,6 +92,7 @@ namespace Ripperoni
         public static bool OnFly { get; set; } = false;
         public static int Timeout { get; set; } = 1000;
         public static string Temp { get; set; } = Path.GetTempPath() + "Ripperoni";
+        public static string Real = AppDomain.CurrentDomain.BaseDirectory;
     }
 
     public static class Utilities
