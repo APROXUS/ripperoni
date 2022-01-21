@@ -95,6 +95,25 @@ namespace Ripperoni
             Progression();
 
             process.done_tertiary = true;
+
+            Done();
+        }
+
+        private void Done()
+        {
+            Task.Factory.StartNew(() => {
+                bool ending = true;
+                while (ending)
+                {
+                    if (process.done)
+                    {
+                        process.Remove(this);
+                        ending = false;
+                    }
+
+                    System.Threading.Thread.Sleep(10);
+                }
+            });
         }
 
         private void Multiplex()

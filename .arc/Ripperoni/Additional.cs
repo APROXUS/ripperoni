@@ -3,6 +3,7 @@ using System.Net;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 
 using Downloader;
 using YoutubeDLSharp.Metadata;
@@ -111,6 +112,25 @@ namespace Ripperoni
             }
 
             process.done_secondary = true;
+
+            Done();
+        }
+
+        private void Done()
+        {
+            Task.Factory.StartNew(() => {
+                bool ending = true;
+                while (ending)
+                {
+                    if (process.done)
+                    {
+                        process.Remove(this);
+                        ending = false;
+                    }
+
+                    System.Threading.Thread.Sleep(10);
+                }
+            });
         }
         #endregion
 

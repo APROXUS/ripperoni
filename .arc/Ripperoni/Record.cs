@@ -5,6 +5,7 @@ using System.Linq;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using Downloader;
@@ -354,6 +355,25 @@ namespace Ripperoni
             process.down_format = down_format;
 
             process.done_primary = true;
+
+            Done();
+        }
+
+        private void Done()
+        {
+            Task.Factory.StartNew(() => {
+                bool ending = true;
+                while (ending)
+                {
+                    if (process.done)
+                    {
+                        process.Remove(this);
+                        ending = false;
+                    }
+
+                    System.Threading.Thread.Sleep(10);
+                }
+            });
         }
         #endregion
 

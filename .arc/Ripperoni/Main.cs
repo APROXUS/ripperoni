@@ -17,6 +17,8 @@ namespace Ripperoni
 {
     public partial class Main : Form
     {
+        private readonly System.Windows.Forms.Timer animation = new System.Windows.Forms.Timer();
+
         private DownloadService download;
         private Point mouselocation;
         private string updater;
@@ -100,12 +102,13 @@ namespace Ripperoni
 
                         Current current = JsonConvert.DeserializeObject<Current>(json);
 
-                        if (current.Build > Assembly.GetExecutingAssembly().GetName().Version.Build)
-                        {
-                            Title.Text = $"{Title.Text} > ({current.Major}.{current.Minor}.{current.Build})";
+                        int majority = current.Major - Assembly.GetExecutingAssembly().GetName().Version.Major;
+                        int minority = current.Minor - Assembly.GetExecutingAssembly().GetName().Version.Minor;
+                        int buildity = current.Build - Assembly.GetExecutingAssembly().GetName().Version.Build;
 
-                            Update(current);
-                        }
+                        if (majority > 0) Update(current);
+                        if (majority == 0 && minority > 0) Update(current);
+                        if (majority == 0 && minority == 0 && buildity > 0) Update(current);
                     }
                 }
             }
@@ -117,6 +120,10 @@ namespace Ripperoni
 
         private async void Update(Current current)
         {
+            Title.Invoke((MethodInvoker)delegate {
+                Title.Text = $"{Title.Text} > ({current.Major}.{current.Minor}.{current.Build})";
+            });
+
             DownloadConfiguration DownloadOption = new DownloadConfiguration()
             {
                 BufferBlockSize = Globals.Buffer,
@@ -211,6 +218,13 @@ namespace Ripperoni
             }
 
             ExitProcess();
+        }
+
+        private void DecreaseOpacity(object sender, EventArgs e)
+        {
+            if (this.Opacity >= 0.1) this.Opacity -= 0.05;
+            if (this.Opacity <= 0.0) animation.Stop();
+            if (this.Opacity <= 0.1) Close();
         }
 
         private void Minimize_Click(object sender, EventArgs e)
@@ -542,7 +556,9 @@ namespace Ripperoni
 
         private void ExitProcess()
         {
-            Close();
+            animation.Interval = 1;
+            animation.Tick += DecreaseOpacity;
+            animation.Start();
         }
         #endregion
     }
@@ -569,6 +585,8 @@ namespace Ripperoni
         public bool done_primary = false;
         public bool done_secondary = false;
         public bool done_tertiary = false;
+
+        public bool done;
 
         public void Process(Main t, string i, string o, string f, string r, string e)
         {
@@ -708,6 +726,20 @@ namespace Ripperoni
             {
                 Utilities.Error("Could not delete temperary files...", "Error", false);
             }
+
+            done = true;
+        }
+
+        public void Remove(Control c)
+        {
+            m.Records.Invoke((MethodInvoker)delegate
+            {
+                if (m.Records.Controls.Contains(c))
+                {
+                    m.Records.Controls.Remove(c);
+                    c.Dispose();
+                }
+            });
         }
     }
 }
