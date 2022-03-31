@@ -49,11 +49,7 @@ namespace Ripperoni
         {
             try
             {
-                string assembly =  $"{Assembly.GetExecutingAssembly().GetName().Version.Major}." +
-                    $"{Assembly.GetExecutingAssembly().GetName().Version.Minor}." +
-                    $"{Assembly.GetExecutingAssembly().GetName().Version.Build}." +
-                    $"{Assembly.GetExecutingAssembly().GetName().Version.Revision:X}";
-                Title.Text = $"APROX Ripperoni ({assembly})";
+                Title.Text = $"APROX Ripperoni";
 
                 Size = new Size(400, 670);
 
@@ -61,9 +57,6 @@ namespace Ripperoni
                 Format_SelectedIndexChanged(sender, e);
 
                 Input.Text = "https://youtu.be/dQw4w9WgXcQ";
-                //Input.Text = "https://www.youtube.com/watch?v=tPEE9ZwTmy0";
-                //Input.Text = "https://vimeo.com/660521773";
-                //Input.Text = "https://vimeo.com/666109154";
 
                 Output.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
             }
@@ -121,7 +114,7 @@ namespace Ripperoni
         private async void Update(Current current)
         {
             Title.Invoke((MethodInvoker)delegate {
-                Title.Text = $"{Title.Text} > ({current.Major}.{current.Minor}.{current.Build})";
+                Title.Text = $"{Title.Text} > {current.Major}.{current.Minor}.{current.Build}";
             });
 
             DownloadConfiguration DownloadOption = new DownloadConfiguration()

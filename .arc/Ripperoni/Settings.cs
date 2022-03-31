@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Reflection;
 using System.Diagnostics;
 using System.Windows.Forms;
 
@@ -16,6 +17,12 @@ namespace Ripperoni
 
         private void Settings_Load(object sender, EventArgs e)
         {
+            string assembly = $"{Assembly.GetExecutingAssembly().GetName().Version.Major}." +
+                    $"{Assembly.GetExecutingAssembly().GetName().Version.Minor}." +
+                    $"{Assembly.GetExecutingAssembly().GetName().Version.Build}." +
+                    $"{Assembly.GetExecutingAssembly().GetName().Version.Revision:X}";
+            Title.Text = $"Settings: {assembly}";
+
             Size = new Size(250, 458);
 
             Json.Read();
