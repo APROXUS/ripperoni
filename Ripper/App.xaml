@@ -11,8 +11,21 @@
                 <ResourceDictionary Source="Theme/MenuButtonTheme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
-            
+            <DataTemplate DataType="{x:Type vm:DownloadsViewModel}">
+                <v:DownloadsView/>
+            </DataTemplate>
 
+            <DataTemplate DataType="{x:Type vm:PropertiesViewModel}">
+                <v:PropertiesView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+                <v:SettingsView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:AboutViewModel}">
+                <v:AboutView/>
+            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

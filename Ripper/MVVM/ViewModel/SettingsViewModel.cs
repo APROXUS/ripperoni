@@ -2,7 +2,7 @@
 
 namespace Ripper.MVVM.ViewModel
 {
-    class DownloadsViewModel
+    class SettingsViewModel
     {
 
     }
