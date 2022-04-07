@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Ripper.MVVM.ViewModel
+﻿namespace Ripper.MVVM.ViewModel
 {
     class DownloadsViewModel
     {

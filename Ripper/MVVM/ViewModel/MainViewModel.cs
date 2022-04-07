@@ -1,5 +1,4 @@
-﻿using System;
-using Ripper.Core;
+﻿using Ripper.Core;
 
 namespace Ripper.MVVM.ViewModel
 {
@@ -21,7 +20,7 @@ namespace Ripper.MVVM.ViewModel
         {
             get { return _currentView; }
             set
-            { 
+            {
                 _currentView = value;
                 OnPropertyChanged();
             }
