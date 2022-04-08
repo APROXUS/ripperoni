@@ -1,28 +1,72 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Diagnostics;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Ripper.MVVM.View
 {
-    /// <summary>
-    /// Interaction logic for SettingsView.xaml
-    /// </summary>
     public partial class SettingsView : UserControl
     {
         public SettingsView()
         {
             InitializeComponent();
+
+            Json.Write();
+
+            TempText.Text = Globals.Temp;
+            OnflyCheck.IsChecked = Globals.OnFly;
+            SpeedText.Text = Globals.Bytes.ToString();
+            DelayText.Text = Globals.Timeout.ToString();
+            ChunkText.Text = Globals.Chunks.ToString();
+            TriesText.Text = Globals.Tries.ToString();
+            BufferText.Text = Globals.Buffer.ToString();
         }
+
+        #region Firewall Fix UI...
+        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            ProcessStartInfo psi = new ProcessStartInfo();
+            psi.FileName = "Firewall.bat";
+            psi.Verb = "runas";
+            Process.Start(psi);
+        }
+        #endregion
+
+        #region Temperary Folder UI...
+        private void TempText_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Globals.Temp = TempText.Text;
+        }
+        #endregion
+
+        #region Downloader Settings UI...
+        private void OnflyCheck_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            try { Globals.OnFly = OnflyCheck.IsChecked ?? false; } catch { }
+        }
+
+        private void SpeedText_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try { Globals.Bytes = int.Parse(SpeedText.Text); } catch { }
+        }
+
+        private void DelayText_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try { Globals.Timeout = int.Parse(DelayText.Text); } catch { }
+        }
+
+        private void ChunkText_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try { Globals.Chunks = int.Parse(ChunkText.Text); } catch { }
+        }
+
+        private void TriesText_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try { Globals.Tries = int.Parse(TriesText.Text); } catch { }
+        }
+
+        private void BufferText_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try { Globals.Buffer = int.Parse(BufferText.Text); } catch { }
+        }
+        #endregion
     }
 }

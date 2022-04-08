@@ -1,4 +1,4 @@
-﻿@echo off
+@echo off
 
 fltmc >nul 2>&1 && (
 	echo Configuration starting...

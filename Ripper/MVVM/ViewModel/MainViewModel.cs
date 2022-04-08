@@ -18,7 +18,10 @@ namespace Ripper.MVVM.ViewModel
 
         public object CurrentView
         {
-            get { return _currentView; }
+            get
+            {
+                return _currentView;
+            }
             set
             {
                 _currentView = value;

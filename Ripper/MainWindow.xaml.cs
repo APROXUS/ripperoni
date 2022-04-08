@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 using System.Diagnostics;
 using System.Windows.Input;
@@ -11,6 +12,22 @@ namespace Ripper
         public MainWindow()
         {
             InitializeComponent();
+
+            Json.Read();
+
+            try
+            {
+                if (Directory.Exists(Globals.Temp))
+                {
+                    Directory.Delete(Globals.Temp, true);
+                }
+
+                Directory.CreateDirectory(Globals.Temp);
+            }
+            catch
+            {
+                Utilities.Error("Could not create a temperary directory...", "Error", true);
+            }
         }
 
         #region Handle Bar UI...
@@ -48,20 +65,29 @@ namespace Ripper
 
         private void TextBlock_MouseDown_3(object sender, MouseButtonEventArgs e)
         {
-            //Directory.CreateDirectory(Output.Text);
+            Directory.CreateDirectory(Globals.Output);
 
-            Process.Start("explorer", @"C:\");
+            Process.Start("explorer", Globals.Output);
         }
         #endregion
 
         #region Auxiliary...
         private void MinimizeProcess()
         {
+            Json.Write();
+
             WindowState = WindowState.Minimized;
         }
 
         private void ExitProcess()
         {
+            Json.Write();
+
+            if (Directory.Exists(Globals.Temp))
+            {
+                Directory.Delete(Globals.Temp, true);
+            }
+
             var a = new DoubleAnimation(0, TimeSpan.FromSeconds(0.5));
             a.Completed += (s, _) => Close();
             BeginAnimation(OpacityProperty, a);

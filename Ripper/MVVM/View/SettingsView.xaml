@@ -22,7 +22,7 @@
             <Border Margin="10" BorderBrush="#3D3D3D" BorderThickness="0,1,0,1" Grid.Column="1">
                 <Button Padding="5" VerticalAlignment="Center" Grid.Column="1"
                         BorderThickness="0" Margin="5,1,0,1" Content="&#xE83d;"
-                        FontFamily="Segoe MDL2 Assets">
+                        FontFamily="Segoe MDL2 Assets" Click="Button_Click">
                     <Button.Resources>
                         <Style TargetType="{x:Type Button}">
                             <Setter Property="Foreground" Value="#969696"/>
@@ -53,9 +53,9 @@
             <Label Margin="3" Foreground="White" Content="Temperary file directory (global path) :"/>
 
             <Border Margin="10,0,10,10" BorderBrush="#3D3D3D" BorderThickness="0,1,0,1">
-                <TextBox Padding="5" VerticalAlignment="Center" Grid.Column="0"
+                <TextBox Padding="5" VerticalAlignment="Center" Grid.Column="0" x:Name="TempText"
                          Foreground="#969696" BorderThickness="0" Margin="0,1,5,1" 
-                         Background="Transparent" CaretBrush="#969696"/>
+                         Background="Transparent" CaretBrush="#969696" TextChanged="TempText_TextChanged"/>
             </Border>
         </StackPanel>
 
@@ -67,7 +67,7 @@
 
             <Border Margin="5" BorderBrush="#3D3D3D" BorderThickness="0,1,0,1">
                 <CheckBox Margin="5" VerticalAlignment="Center" Foreground="#969696"
-                          Background="White" Content="Enabled?"/>
+                          Background="White" Content="Enabled?" x:Name="OnflyCheck" Click="OnflyCheck_Click"/>
             </Border>
 
             <Label Grid.Column="1" VerticalAlignment="Center"
@@ -83,7 +83,7 @@
             <Border Margin="5" BorderBrush="#3D3D3D" BorderThickness="0,1,0,1">
                 <TextBox Padding="5" VerticalAlignment="Center" Grid.Column="0"
                          Foreground="#969696" BorderThickness="0" Margin="0,1,5,1" 
-                         Background="Transparent" CaretBrush="#969696"/>
+                         Background="Transparent" CaretBrush="#969696" x:Name="SpeedText" TextChanged="SpeedText_TextChanged"/>
             </Border>
 
             <Label Grid.Column="1" VerticalAlignment="Center"
@@ -99,7 +99,7 @@
             <Border Margin="5" BorderBrush="#3D3D3D" BorderThickness="0,1,0,1">
                 <TextBox Padding="5" VerticalAlignment="Center" Grid.Column="0"
                          Foreground="#969696" BorderThickness="0" Margin="0,1,5,1" 
-                         Background="Transparent" CaretBrush="#969696"/>
+                         Background="Transparent" CaretBrush="#969696" x:Name="DelayText" TextChanged="DelayText_TextChanged"/>
             </Border>
 
             <Label Grid.Column="1" VerticalAlignment="Center"
@@ -115,7 +115,7 @@
             <Border Margin="5" BorderBrush="#3D3D3D" BorderThickness="0,1,0,1">
                 <TextBox Padding="5" VerticalAlignment="Center" Grid.Column="0"
                          Foreground="#969696" BorderThickness="0" Margin="0,1,5,1" 
-                         Background="Transparent" CaretBrush="#969696"/>
+                         Background="Transparent" CaretBrush="#969696" x:Name="ChunkText" TextChanged="ChunkText_TextChanged"/>
             </Border>
 
             <Label Grid.Column="1" VerticalAlignment="Center"
@@ -131,7 +131,7 @@
             <Border Margin="5" BorderBrush="#3D3D3D" BorderThickness="0,1,0,1">
                 <TextBox Padding="5" VerticalAlignment="Center" Grid.Column="0"
                          Foreground="#969696" BorderThickness="0" Margin="0,1,5,1" 
-                         Background="Transparent" CaretBrush="#969696"/>
+                         Background="Transparent" CaretBrush="#969696" x:Name="TriesText" TextChanged="TriesText_TextChanged"/>
             </Border>
 
             <Label Grid.Column="1" VerticalAlignment="Center"
@@ -147,7 +147,7 @@
             <Border Margin="5" BorderBrush="#3D3D3D" BorderThickness="0,1,0,1">
                 <TextBox Padding="5" VerticalAlignment="Center" Grid.Column="0"
                          Foreground="#969696" BorderThickness="0" Margin="0,1,5,1" 
-                         Background="Transparent" CaretBrush="#969696"/>
+                         Background="Transparent" CaretBrush="#969696" x:Name="BufferText" TextChanged="BufferText_TextChanged"/>
             </Border>
 
             <Label Grid.Column="1" VerticalAlignment="Center"
