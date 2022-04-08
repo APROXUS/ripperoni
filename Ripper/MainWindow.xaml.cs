@@ -6,9 +6,6 @@ using System.Windows.Media.Animation;
 
 namespace Ripper
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
@@ -36,49 +33,24 @@ namespace Ripper
         #region Footer UI...
         private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            var p = new ProcessStartInfo
-            {
-                FileName = "https://www.aprox.us/",
-                UseShellExecute = true
-            };
-
-            Process.Start(p);
+            Process.Start("https://www.aprox.us/");
         }
 
         private void TextBlock_MouseDown_1(object sender, MouseButtonEventArgs e)
         {
-            var p = new ProcessStartInfo
-            {
-                FileName = "https://www.aprox.us/services/ripper",
-                UseShellExecute = true
-            };
-
-            Process.Start(p);
+            Process.Start("https://www.aprox.us/services/ripper");
         }
 
         private void TextBlock_MouseDown_2(object sender, MouseButtonEventArgs e)
         {
-            var p = new ProcessStartInfo
-            {
-                FileName = "https://www.github.com/aproxus/ripper",
-                UseShellExecute = true
-            };
-
-            Process.Start(p);
+            Process.Start("https://www.github.com/aproxus/ripper");
         }
 
         private void TextBlock_MouseDown_3(object sender, MouseButtonEventArgs e)
         {
             //Directory.CreateDirectory(Output.Text);
 
-            var p = new ProcessStartInfo
-            {
-                //FileName = Output.Text,
-                FileName = "explorer",
-                Arguments = @"C:\"
-            };
-
-            Process.Start(p);
+            Process.Start("explorer", @"C:\");
         }
         #endregion
 

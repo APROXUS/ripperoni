@@ -13,7 +13,8 @@
                 <GradientStop Color="#202020" Offset="1"/>
             </LinearGradientBrush>
         </Grid.Background>
-        
+
         <Label Foreground="White">About</Label>
     </Grid>
 </UserControl>
+

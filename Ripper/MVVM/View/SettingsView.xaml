@@ -73,7 +73,7 @@
             <Label Grid.Column="1" VerticalAlignment="Center"
                    Foreground="White" Content=": Cache in memory (requires enough RAM)"/>
         </Grid>
-        
+
         <Grid Margin="5,2,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
@@ -89,7 +89,7 @@
             <Label Grid.Column="1" VerticalAlignment="Center"
                    Foreground="White" Content=": Transfer speed limit (bytes/s) (0=inf)"/>
         </Grid>
-        
+
         <Grid Margin="5,5,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
@@ -137,7 +137,7 @@
             <Label Grid.Column="1" VerticalAlignment="Center"
                    Foreground="White" Content=": Attempts before fail"/>
         </Grid>
-        
+
         <Grid Margin="5,5,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
