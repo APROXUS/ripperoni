@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Ripper" mc:Ignorable="d"
         xmlns:vm="clr-namespace:Ripper.MVVM.ViewModel"
         xmlns:v="clr-namespace:Ripper.MVVM.View"
-        Height="700" Width="410" WindowStyle="None" ResizeMode="NoResize"
+        Height="710" Width="410" WindowStyle="None" ResizeMode="NoResize"
         Background="Transparent" AllowsTransparency="True">
     <Window.DataContext>
         <vm:MainViewModel/>
@@ -27,99 +27,99 @@
                 <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0" x:Name="DragBar" Background="#202020"
-                  MouseLeftButtonDown="DragBar_MouseLeftButtonDown">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="35"/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="40"/>
-                    <ColumnDefinition Width="40"/>
-                </Grid.ColumnDefinitions>
+            <Border Grid.Row="0" x:Name="DragBar" Background="#202020"
+                  MouseLeftButtonDown="DragBar_MouseLeftButtonDown" CornerRadius="8">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="35"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="40"/>
+                        <ColumnDefinition Width="40"/>
+                    </Grid.ColumnDefinitions>
 
-                <Image Grid.Column="0" Margin="9,4,9,4" Source="/Pepperoni Tiny.png"/>
+                    <Image Grid.Column="0" Margin="9,4,9,4" Source="/Pepperoni Tiny.png"/>
 
-                <TextBlock Text="APROX Ripper" Grid.Column="1"
+                    <TextBlock Text="APROX Ripper" Grid.Column="1"
                            VerticalAlignment="Center" FontSize="12"
                            HorizontalAlignment="Left" Foreground="White"/>
 
-                <Button Grid.Column="2" FontFamily="Segoe MDL2 Assets"
+                    <Button Grid.Column="2" FontFamily="Segoe MDL2 Assets"
                         Content="&#xE108;" BorderThickness="0" Foreground="White" Click="Button_Click_1">
-                    <Button.Resources>
-                        <Style TargetType="{x:Type Button}">
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Border Background="{TemplateBinding Background}">
-                                            <ContentPresenter HorizontalAlignment="Center"
+                        <Button.Resources>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border Background="{TemplateBinding Background}">
+                                                <ContentPresenter HorizontalAlignment="Center"
                                                               VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#007ACC"/>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Resources>
-                </Button>
-                <Button Grid.Column="3" FontFamily="Segoe MDL2 Assets"
-                        Content="&#xE10A;" BorderThickness="0" Foreground="White" Height="25" VerticalAlignment="Top" Click="Button_Click">
-                    <Button.Resources>
-                        <Style TargetType="{x:Type Border}">
-                            <Setter Property="CornerRadius" Value="0,8,0,0"/>
-                        </Style>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#3D3D3D"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                    
+                    <Button Grid.Column="3" FontFamily="Segoe MDL2 Assets"
+                            Content="&#xE10A;" BorderThickness="0" Foreground="White"
+                            Height="25" VerticalAlignment="Top" Click="Button_Click">
+                        <Button.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="0,8,0,0"/>
+                            </Style>
 
-                        <Style TargetType="{x:Type Button}">
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Border Background="{TemplateBinding Background}">
-                                            <ContentPresenter HorizontalAlignment="Center"
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border Background="{TemplateBinding Background}">
+                                                <ContentPresenter HorizontalAlignment="Center"
                                                               VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#DA2626"/>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Resources>
-                </Button>
-            </Grid>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="Red"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                </Grid>
+            </Border>
 
             <Border Grid.Row="1" BorderBrush="#3D3D3D" BorderThickness="0,1,0,1">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
-                    <RadioButton Content="Downloads" Height="35" Width="100" FontSize="14"
-                                 Grid.Column="0" Foreground="White" IsChecked="True"
-                                 Style="{StaticResource MenuButtonTheme}"
-                                 Command="{Binding DownloadsVC}" FontFamily="Segoe UI"/>
+                    <RadioButton Content="Downloads" FontSize="14" Grid.Column="0"
+                                 IsChecked="True" Style="{StaticResource MenuButtonTheme}"
+                                 Command="{Binding DownloadsVC}"/>
 
-                    <RadioButton Content="Properties" Height="35" Width="100" FontSize="14"
-                                 Grid.Column="1" Foreground="White"
+                    <RadioButton Content="Properties" FontSize="14" Grid.Column="1"
                                  Style="{StaticResource MenuButtonTheme}"
                                  Command="{Binding PropertiesVC}"/>
 
-                    <RadioButton Content="Settings" Height="35" Width="100" FontSize="14"
-                                 Grid.Column="2" Foreground="White"
+                    <RadioButton Content="Settings" FontSize="14" Grid.Column="2"
                                  Style="{StaticResource MenuButtonTheme}"
                                  Command="{Binding SettingsVC}"/>
 
-                    <RadioButton Content="About" Height="35" Width="100" FontSize="14"
-                                 Grid.Column="3" Foreground="White"
+                    <RadioButton Content="About" FontSize="14" Grid.Column="3"
                                  Style="{StaticResource MenuButtonTheme}"
                                  Command="{Binding AboutVC}"/>
                 </Grid>
@@ -136,13 +136,12 @@
                     </Grid.ColumnDefinitions>
 
                     <Border Grid.Column="0" CornerRadius="15" Height="30" Margin="5"
-                            BorderBrush="White" BorderThickness="1">
+                            BorderBrush="White" BorderThickness="1" Background="#191919">
                         <Grid>
                             <TextBox Padding="10,0,10,0" VerticalAlignment="Center"
                                      Foreground="White" BorderThickness="0"
                                      Background="Transparent" Margin="1"
-                                     x:Name="InputBox" CaretBrush="White"
-                                     FontFamily="/Fonts/#Poppins"/>
+                                     x:Name="InputBox" CaretBrush="White"/>
 
                             <TextBlock Text="Search query or direct link..."
                                        IsHitTestVisible="False" Margin="13,0,0,0"
@@ -166,7 +165,7 @@
 
                     <Border Grid.Column="1" CornerRadius="15" Height="30" Margin="5"
                             BorderBrush="White" BorderThickness="1">
-                        <Button Grid.Column="3" FontFamily="Segoe MDL2 Assets"
+                        <Button Grid.Column="3" FontFamily="Segoe MDL2 Assets" Background="#191919"
                                 Content="&#xE896;" BorderThickness="0" Foreground="White">
                             <Button.Resources>
                                 <Style TargetType="{x:Type Border}">
@@ -197,7 +196,7 @@
 
                     <Border Grid.Column="2" CornerRadius="15" Height="30" Margin="5"
                             BorderBrush="White" BorderThickness="1">
-                        <Button Grid.Column="3" FontFamily="Segoe MDL2 Assets"
+                        <Button Grid.Column="3" FontFamily="Segoe MDL2 Assets" Background="#191919"
                                 Content="&#xE094;" BorderThickness="0" Foreground="White">
                             <Button.Resources>
                                 <Style TargetType="{x:Type Border}">
