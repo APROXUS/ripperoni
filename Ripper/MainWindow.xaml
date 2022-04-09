@@ -141,7 +141,7 @@
                             <TextBox Padding="10,0,10,0" VerticalAlignment="Center"
                                      Foreground="White" BorderThickness="0"
                                      Background="Transparent" Margin="1"
-                                     x:Name="InputBox" CaretBrush="White"/>
+                                     x:Name="InputText" CaretBrush="White"/>
 
                             <TextBlock Text="Search query or direct link..."
                                        IsHitTestVisible="False" Margin="13,0,0,0"
@@ -150,7 +150,7 @@
                                 <TextBlock.Style>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Text, ElementName=InputBox}"
+                                            <DataTrigger Binding="{Binding Text, ElementName=InputText}"
                                                          Value="">
                                                 <Setter Property="Visibility" Value="Visible"/>
                                             </DataTrigger>
@@ -166,7 +166,7 @@
                     <Border Grid.Column="1" CornerRadius="15" Height="30" Margin="5"
                             BorderBrush="White" BorderThickness="1">
                         <Button Grid.Column="3" FontFamily="Segoe MDL2 Assets" Background="#191919"
-                                Content="&#xE896;" BorderThickness="0" Foreground="White">
+                                Content="&#xE896;" BorderThickness="0" Foreground="White" Click="Button_Click_2">
                             <Button.Resources>
                                 <Style TargetType="{x:Type Border}">
                                     <Setter Property="CornerRadius" Value="15"/>
@@ -197,7 +197,7 @@
                     <Border Grid.Column="2" CornerRadius="15" Height="30" Margin="5"
                             BorderBrush="White" BorderThickness="1">
                         <Button Grid.Column="3" FontFamily="Segoe MDL2 Assets" Background="#191919"
-                                Content="&#xE094;" BorderThickness="0" Foreground="White">
+                                Content="&#xE094;" BorderThickness="0" Foreground="White" Click="Button_Click_3">
                             <Button.Resources>
                                 <Style TargetType="{x:Type Border}">
                                     <Setter Property="CornerRadius" Value="15"/>

@@ -4,6 +4,7 @@ namespace Ripper.MVVM.ViewModel
 {
     class MainViewModel : ObservableObject
     {
+        #region View Variables...
         public RelayCommand DownloadsVC { get; set; }
         public RelayCommand PropertiesVC { get; set; }
         public RelayCommand SettingsVC { get; set; }
@@ -15,6 +16,7 @@ namespace Ripper.MVVM.ViewModel
         public AboutViewModel AboutVM { get; set; }
 
         private object _currentView;
+        #endregion
 
         public object CurrentView
         {
@@ -39,6 +41,7 @@ namespace Ripper.MVVM.ViewModel
 
             CurrentView = DownloadsVM;
 
+            #region Relay Commands...
             DownloadsVC = new RelayCommand(o =>
             {
                 CurrentView = DownloadsVM;
@@ -58,6 +61,7 @@ namespace Ripper.MVVM.ViewModel
             {
                 CurrentView = AboutVM;
             });
+            #endregion
         }
     }
 }

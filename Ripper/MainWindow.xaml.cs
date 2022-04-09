@@ -47,6 +47,18 @@ namespace Ripper
         }
         #endregion
 
+        #region Input UI...
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+
+        }
+        #endregion
+
         #region Footer UI...
         private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -92,6 +104,7 @@ namespace Ripper
             a.Completed += (s, _) => Close();
             BeginAnimation(OpacityProperty, a);
         }
+
         #endregion
     }
 }

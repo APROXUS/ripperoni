@@ -116,11 +116,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MVVM\View\RecordView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MVVM\View\SettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\MenuButtonTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\MenuScrollTheme.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -139,6 +147,9 @@
     </Compile>
     <Compile Include="MVVM\View\PropertiesView.xaml.cs">
       <DependentUpon>PropertiesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\RecordView.xaml.cs">
+      <DependentUpon>RecordView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\View\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
@@ -207,10 +218,18 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Tools\DownloaderP.exe" />
-    <Content Include="Tools\FFmpeg.exe" />
-    <Content Include="Tools\LibWebPx64.dll" />
-    <Content Include="Tools\LibWebPx86.dll" />
+    <Content Include="DownloaderP.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="FFmpeg.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="LibWebPx64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="LibWebPx86.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

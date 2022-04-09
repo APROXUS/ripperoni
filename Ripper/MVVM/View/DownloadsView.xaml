@@ -5,7 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Ripper.MVVM.View"
              mc:Ignorable="d" d:DesignHeight="555" d:DesignWidth="400">
-    <Grid>
-        <Label Foreground="White">Downloads</Label>
-    </Grid>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Background="#202020">
+        <Grid>
+            <TextBlock Text="There are no currently active downloads..."
+                    IsHitTestVisible="False" Foreground="White"
+                    HorizontalAlignment="Center" Margin="10"/>
+
+            <StackPanel x:Name="Records">
+                
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
 </UserControl>
