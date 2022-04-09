@@ -5,11 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Ripper.MVVM.View"
              mc:Ignorable="d" d:DesignHeight="555" d:DesignWidth="400">
-    <ScrollViewer VerticalScrollBarVisibility="Auto" Background="#202020">
+    <ScrollViewer Height="555" Width="400" Background="#202020"
+                  VerticalScrollBarVisibility="Auto">
         <Grid>
             <TextBlock Text="There are no currently active downloads..."
-                    IsHitTestVisible="False" Foreground="White"
-                    HorizontalAlignment="Center" Margin="10"/>
+                       IsHitTestVisible="False" Foreground="White"
+                       HorizontalAlignment="Center" Margin="10"/>
 
             <StackPanel x:Name="Records">
                 

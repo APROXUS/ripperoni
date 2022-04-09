@@ -5,6 +5,8 @@ using System.Diagnostics;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 
+using Ripper.MVVM.View;
+
 namespace Ripper
 {
     public partial class MainWindow : Window
@@ -48,9 +50,14 @@ namespace Ripper
         #endregion
 
         #region Input UI...
+        private void InputText_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            Globals.Input = InputText.Text;
+        }
+
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-
+            Records.Children.Add(new RecordView());
         }
 
         private void Button_Click_3(object sender, RoutedEventArgs e)

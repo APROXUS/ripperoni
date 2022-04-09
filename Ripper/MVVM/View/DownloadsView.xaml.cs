@@ -10,5 +10,10 @@ namespace Ripper.MVVM.View
 
             Json.Write();
         }
+
+        public void DownloadProcess()
+        {
+            Records.Children.Add(new RecordView());
+        }
     }
 }

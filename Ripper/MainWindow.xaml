@@ -37,7 +37,7 @@
                         <ColumnDefinition Width="40"/>
                     </Grid.ColumnDefinitions>
 
-                    <Image Grid.Column="0" Margin="9,4,9,4" Source="Images/Pepperoni Tiny.png"/>
+                    <Image Grid.Column="0" Margin="9,4,9,4" Source="Images/Pepperoni.png"/>
 
                     <TextBlock Text="APROX Ripper" Grid.Column="1"
                            VerticalAlignment="Center" FontSize="12"
@@ -109,7 +109,7 @@
 
                     <RadioButton Content="Downloads" FontSize="14" Grid.Column="0"
                                  IsChecked="True" Style="{StaticResource MenuButtonTheme}"
-                                 Command="{Binding DownloadsVC}"/>
+                                 Command="{Binding DownloadsVC}" x:Name="Downloads"/>
 
                     <RadioButton Content="Properties" FontSize="14" Grid.Column="1"
                                  Style="{StaticResource MenuButtonTheme}"
@@ -125,7 +125,34 @@
                 </Grid>
             </Border>
 
-            <ContentControl Grid.Row="2" Content="{Binding CurrentView}"/>
+            <Grid Grid.Row="2">
+                <ContentControl Content="{Binding CurrentView}"/>
+
+                <ScrollViewer Background="#202020" VerticalScrollBarVisibility="Auto">
+                    <ScrollViewer.Style>
+                        <Style TargetType="{x:Type ScrollViewer}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsChecked, ElementName=Downloads}"
+                                             Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+
+                            <Setter Property="Visibility" Value="Hidden"/>
+                        </Style>
+                    </ScrollViewer.Style>
+                    
+                    <Grid>
+                        <TextBlock Text="There are no currently active downloads..."
+                       IsHitTestVisible="False" Foreground="White"
+                       HorizontalAlignment="Center" Margin="10"/>
+
+                        <StackPanel x:Name="Records">
+
+                        </StackPanel>
+                    </Grid>
+                </ScrollViewer>
+            </Grid>
 
             <Border Grid.Row="3" BorderBrush="#3D3D3D" BorderThickness="0,1,0,1" Padding="5,0,5,0">
                 <Grid>
@@ -141,7 +168,7 @@
                             <TextBox Padding="10,0,10,0" VerticalAlignment="Center"
                                      Foreground="White" BorderThickness="0"
                                      Background="Transparent" Margin="1"
-                                     x:Name="InputText" CaretBrush="White"/>
+                                     x:Name="InputText" CaretBrush="White" TextChanged="InputText_TextChanged"/>
 
                             <TextBlock Text="Search query or direct link..."
                                        IsHitTestVisible="False" Margin="13,0,0,0"

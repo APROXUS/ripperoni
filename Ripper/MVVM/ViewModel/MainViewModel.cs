@@ -39,12 +39,12 @@ namespace Ripper.MVVM.ViewModel
             SettingsVM = new SettingsViewModel();
             AboutVM = new AboutViewModel();
 
-            CurrentView = DownloadsVM;
+            CurrentView = null;
 
             #region Relay Commands...
             DownloadsVC = new RelayCommand(o =>
             {
-                CurrentView = DownloadsVM;
+                CurrentView = null;
             });
 
             PropertiesVC = new RelayCommand(o =>

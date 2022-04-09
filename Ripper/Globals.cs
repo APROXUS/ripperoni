@@ -1,10 +1,12 @@
-﻿using NETWORKLIST;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Windows.Forms;
+
+using NETWORKLIST;
+
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Ripper
 {
@@ -101,6 +103,7 @@ namespace Ripper
     {
         public static string Real = AppDomain.CurrentDomain.BaseDirectory;
 
+        public static string Input { get; set; } = "";
         public static string Output { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
         public static string Format { get; set; } = "mp4";
         public static int Resolution { get; set; } = 1080;
