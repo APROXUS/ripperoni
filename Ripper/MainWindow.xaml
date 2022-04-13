@@ -168,7 +168,7 @@
                             <TextBox Padding="10,0,10,0" VerticalAlignment="Center"
                                      Foreground="White" BorderThickness="0"
                                      Background="Transparent" Margin="1"
-                                     x:Name="InputText" CaretBrush="White" TextChanged="InputText_TextChanged"/>
+                                     x:Name="Input" CaretBrush="White" TextChanged="Input_Changed"/>
 
                             <TextBlock Text="Search query or direct link..."
                                        IsHitTestVisible="False" Margin="13,0,0,0"

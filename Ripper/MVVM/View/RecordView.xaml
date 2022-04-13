@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Ripper.MVVM.View"
              mc:Ignorable="d" d:DesignHeight="75" d:DesignWidth="390">
-    <Border Grid.Column="0" CornerRadius="15" BorderBrush="White"
+    <Border Grid.Column="0" CornerRadius="15" BorderBrush="#3D3D3D"
             BorderThickness="1" Background="#191919" Margin="5"
             Height="65">
         <Grid>
@@ -45,14 +45,14 @@
                        Foreground="White" Grid.Column="3" Grid.Row="1" 
                        Margin="5,0,0,0" Text="Retrieving..." x:Name="Status"/>
 
-            <ProgressBar Margin="5,0,5,0" Name="PBar" Grid.Column="1" Grid.Row="2" Height="5"
+            <ProgressBar Margin="5,0,5,0" x:Name="Progress" Grid.Column="1" Grid.Row="2" Height="5"
                          VerticalAlignment="Center"  Grid.ColumnSpan="3" IsIndeterminate="True"/>
 
             <Border Grid.Column="4" CornerRadius="15" Height="30" Margin="-1"
-                    BorderBrush="White" BorderThickness="1" HorizontalAlignment="Right"
+                    BorderBrush="#3D3D3D" BorderThickness="1" HorizontalAlignment="Right"
                     VerticalAlignment="Top"  Grid.RowSpan="2" Width="30">
                 <Button Grid.Column="3" FontFamily="Segoe MDL2 Assets" Background="#191919"
-                        Content="&#xE10A;" BorderThickness="0" Foreground="White">
+                        Content="&#xE10A;" BorderThickness="0" Foreground="White" x:Name="Remove">
                     <Button.Resources>
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="CornerRadius" Value="15"/>

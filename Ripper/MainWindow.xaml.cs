@@ -50,14 +50,50 @@ namespace Ripper
         #endregion
 
         #region Input UI...
-        private void InputText_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void Input_Changed(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            Globals.Input = InputText.Text;
+            Globals.Input = Input.Text;
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            Records.Children.Add(new RecordView());
+            if (Utilities.Internet())
+            {
+                if (Uri.IsWellFormedUriString(Input.Text, UriKind.Absolute))
+                {
+                    if (Input.Text.Split(':')[0].ToLower() == "http" || Input.Text.Split(':')[0].ToLower() == "https")
+                    {
+                        if (Path.IsPathRooted(Globals.Output))
+                        {
+                            Directory.CreateDirectory(Globals.Output);
+
+                            Globals.Input = Input.Text;
+
+                            var RecordView = new RecordView();
+
+                            Records.Children.Add(RecordView);
+
+                            RecordView.Remove.Click += (o, args) => Records.Children.Remove(RecordView);
+                        }
+                        else
+                        {
+                            Utilities.Error("[Output] Not a valid output path and must be rooted...", "Error", false);
+                        }
+                    }
+                    else
+                    {
+                        Utilities.Error("[Input] Not a valid HTTP/HTTPS url...", "Error", false);
+                    }
+                }
+                else
+                {
+                    Utilities.Error("[Input] Not a valid URL...", "Error", false);
+                }
+            }
+            else
+            {
+                Utilities.Error("You are not currently connected to the internet...", "Internet Connectivity", false);
+            }
         }
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
