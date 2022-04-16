@@ -23,10 +23,18 @@ namespace Ripper.MVVM.View
         #region Firewall Fix UI...
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            ProcessStartInfo psi = new ProcessStartInfo();
-            psi.FileName = "Firewall.bat";
-            psi.Verb = "runas";
-            Process.Start(psi);
+            try
+            {
+                ProcessStartInfo psi = new ProcessStartInfo();
+                psi.FileName = "Firewall.bat";
+                psi.Verb = "runas";
+                Process.Start(psi);
+            }
+            catch
+            {
+                Utilities.Error("Could not run console as administator...", "Error", true);
+            }
+            
         }
         #endregion
 

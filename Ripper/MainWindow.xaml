@@ -39,7 +39,7 @@
 
                     <Image Grid.Column="0" Margin="9,4,9,4" Source="Images/Pepperoni.png"/>
 
-                    <TextBlock Text="APROX Ripper" Grid.Column="1"
+                    <TextBlock Text="APROX Ripperoni" Grid.Column="1"
                            VerticalAlignment="Center" FontSize="12"
                            HorizontalAlignment="Left" Foreground="White"/>
 
@@ -167,8 +167,8 @@
                         <Grid>
                             <TextBox Padding="10,0,10,0" VerticalAlignment="Center"
                                      Foreground="White" BorderThickness="0"
-                                     Background="Transparent" Margin="1"
-                                     x:Name="Input" CaretBrush="White" TextChanged="Input_Changed"/>
+                                     Background="Transparent" TextChanged="Input_Changed"
+                                     x:Name="Input" CaretBrush="White" Margin="1"/>
 
                             <TextBlock Text="Search query or direct link..."
                                        IsHitTestVisible="False" Margin="13,0,0,0"
@@ -177,8 +177,7 @@
                                 <TextBlock.Style>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Text, ElementName=InputText}"
-                                                         Value="">
+                                            <DataTrigger Binding="{Binding Text, ElementName=Input}" Value="">
                                                 <Setter Property="Visibility" Value="Visible"/>
                                             </DataTrigger>
                                         </Style.Triggers>

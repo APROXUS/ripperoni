@@ -3,7 +3,9 @@ using System.IO;
 using System.Net;
 using System.Linq;
 using System.Drawing;
+using System.Threading;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Interop;
 using System.Windows.Controls;
 using System.Collections.Generic;
@@ -14,7 +16,6 @@ using WebPWrapper;
 using Javi.FFmpeg;
 using YoutubeDLSharp;
 using YoutubeDLSharp.Metadata;
-using System.Threading.Tasks;
 
 namespace Ripper.MVVM.View
 {
@@ -43,6 +44,7 @@ namespace Ripper.MVVM.View
         private string f2;
 
         private DownloadService d;
+        private bool done;
         private string s;
 
         public RecordView()
@@ -107,36 +109,31 @@ namespace Ripper.MVVM.View
                 Utilities.Error("Could not create progress event listener...", "Error", false);
             }
 
-            //
-            // MAKEONE BIG ASYNC METHOD
-            //
-
-            //Base Action
-            Task.Run(async () => { await GetMetadata(); }).Wait();
+            GetMetadata();
+            WaitForAsync();
 
             PostMetadata();
 
-            Task.Run(async () => { await GetBase(); }).Wait();
+            GetBase();
+            WaitForAsync();
 
-            //Additional Action
             if (l)
             {
-                Task.Run(async () => { await GetAdditional(); }).Wait();
+                GetAdditional();
+                WaitForAsync();
             }
 
-            //Processing Action
             if (fr != f || l)
             {
                 GetProcessing();
             }
 
-            //Completing Action
             GetComplete();
         }
         #endregion
 
         #region Base Action...
-        private async Task GetMetadata()
+        private async void GetMetadata()
         {
             try
             {
@@ -213,6 +210,8 @@ namespace Ripper.MVVM.View
             }
 
             vi = re.Url;
+
+            done = true;
         }
 
         private void PostMetadata()
@@ -268,7 +267,7 @@ namespace Ripper.MVVM.View
             }
         }
 
-        private async Task GetBase()
+        private async void GetBase()
         {
             te = Globals.Temp + "\\" + ti + "." + e + "." + fr;
 
@@ -293,11 +292,13 @@ namespace Ripper.MVVM.View
             {
                 Utilities.Error("Could not download required files (primary)...", "Error", true);
             }
+
+            done = true;
         }
         #endregion
 
         #region Additional Action...
-        private async Task GetAdditional()
+        private async void GetAdditional()
         {
             try
             {
@@ -329,6 +330,8 @@ namespace Ripper.MVVM.View
             {
                 Utilities.Error("Could not download required files (primary)...", "Error", true);
             }
+
+            done = true;
         }
         #endregion
 
@@ -531,6 +534,16 @@ namespace Ripper.MVVM.View
             {
                 Utilities.Error("Could not invoke UI controls on progress event...", "Error", false);
             }
+        }
+
+        private void WaitForAsync()
+        {
+            while (!done)
+            {
+                Thread.Sleep(100);
+            }
+
+            done = false;
         }
         #endregion
     }

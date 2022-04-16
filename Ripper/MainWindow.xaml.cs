@@ -21,10 +21,20 @@ namespace Ripper
             {
                 if (Directory.Exists(Globals.Temp))
                 {
-                    Directory.Delete(Globals.Temp, true);
-                }
+                    try
+                    {
+                        Directory.Delete(Globals.Temp, true);
+                        Directory.CreateDirectory(Globals.Temp);
+                    }
+                    catch
+                    {
 
-                Directory.CreateDirectory(Globals.Temp);
+                    }
+                }
+                else
+                {
+                    Directory.CreateDirectory(Globals.Temp);
+                }
             }
             catch
             {
@@ -138,9 +148,16 @@ namespace Ripper
         {
             Json.Write();
 
-            if (Directory.Exists(Globals.Temp))
+            try
             {
-                Directory.Delete(Globals.Temp, true);
+                if (Directory.Exists(Globals.Temp))
+                {
+                    Directory.Delete(Globals.Temp, true);
+                }
+            }
+            catch
+            {
+
             }
 
             var a = new DoubleAnimation(0, TimeSpan.FromSeconds(0.5));
