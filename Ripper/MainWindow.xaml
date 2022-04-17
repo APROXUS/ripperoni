@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Ripper" mc:Ignorable="d"
         xmlns:vm="clr-namespace:Ripper.MVVM.ViewModel"
-        xmlns:v="clr-namespace:Ripper.MVVM.View"
+        xmlns:v="clr-namespace:Ripper.MVVM.View" Title="APROX Ripperoni"
         Height="710" Width="410" WindowStyle="None" ResizeMode="NoResize"
         Background="Transparent" AllowsTransparency="True">
     <Window.DataContext>

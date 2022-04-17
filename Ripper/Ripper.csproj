@@ -238,7 +238,6 @@
     <Content Include="FFmpeg.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="MVVM\View\YouTube.jpg" />
     <Resource Include="Images\YouTube.jpg" />
     <Content Include="LibWebPx64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

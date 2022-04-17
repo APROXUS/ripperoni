@@ -34,7 +34,6 @@ namespace Ripper.MVVM.View
             {
                 Utilities.Error("Could not run console as administator...", "Error", true);
             }
-            
         }
         #endregion
 
@@ -42,6 +41,7 @@ namespace Ripper.MVVM.View
         private void TempText_TextChanged(object sender, TextChangedEventArgs e)
         {
             Globals.Temp = TempText.Text;
+            Json.Write();
         }
         #endregion
 
@@ -49,31 +49,37 @@ namespace Ripper.MVVM.View
         private void OnflyCheck_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             try { Globals.OnFly = OnflyCheck.IsChecked ?? false; } catch { }
+            Json.Write();
         }
 
         private void SpeedText_TextChanged(object sender, TextChangedEventArgs e)
         {
             try { Globals.Bytes = int.Parse(SpeedText.Text); } catch { }
+            Json.Write();
         }
 
         private void DelayText_TextChanged(object sender, TextChangedEventArgs e)
         {
             try { Globals.Timeout = int.Parse(DelayText.Text); } catch { }
+            Json.Write();
         }
 
         private void ChunkText_TextChanged(object sender, TextChangedEventArgs e)
         {
             try { Globals.Chunks = int.Parse(ChunkText.Text); } catch { }
+            Json.Write();
         }
 
         private void TriesText_TextChanged(object sender, TextChangedEventArgs e)
         {
             try { Globals.Tries = int.Parse(TriesText.Text); } catch { }
+            Json.Write();
         }
 
         private void BufferText_TextChanged(object sender, TextChangedEventArgs e)
         {
             try { Globals.Buffer = int.Parse(BufferText.Text); } catch { }
+            Json.Write();
         }
         #endregion
     }

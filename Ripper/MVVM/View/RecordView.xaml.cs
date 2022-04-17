@@ -21,6 +21,7 @@ namespace Ripper.MVVM.View
 {
     public partial class RecordView : UserControl
     {
+        #region Variables...
         private readonly string i;
         private readonly string o;
         private readonly string f;
@@ -28,15 +29,15 @@ namespace Ripper.MVVM.View
         private readonly bool l;
         private readonly int r;
 
-        private string ti;
-        private string up;
-        private float le;
-        private string th;
         private FormatData[] fs;
         private FormatData re;
+        private string ti;
+        private string up;
+        private string th;
         private string fr;
         private string vi;
         private string te;
+        private float le;
 
         private string tm;
         private string tc;
@@ -44,8 +45,9 @@ namespace Ripper.MVVM.View
         private string f2;
 
         private DownloadService d;
-        private bool done;
+        private string p;
         private string s;
+        #endregion
 
         public RecordView()
         {
@@ -67,13 +69,13 @@ namespace Ripper.MVVM.View
 
             e = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
 
-            Processor();
+            Task.Factory.StartNew(() => Processor());
         }
 
         #region Processor...
-        private void Processor()
+        private async void Processor()
         {
-            Status.Text = "Starting...";
+            Dispatcher.Invoke(delegate () { Status.Text = "Starting..."; });
 
             DownloadConfiguration DownloadOption = new DownloadConfiguration()
             {
@@ -109,32 +111,7 @@ namespace Ripper.MVVM.View
                 Utilities.Error("Could not create progress event listener...", "Error", false);
             }
 
-            GetMetadata();
-            WaitForAsync();
-
-            PostMetadata();
-
-            GetBase();
-            WaitForAsync();
-
-            if (l)
-            {
-                GetAdditional();
-                WaitForAsync();
-            }
-
-            if (fr != f || l)
-            {
-                GetProcessing();
-            }
-
-            GetComplete();
-        }
-        #endregion
-
-        #region Base Action...
-        private async void GetMetadata()
-        {
+            #region GetMetadata
             try
             {
                 var y = new YoutubeDL
@@ -210,77 +187,61 @@ namespace Ripper.MVVM.View
             }
 
             vi = re.Url;
+            #endregion
 
-            done = true;
-        }
+            #region PostMetadata
+            //try
+            //{
+            //    Bitmap bm;
 
-        private void PostMetadata()
-        {
-            try
-            {
-                Bitmap bm;
+            //    if (th.Split('.').Last().ToString() == "webp")
+            //    {
+            //        byte[] i = new WebClient().DownloadData(th);
+            //        using (WebP w = new WebP())
+            //        {
+            //            bm = w.Decode(i);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        byte[] i = new WebClient().DownloadData(th);
 
-                if (th.Split('.').Last().ToString() == "webp")
-                {
-                    byte[] i = new WebClient().DownloadData(th);
-                    using (WebP w = new WebP())
-                    {
-                        bm = w.Decode(i);
-                    }
-                }
-                else
-                {
-                    byte[] i = new WebClient().DownloadData(th);
+            //        MemoryStream s = new MemoryStream();
+            //        byte[] d = i;
+            //        s.Write(d, 0, Convert.ToInt32(d.Length));
+            //        Bitmap j = new Bitmap(s, false);
+            //        s.Dispose();
 
-                    MemoryStream s = new MemoryStream();
-                    byte[] d = i;
-                    s.Write(d, 0, Convert.ToInt32(d.Length));
-                    Bitmap j = new Bitmap(s, false);
-                    s.Dispose();
+            //        bm = j;
+            //    }
 
-                    bm = j;
-                }
+            //    Thumbnail.ImageSource = Imaging.CreateBitmapSourceFromHBitmap(
+            //        bm.GetHbitmap(),
+            //        IntPtr.Zero,
+            //        System.Windows.Int32Rect.Empty,
+            //        BitmapSizeOptions.FromHeight(61)
+            //    );
+            //}
+            //catch
+            //{
+            //    Utilities.Error("Could not fetch and convert thumbnail image...", "Error", false);
+            //}
 
-                Thumbnail.ImageSource = Imaging.CreateBitmapSourceFromHBitmap(
-                    bm.GetHbitmap(),
-                    IntPtr.Zero,
-                    System.Windows.Int32Rect.Empty,
-                    BitmapSizeOptions.FromHeight(61)
-                );
-            }
-            catch
-            {
-                Utilities.Error("Could not fetch and convert thumbnail image...", "Error", false);
-            }
+            Dispatcher.Invoke(delegate () { 
+                Title.Text = ti;
 
-            try
-            {
-                Title.Text = ti.Truncate(89);
-
-                Author.Text = up.Truncate(15);
+                Author.Text = up;
 
                 Length.Text = TimeSpan.FromSeconds(le).ToString(@"hh\:mm\:ss");
-            }
-            catch
-            {
-                Utilities.Error("Could not invoke UI controls...", "Error", false);
-            }
-        }
+            });
+            #endregion
 
-        private async void GetBase()
-        {
+            #region GetBase
             te = Globals.Temp + "\\" + ti + "." + e + "." + fr;
 
             s = FileSize(new Uri(vi));
 
-            try
-            {
-                Title.Text = ti + " (" + s + ")";
-            }
-            catch
-            {
-                Utilities.Error("Could not invoke UI controls...", "Error", false);
-            }
+            Dispatcher.Invoke(delegate () { Title.Text = "V: " + ti; });
 
             Json.Read();
 
@@ -292,76 +253,147 @@ namespace Ripper.MVVM.View
             {
                 Utilities.Error("Could not download required files (primary)...", "Error", true);
             }
-
-            done = true;
-        }
-        #endregion
-
-        #region Additional Action...
-        private async void GetAdditional()
-        {
-            try
-            {
-                fs.ToList().FindAll(a => a.Extension == "m4a").ForEach(a =>
-                {
-                    re = a;
-                });
-            }
-            catch
-            {
-                Utilities.Error("Could not find a viable or valid media record...", "Error", true);
-            }
-
-            vi = re.Url;
-
-            te = Globals.Temp + "\\" + ti + "." + e + ".m4a";
-
-            s = FileSize(new Uri(vi));
-
-            Title.Text = "(Audio) " + ti.Truncate(42);
-
-            Json.Read();
-
-            try
-            {
-                await d.DownloadFileTaskAsync(vi, te);
-            }
-            catch
-            {
-                Utilities.Error("Could not download required files (primary)...", "Error", true);
-            }
-
-            done = true;
-        }
-        #endregion
-
-        #region Processing Action...
-        private void GetProcessing()
-        {
-            tm = Globals.Temp + "\\" + ti + "." + e + "." + fr;
-            tc = Globals.Temp + "\\" + ti + "." + e + "." + f;
-
-            Title.Text = "(Processing) " + ti.Truncate(38);
-
-            Json.Read();
-
-            f1 = Globals.Temp + "\\" + ti + "." + e + "." + fr;
+            #endregion
 
             if (l)
             {
-                f2 = Globals.Temp + "\\" + ti + "." + e + ".m4a";
+                #region GetAdditional
+                try
+                {
+                    fs.ToList().FindAll(a => a.Extension == "m4a").ForEach(a =>
+                    {
+                        re = a;
+                    });
+                }
+                catch
+                {
+                    Utilities.Error("Could not find a viable or valid media record...", "Error", true);
+                }
 
-                GetMultiplex();
+                vi = re.Url;
 
-                f1 = tm;
+                te = Globals.Temp + "\\" + ti + "." + e + ".m4a";
+
+                s = FileSize(new Uri(vi));
+
+                Dispatcher.Invoke(delegate () { Title.Text = "A: " + ti; });
+
+                Json.Read();
+
+                try
+                {
+                    await d.DownloadFileTaskAsync(vi, te);
+                }
+                catch
+                {
+                    Utilities.Error("Could not download required files (primary)...", "Error", true);
+                }
+                #endregion
             }
 
-            if (f != fr)
+            if (fr != f || l)
             {
-                GetConvert();
-            }
-        }
+                #region GetProcessing
+                p = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
 
+                tm = Globals.Temp + "\\" + ti + "." + p + "." + fr;
+                tc = Globals.Temp + "\\" + ti + "." + e + "." + f;
+
+                Dispatcher.Invoke(delegate () {
+                    Title.Text = "P: " + ti;
+
+                    Status.Text = "Processing...";
+
+                    Progress.IsIndeterminate = true;
+                });
+
+                Json.Read();
+
+                f1 = Globals.Temp + "\\" + ti + "." + e + "." + fr;
+
+                if (l)
+                {
+                    f2 = Globals.Temp + "\\" + ti + "." + e + ".m4a";
+
+                    Dispatcher.Invoke(delegate () { Status.Text = "Multiplexing..."; });
+
+                    GetMultiplex();
+
+                    f1 = tm;
+                }
+
+                if (f != fr)
+                {
+                    Dispatcher.Invoke(delegate () { Status.Text = "Converting..."; });
+
+                    GetConvert();
+                }
+                #endregion
+            }
+
+            #region Completed
+            string so;
+            string de;
+
+            Dispatcher.Invoke(delegate () {
+                Title.Text = ti;
+
+                Status.Text = "Completing...";
+            });
+
+            try
+            {
+                if (l || f != fr)
+                {
+                    so = tm;
+                }
+                else
+                {
+                    so = tc;
+                }
+
+                de = o + "\\" + ti + "." + f;
+
+                File.Delete(de);
+                File.Move(so, de);
+            }
+            catch
+            {
+                Utilities.Error("Could not transfer completed files...", "Error", false);
+            }
+
+            try
+            {
+                File.Delete(Globals.Temp + "\\" + ti + "." + e + "." + fr);
+
+                if (l)
+                {
+                    File.Delete(Globals.Temp + "\\" + ti + "." + e + ".m4a");
+                    File.Delete(Globals.Temp + "\\" + ti + "." + p + "." + fr);
+                }
+
+                if (f != fr)
+                {
+                    File.Delete(Globals.Temp + "\\" + ti + "." + e + "." + f);
+                }
+            }
+            catch
+            {
+                Utilities.Error("Could not delete temperary files...", "Error", false);
+            }
+
+            Dispatcher.Invoke(delegate () {
+                Status.Text = "Completed!";
+
+                Progress.IsIndeterminate = false;
+                Progress.Opacity = 0;
+                Progress.Value = 0;
+            });
+            #endregion
+        }
+        #endregion
+
+        #region FFmpeg Action...
         private void GetMultiplex()
         {
             try
@@ -435,55 +467,6 @@ namespace Ripper.MVVM.View
         }
         #endregion
 
-        #region Completing Action...
-        private void GetComplete()
-        {
-            string so;
-            string de;
-
-            try
-            {
-                if (l || f != fr)
-                {
-                    so = Globals.Temp + "\\" + ti + "." + e + "." + f;
-                }
-                else
-                {
-                    so = Globals.Temp + "\\" + ti + "." + e + "." + f;
-                }
-
-                de = o + "\\" + ti + "." + f;
-
-                File.Delete(de);
-                File.Move(so, de);
-            }
-            catch
-            {
-                Utilities.Error("Could not transfer completed files...", "Error", false);
-            }
-
-            try
-            {
-                if (l)
-                {
-                    File.Delete(Globals.Temp + "\\" + ti + "." + e + ".m4a");
-                    File.Delete(Globals.Temp + "\\" + ti + "." + e + "." + f);
-                }
-
-                if (f != fr)
-                {
-                    File.Delete(Globals.Temp + "\\" + ti + "." + e + "." + f);
-                }
-
-                File.Delete(Globals.Temp + "\\" + ti + "." + e + "." + fr);
-            }
-            catch
-            {
-                Utilities.Error("Could not delete temperary files...", "Error", false);
-            }
-        }
-        #endregion
-
         #region Auxiliary...
         protected virtual bool FileLocked(FileInfo f)
         {
@@ -525,25 +508,17 @@ namespace Ripper.MVVM.View
         {
             try
             {
-                Status.Text = Math.Round(Convert.ToDouble(e.ReceivedBytesSize) / 1024.0 / 1024.0, 2) + " / " + s;
+                Dispatcher.Invoke(delegate () {
+                    Status.Text = Math.Round(Convert.ToDouble(e.ReceivedBytesSize) / 1024.0 / 1024.0, 2) + " / " + s;
 
-                Progress.IsIndeterminate = false;
-                Progress.Value = (Int32)e.ProgressPercentage;
+                    Progress.IsIndeterminate = false;
+                    Progress.Value = (Int32)e.ProgressPercentage;
+                });
             }
             catch
             {
                 Utilities.Error("Could not invoke UI controls on progress event...", "Error", false);
             }
-        }
-
-        private void WaitForAsync()
-        {
-            while (!done)
-            {
-                Thread.Sleep(100);
-            }
-
-            done = false;
         }
         #endregion
     }
