@@ -1,9 +1,12 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Drawing;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Drawing.Imaging;
+using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 using NETWORKLIST;
 
@@ -154,20 +157,25 @@ namespace Ripper
             return r;
         }
 
-        public static string Truncate(this string v, int l, string s = "…")
+        public static BitmapImage Bitmapper(Bitmap src)
         {
+            BitmapImage i = new BitmapImage();
+
             try
             {
-                return v?.Length > l
-                ? v.Substring(0, l) + s
-                : v;
+                MemoryStream ms = new MemoryStream();
+                (src).Save(ms, ImageFormat.Bmp);
+                i.BeginInit();
+                ms.Seek(0, SeekOrigin.Begin);
+                i.StreamSource = ms;
+                i.EndInit();
             }
             catch
             {
-                Error("Could not truncate text...", "Error", false);
-
-                return "Error...";
+                Error("Could not convert thumbnail image...", "Error", false);
             }
+
+            return i;
         }
 
         public static void Error(string m, string t, bool f)

@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media.Animation;
 
 using Ripper.MVVM.View;
+using System.Threading;
 
 namespace Ripper
 {
@@ -83,7 +84,11 @@ namespace Ripper
 
                             Records.Children.Add(RecordView);
 
-                            RecordView.Remove.Click += (o, args) => Records.Children.Remove(RecordView);
+                            RecordView.Remove.Click += (o, args) =>
+                            {
+                                Thread.Sleep(1000);
+                                Records.Children.Remove(RecordView);
+                            };
                         }
                         else
                         {
@@ -164,7 +169,6 @@ namespace Ripper
             a.Completed += (s, _) => Close();
             BeginAnimation(OpacityProperty, a);
         }
-
         #endregion
     }
 }
