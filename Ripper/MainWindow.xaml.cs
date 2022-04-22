@@ -1,12 +1,12 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
+using System.Threading;
 using System.Diagnostics;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 
 using Ripper.MVVM.View;
-using System.Threading;
 
 namespace Ripper
 {
@@ -86,8 +86,7 @@ namespace Ripper
 
                             RecordView.Remove.Click += (o, args) =>
                             {
-                                Thread.Sleep(1000);
-                                Records.Children.Remove(RecordView);
+                                //Records.Children.Remove(RecordView);
                             };
                         }
                         else

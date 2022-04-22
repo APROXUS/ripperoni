@@ -16,7 +16,7 @@
                 <Label Margin="3" Foreground="White"
                        Content="Slow speeds with Charter Communication ISPs :"/>
                 <Label Foreground="#969696" FontSize="10" Margin="3,-10,0,5"
-                       Content="*Providers: Spectrum, TWC, Bright House, Road Runner..."/>
+                       Content="*Ex: Spectrum, TWC, Bright House, Road Runner..."/>
             </StackPanel>
 
             <Border Margin="10" BorderBrush="#3D3D3D" BorderThickness="0,1,0,1" Grid.Column="1">
