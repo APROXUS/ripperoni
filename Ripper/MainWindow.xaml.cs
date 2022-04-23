@@ -74,24 +74,33 @@ namespace Ripper
                 {
                     if (Input.Text.Split(':')[0].ToLower() == "http" || Input.Text.Split(':')[0].ToLower() == "https")
                     {
-                        if (Path.IsPathRooted(Globals.Output))
+                        string a = Input.Text.Split('/')[2].ToLower();
+
+                        if (File.ReadAllText("Domains.txt").Contains(Input.Text.Split('/')[2].ToLower()))
                         {
-                            Directory.CreateDirectory(Globals.Output);
-
-                            Globals.Input = Input.Text;
-
-                            var RecordView = new RecordView();
-
-                            Records.Children.Add(RecordView);
-
-                            RecordView.Remove.Click += (o, args) =>
+                            if (Path.IsPathRooted(Globals.Output))
                             {
-                                //Records.Children.Remove(RecordView);
-                            };
+                                Directory.CreateDirectory(Globals.Output);
+
+                                Globals.Input = Input.Text;
+
+                                var RecordView = new RecordView();
+
+                                Records.Children.Add(RecordView);
+
+                                RecordView.Remove.Click += (o, args) =>
+                                {
+                                    Records.Children.Remove(RecordView);
+                                };
+                            }
+                            else
+                            {
+                                Utilities.Error("[Output] Not a valid output path and must be rooted...", "Error", false);
+                            }
                         }
                         else
                         {
-                            Utilities.Error("[Output] Not a valid output path and must be rooted...", "Error", false);
+                            Utilities.Error("[Input] Not a valid YouTube url...", "Error", false);
                         }
                     }
                     else
@@ -152,12 +161,14 @@ namespace Ripper
         {
             Json.Write();
 
+            foreach (var p in Process.GetProcessesByName("FFmpeg.exe"))
+            {
+                p.Kill();
+            }
+
             try
             {
-                if (Directory.Exists(Globals.Temp))
-                {
-                    Directory.Delete(Globals.Temp, true);
-                }
+                Directory.Delete(Globals.Temp, true);
             }
             catch
             {

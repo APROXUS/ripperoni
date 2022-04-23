@@ -6,24 +6,22 @@ using System.Drawing;
 using System.Threading;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows.Interop;
 using System.Windows.Controls;
 using System.Collections.Generic;
-using System.Windows.Media.Imaging;
 
 using Downloader;
 using WebPWrapper;
 using Javi.FFmpeg;
 using YoutubeDLSharp;
 using YoutubeDLSharp.Metadata;
-using System.Windows.Media.Animation;
 
 namespace Ripper.MVVM.View
 {
     public partial class RecordView : UserControl
     {
         #region Variables...
-        private volatile bool halt;
+        private readonly CancellationTokenSource source;
+        private CancellationToken token;
 
         private readonly string i;
         private readonly string o;
@@ -48,6 +46,9 @@ namespace Ripper.MVVM.View
         private string f2;
 
         private DownloadService d;
+        private bool downloading;
+        private bool processing;
+        private FFmpeg ffmpeg;
         private string p;
         private string s;
         #endregion
@@ -72,39 +73,31 @@ namespace Ripper.MVVM.View
 
             e = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
 
-            Task.Factory.StartNew(() => Processor());
+            source = new CancellationTokenSource();
+            token = source.Token;
+
+            Task.Factory.StartNew(() => Processor(), token);
         }
 
         private void Remove_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            halt = true;
-
-            Dispatcher.Invoke(delegate () {
-                Title.Text = "Waiting for current step to finish...";
-                Author.Text = "Stopping...";
-                Length.Text = "--:--:--";
-            });
-
-            Thread.Sleep(5000);
-
-            // Force kill
+            source.Cancel();
         }
 
         #region Processor...
         private async void Processor()
         {
+            #pragma warning disable CS4014 // This is the wanted functionality
+
             try
             {
+                token.ThrowIfCancellationRequested();
 
-            }
-            catch
-            {
+                Dispatcher.Invoke(delegate () {
+                    Status.Text = "Starting...";
+                });
 
-            }
-            while (!halt)
-            {
-                Dispatcher.Invoke(delegate () { Status.Text = "Starting..."; });
-
+                #region Systems and Events...
                 DownloadConfiguration DownloadOption = new DownloadConfiguration()
                 {
                     BufferBlockSize = Globals.Buffer,
@@ -116,15 +109,15 @@ namespace Ripper.MVVM.View
                     TempDirectory = Globals.Temp,
                     Timeout = Globals.Timeout,
                     RequestConfiguration = {
-                    Accept = "*/*",
-                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
-                    CookieContainer =  new CookieContainer(),
-                    Headers = new WebHeaderCollection(),
-                    KeepAlive = false,
-                    ProtocolVersion = HttpVersion.Version11,
-                    UseDefaultCredentials = false,
-                    UserAgent = $"DownloaderSample/{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}"
-                }
+                        Accept = "*/*",
+                        AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                        CookieContainer =  new CookieContainer(),
+                        Headers = new WebHeaderCollection(),
+                        KeepAlive = false,
+                        ProtocolVersion = HttpVersion.Version11,
+                        UseDefaultCredentials = false,
+                        UserAgent = $"DownloaderSample/{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}"
+                    }
                 };
 
                 d = new DownloadService(DownloadOption);
@@ -135,10 +128,22 @@ namespace Ripper.MVVM.View
                 }
                 catch
                 {
-                    Utilities.Error("Could not create progress event listener...", "Error", false);
+                    Utilities.Error("Could not create download progress event listener...", "Error", false);
                 }
 
-                if (halt) { break; }
+                ffmpeg = new FFmpeg(Globals.Real + @"FFmpeg.exe");
+
+                try
+                {
+                    ffmpeg.OnProgress += ProcessProgression;
+                }
+                catch
+                {
+                    Utilities.Error("Could not create process progress event listener...", "Error", false);
+                }
+                #endregion
+
+                token.ThrowIfCancellationRequested();
 
                 #region GetMetadata
                 try
@@ -158,6 +163,8 @@ namespace Ripper.MVVM.View
                 }
                 catch
                 {
+                    source.Cancel();
+
                     Utilities.Error("Could not fetch data regarding URL: " + i + " ...", "Error", true);
                 }
 
@@ -212,13 +219,15 @@ namespace Ripper.MVVM.View
                 }
                 catch
                 {
+                    source.Cancel();
+
                     Utilities.Error("Could not find a viable or valid media record...", "Error", true);
                 }
 
                 vi = re.Url;
                 #endregion
 
-                if (halt) { break; }
+                token.ThrowIfCancellationRequested();
 
                 #region PostMetadata
                 try
@@ -262,28 +271,46 @@ namespace Ripper.MVVM.View
                 });
                 #endregion
 
-                if (halt) { break; }
+                token.ThrowIfCancellationRequested();
 
                 #region GetBase
                 te = Globals.Temp + "\\" + ti + "." + e + "." + fr;
 
                 s = FileSize(new Uri(vi));
 
-                Dispatcher.Invoke(delegate () { Title.Text = "V: " + ti; });
+                Dispatcher.Invoke(delegate () {
+                    Title.Text = "V: " + ti;
+                });
 
                 Json.Read();
 
-                try
+                downloading = true;
+
+                Task.Factory.StartNew(async () =>
                 {
-                    await d.DownloadFileTaskAsync(vi, te);
-                }
-                catch
+                    try
+                    {
+                        await d.DownloadFileTaskAsync(vi, te);
+                    }
+                    catch
+                    {
+                        source.Cancel();
+
+                        Utilities.Error("Could not download required files (primary)...", "Error", false);
+                    }
+
+                    downloading = false;
+                });
+
+                while (downloading)
                 {
-                    Utilities.Error("Could not download required files (primary)...", "Error", true);
+                    token.ThrowIfCancellationRequested();
+
+                    Thread.Sleep(10);
                 }
                 #endregion
 
-                if (halt) { break; }
+                token.ThrowIfCancellationRequested();
 
                 if (l)
                 {
@@ -297,7 +324,9 @@ namespace Ripper.MVVM.View
                     }
                     catch
                     {
-                        Utilities.Error("Could not find a viable or valid media record...", "Error", true);
+                        source.Cancel();
+
+                        Utilities.Error("Could not find a viable or valid media record...", "Error", false);
                     }
 
                     vi = re.Url;
@@ -306,21 +335,39 @@ namespace Ripper.MVVM.View
 
                     s = FileSize(new Uri(vi));
 
-                    Dispatcher.Invoke(delegate () { Title.Text = "A: " + ti; });
+                    Dispatcher.Invoke(delegate () {
+                        Title.Text = "A: " + ti;
+                    });
 
                     Json.Read();
 
-                    try
+                    downloading = true;
+
+                    Task.Factory.StartNew(async () =>
                     {
-                        await d.DownloadFileTaskAsync(vi, te);
-                    }
-                    catch
+                        try
+                        {
+                            await d.DownloadFileTaskAsync(vi, te);
+                        }
+                        catch
+                        {
+                            source.Cancel();
+
+                            Utilities.Error("Could not download required files (secondary)...", "Error", false);
+                        }
+
+                        downloading = false;
+                    });
+
+                    while (downloading)
                     {
-                        Utilities.Error("Could not download required files (primary)...", "Error", true);
+                        token.ThrowIfCancellationRequested();
+
+                        Thread.Sleep(10);
                     }
                     #endregion
 
-                    if (halt) { break; }
+                    token.ThrowIfCancellationRequested();
                 }
 
                 if (fr != f || l)
@@ -343,32 +390,52 @@ namespace Ripper.MVVM.View
 
                     f1 = Globals.Temp + "\\" + ti + "." + e + "." + fr;
 
-                    if (halt) { break; }
-
                     if (l)
                     {
                         f2 = Globals.Temp + "\\" + ti + "." + e + ".m4a";
 
-                        Dispatcher.Invoke(delegate () { Status.Text = "Multiplexing..."; });
+                        Dispatcher.Invoke(delegate () {
+                            Status.Text = "Multiplexing...";
+                        });
 
-                        GetMultiplex();
+                        processing = true;
+
+                        Task.Factory.StartNew(() => GetMultiplex());
+
+                        while (processing)
+                        {
+                            token.ThrowIfCancellationRequested();
+
+                            Thread.Sleep(10);
+                        }
 
                         f1 = tm;
 
-                        if (halt) { break; }
+                        token.ThrowIfCancellationRequested();
                     }
 
                     if (f != fr)
                     {
-                        Dispatcher.Invoke(delegate () { Status.Text = "Converting..."; });
+                        Dispatcher.Invoke(delegate () {
+                            Status.Text = "Converting...";
+                        });
 
-                        GetConvert();
+                        processing = true;
 
-                        if (halt) { break; }
+                        Task.Factory.StartNew(() => GetConvert());
+
+                        while (processing)
+                        {
+                            token.ThrowIfCancellationRequested();
+
+                            Thread.Sleep(10);
+                        }
+
+                        token.ThrowIfCancellationRequested();
                     }
                     #endregion
 
-                    if (halt) { break; }
+                    token.ThrowIfCancellationRequested();
                 }
 
                 #region Completed
@@ -399,6 +466,8 @@ namespace Ripper.MVVM.View
                 }
                 catch
                 {
+                    source.Cancel();
+
                     Utilities.Error("Could not transfer completed files...", "Error", false);
                 }
 
@@ -430,8 +499,13 @@ namespace Ripper.MVVM.View
                     Progress.Value = 0;
                 });
                 #endregion
-
-                break;
+            }
+            catch
+            {
+                if (downloading)
+                {
+                    d.CancelAsync();
+                }
             }
         }
         #endregion
@@ -441,72 +515,81 @@ namespace Ripper.MVVM.View
         {
             try
             {
-                using (var ffmpeg = new FFmpeg(Globals.Real + @"FFmpeg.exe"))
+                string c;
+
+                switch (f)
                 {
-                    string c;
-
-                    switch (f)
-                    {
-                        case "webm":
-                            c = string.Format($"-i \"{f1}\"  -i \"{f2}\" -c:v copy -c:a libvorbis \"{tm}\"");
-                            break;
-                        default:
-                            c = string.Format($"-i \"{f1}\" -i \"{f2}\" -c:v copy -c:a aac \"{tm}\"");
-                            break;
-                    }
-
-                    ffmpeg.Run(f1, tm, c);
+                    case "webm":
+                        c = string.Format($"-i \"{f1}\"  -i \"{f2}\" -c:v copy -c:a libvorbis \"{tm}\"");
+                        break;
+                    default:
+                        c = string.Format($"-i \"{f1}\" -i \"{f2}\" -c:v copy -c:a aac \"{tm}\"");
+                        break;
                 }
+
+                ffmpeg.Run(f1, tm, c, token);
             }
             catch
             {
-                Utilities.Error("Could not run FFmpeg process without error (Multiplexer)...", "Error", true);
+                if (!token.IsCancellationRequested)
+                {
+                    source.Cancel();
+
+                    Utilities.Error("Could not run FFmpeg process without error (Multiplexer)...", "Error", false);
+                }
+                
             }
+
+            processing = false;
         }
 
         private void GetConvert()
         {
             try
             {
-                using (var ffmpeg = new FFmpeg(Globals.Real + @"FFmpeg.exe"))
+                string c;
+
+                switch (f)
                 {
-                    string c;
-
-                    switch (f)
-                    {
-                        case "webm":
-                            c = string.Format($"-i \"{f1}\" -c:v vp9 -c:a libvorbis \"{tc}\"");
-                            break;
-                        case "flv":
-                            c = string.Format($"-i \"{f1}\" -c:v libx264 -ar 22050 -crf 28 \"{tc}\"");
-                            break;
-                        case "mov":
-                            c = string.Format($"-i \"{f1}\" -f mov \"{tc}\"");
-                            break;
-                        case "mp3":
-                            c = string.Format($"-i \"{f1}\" -c:a libmp3lame \"{tc}\"");
-                            break;
-                        case "wav":
-                            c = string.Format($"-i \"{f1}\" -c:a pcm_s16le \"{tc}\"");
-                            break;
-                        case "ogg":
-                            c = string.Format($"-i \"{f1}\" -c:a libvorbis \"{tc}\"");
-                            break;
-                        case "pcm":
-                            c = string.Format($"-i \"{f1}\" -c:a pcm_s16le -f s16le -ac 1 -ar 16000 \"{tc}\"");
-                            break;
-                        default:
-                            c = string.Format($"-i \"{f1}\" -c:v copy -c:a copy \"{tc}\"");
-                            break;
-                    }
-
-                    ffmpeg.Run(f1, tc, c);
+                    case "webm":
+                        c = string.Format($"-i \"{f1}\" -c:v vp9 -c:a libvorbis \"{tc}\"");
+                        break;
+                    case "flv":
+                        c = string.Format($"-i \"{f1}\" -c:v libx264 -ar 22050 -crf 28 \"{tc}\"");
+                        break;
+                    case "mov":
+                        c = string.Format($"-i \"{f1}\" -f mov \"{tc}\"");
+                        break;
+                    case "mp3":
+                        c = string.Format($"-i \"{f1}\" -c:a libmp3lame \"{tc}\"");
+                        break;
+                    case "wav":
+                        c = string.Format($"-i \"{f1}\" -c:a pcm_s16le \"{tc}\"");
+                        break;
+                    case "ogg":
+                        c = string.Format($"-i \"{f1}\" -c:a libvorbis \"{tc}\"");
+                        break;
+                    case "pcm":
+                        c = string.Format($"-i \"{f1}\" -c:a pcm_s16le -f s16le -ac 1 -ar 16000 \"{tc}\"");
+                        break;
+                    default:
+                        c = string.Format($"-i \"{f1}\" -c:v copy -c:a copy \"{tc}\"");
+                        break;
                 }
+
+                ffmpeg.Run(f1, tc, c, token);
             }
             catch
             {
-                Utilities.Error("Could not run FFmpeg process without error (Converter)...", "Error", true);
+                if (!token.IsCancellationRequested)
+                {
+                    source.Cancel();
+
+                    Utilities.Error("Could not run FFmpeg process without error (Converter)...", "Error", false);
+                }
             }
+
+            processing = false;
         }
         #endregion
 
@@ -520,7 +603,10 @@ namespace Ripper.MVVM.View
                     s.Close();
                 }
             }
-            catch (IOException) { return true; }
+            catch (IOException)
+            {
+                return true;
+            }
 
             return false;
         }
@@ -556,6 +642,21 @@ namespace Ripper.MVVM.View
 
                     Progress.IsIndeterminate = false;
                     Progress.Value = (Int32)e.ProgressPercentage;
+                });
+            }
+            catch
+            {
+                Utilities.Error("Could not invoke UI controls on progress event...", "Error", false);
+            }
+        }
+
+        private void ProcessProgression(object sender, FFmpegProgressEventArgs e)
+        {
+            try
+            {
+                Dispatcher.Invoke(delegate () {
+                    Progress.IsIndeterminate = false;
+                    Progress.Value = e.ProcessedDuration.TotalMilliseconds / e.TotalDuration.TotalMilliseconds * 100;
                 });
             }
             catch

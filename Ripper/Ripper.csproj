@@ -232,6 +232,9 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Domains.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="DownloaderP.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

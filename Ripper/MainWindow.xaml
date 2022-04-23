@@ -168,8 +168,7 @@
                             <TextBox Padding="10,0,10,0" VerticalAlignment="Center"
                                      Foreground="White" BorderThickness="0"
                                      Background="Transparent" TextChanged="Input_Changed"
-                                     x:Name="Input" CaretBrush="White" Margin="1"
-                                     Text="https://www.youtube.com/watch?v=dQw4w9WgXcQ"/>
+                                     x:Name="Input" CaretBrush="White" Margin="1"/>
 
                             <TextBlock Text="Search query or direct link..."
                                        IsHitTestVisible="False" Margin="13,0,0,0"

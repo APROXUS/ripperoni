@@ -6,8 +6,7 @@
              xmlns:local="clr-namespace:Ripper.MVVM.View"
              mc:Ignorable="d" d:DesignHeight="75" d:DesignWidth="390">
     <Border Grid.Column="0" CornerRadius="15" BorderBrush="#3D3D3D"
-            BorderThickness="1" Background="#202020" Margin="5"
-            Height="65">
+            BorderThickness="1" Background="#202020" Margin="5" Height="65">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
