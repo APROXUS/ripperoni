@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Windows;
-using System.Threading;
 using System.Diagnostics;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
@@ -74,8 +74,6 @@ namespace Ripper
                 {
                     if (Input.Text.Split(':')[0].ToLower() == "http" || Input.Text.Split(':')[0].ToLower() == "https")
                     {
-                        string a = Input.Text.Split('/')[2].ToLower();
-
                         if (File.ReadAllText("Domains.txt").Contains(Input.Text.Split('/')[2].ToLower()))
                         {
                             if (Path.IsPathRooted(Globals.Output))
@@ -121,7 +119,16 @@ namespace Ripper
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
+            if (Utilities.Internet())
+            {
+                string html = new WebClient().DownloadString("https://www.youtube.com/results?search_query=" + WebUtility.UrlEncode(Input.Text));
 
+                // TODO: Parse HTML... https://www.google.com/search?q=parse+html+c%23
+            }
+            else
+            {
+                Utilities.Error("You are not currently connected to the internet...", "Internet Connectivity", false);
+            }
         }
         #endregion
 
