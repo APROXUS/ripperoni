@@ -1,12 +1,16 @@
 ﻿using System;
 using System.IO;
-using System.Net;
 using System.Windows;
 using System.Diagnostics;
 using System.Windows.Input;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 using System.Windows.Media.Animation;
 
 using Ripper.MVVM.View;
+using Google.Apis.Services;
+using Google.Apis.YouTube.v3;
+using Google.Apis.YouTube.v3.Data;
 
 namespace Ripper
 {
@@ -121,9 +125,44 @@ namespace Ripper
         {
             if (Utilities.Internet())
             {
-                string html = new WebClient().DownloadString("https://www.youtube.com/results?search_query=" + WebUtility.UrlEncode(Input.Text));
+                var youtube = new YouTubeService(new BaseClientService.Initializer()
+                {
+                    ApiKey = "AIzaSyDNbyuJeVJlSq5jBwKzai4xcYflRbXSs5w",
+                    ApplicationName = GetType().ToString()
+                });
 
-                // TODO: Parse HTML... https://www.google.com/search?q=parse+html+c%23
+                var request = youtube.Search.List("snippet");
+                request.Q = Input.Text;
+                request.MaxResults = 5;
+
+                List<string[]> videos = new List<string[]>();
+
+                foreach (var result in request.Execute().Items)
+                {
+                    string thumbnail = "https://cdn.aprox.us/img/ripperoni/unknown.jpg";
+
+                    if (result.Snippet.Thumbnails.Standard != null)
+                        thumbnail = result.Snippet.Thumbnails.Standard.Url;
+                    if (result.Snippet.Thumbnails.Medium != null)
+                        thumbnail = result.Snippet.Thumbnails.Medium.Url;
+                    if (result.Snippet.Thumbnails.High != null)
+                        thumbnail = result.Snippet.Thumbnails.High.Url;
+                    if (result.Snippet.Thumbnails.Maxres != null)
+                        thumbnail = result.Snippet.Thumbnails.Maxres.Url;
+
+                    switch (result.Id.Kind)
+                    {
+                        case "youtube#video":
+                            videos.Add(new string[] { result.Id.VideoId, thumbnail, result.Snippet.Title, result.Snippet.Description, result.Snippet.ChannelTitle });
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+
+                SearchWindow sw = new SearchWindow(videos);
+                sw.Show();
             }
             else
             {
