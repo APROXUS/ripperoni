@@ -10,7 +10,7 @@ namespace Ripper.MVVM.ViewModel
         public RelayCommand SettingsVC { get; set; }
         public RelayCommand AboutVC { get; set; }
 
-        public DownloadsViewModel DownloadsVM { get; set; }
+
         public PropertiesViewModel PropertiesVM { get; set; }
         public SettingsViewModel SettingsVM { get; set; }
         public AboutViewModel AboutVM { get; set; }
@@ -34,7 +34,6 @@ namespace Ripper.MVVM.ViewModel
 
         public MainViewModel()
         {
-            DownloadsVM = new DownloadsViewModel();
             PropertiesVM = new PropertiesViewModel();
             SettingsVM = new SettingsViewModel();
             AboutVM = new AboutViewModel();

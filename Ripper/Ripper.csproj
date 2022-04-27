@@ -120,6 +120,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="MVVM\View\ResultView.xaml.cs">
+      <DependentUpon>ResultView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SearchWindow.xaml.cs">
       <DependentUpon>SearchWindow.xaml</DependentUpon>
     </Compile>
@@ -143,10 +146,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MVVM\View\DownloadsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MVVM\View\PropertiesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -155,11 +154,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MVVM\View\ResultView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MVVM\View\SettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SearchWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\MenuBorderTheme.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -174,15 +181,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MVVM\ViewModel\AboutViewModel.cs" />
-    <Compile Include="MVVM\ViewModel\DownloadsViewModel.cs" />
     <Compile Include="MVVM\ViewModel\MainViewModel.cs" />
     <Compile Include="MVVM\ViewModel\PropertiesViewModel.cs" />
     <Compile Include="MVVM\ViewModel\SettingsViewModel.cs" />
     <Compile Include="MVVM\View\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="MVVM\View\DownloadsView.xaml.cs">
-      <DependentUpon>DownloadsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\View\PropertiesView.xaml.cs">
       <DependentUpon>PropertiesView.xaml</DependentUpon>
@@ -267,6 +270,22 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Resource Include="Images\YouTube.jpg" />
+    <Resource Include="Images\Downloader.png" />
+    <Resource Include="Images\Google API.png" />
+    <Resource Include="Images\Greyscale\Downloader.png" />
+    <Resource Include="Images\Greyscale\Google API.png" />
+    <Resource Include="Images\Greyscale\Javi FFmpeg.png" />
+    <Resource Include="Images\Greyscale\Newtonsoft JSON.png" />
+    <Resource Include="Images\Greyscale\Windows Shell.png" />
+    <Resource Include="Images\Greyscale\YoutubeDL Sharp.png" />
+    <Resource Include="Images\Javi FFmpeg.png" />
+    <Resource Include="Images\Newtonsoft JSON.png" />
+    <Resource Include="Images\Ripperoni.png" />
+    <Resource Include="Images\Windows Shell.png" />
+    <Resource Include="Images\YoutubeDL Sharp.png" />
+    <Resource Include="Images\Greyscale\Ripperoni.png" />
+    <Resource Include="Images\WebP.png" />
+    <Resource Include="Images\Greyscale\WebP.png" />
     <Content Include="LibWebPx64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

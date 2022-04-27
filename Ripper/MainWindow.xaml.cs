@@ -1,16 +1,15 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Windows;
 using System.Diagnostics;
 using System.Windows.Input;
-using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Windows.Media.Animation;
 
 using Ripper.MVVM.View;
 using Google.Apis.Services;
 using Google.Apis.YouTube.v3;
-using Google.Apis.YouTube.v3.Data;
 
 namespace Ripper
 {
@@ -133,7 +132,7 @@ namespace Ripper
 
                 var request = youtube.Search.List("snippet");
                 request.Q = Input.Text;
-                request.MaxResults = 5;
+                request.MaxResults = 10;
 
                 List<string[]> videos = new List<string[]>();
 
@@ -161,12 +160,35 @@ namespace Ripper
                     }
                 }
 
-                SearchWindow sw = new SearchWindow(videos);
-                sw.Show();
+                SearchWindow sw = new SearchWindow(this, WebUtility.UrlEncode(Input.Text), videos);
+                sw.ShowDialog();
             }
             else
             {
                 Utilities.Error("You are not currently connected to the internet...", "Internet Connectivity", false);
+            }
+        }
+
+        public void Request(string v)
+        {
+            if (Path.IsPathRooted(Globals.Output))
+            {
+                Directory.CreateDirectory(Globals.Output);
+
+                Globals.Input = v;
+
+                var RecordView = new RecordView();
+
+                Records.Children.Add(RecordView);
+
+                RecordView.Remove.Click += (o, args) =>
+                {
+                    Records.Children.Remove(RecordView);
+                };
+            }
+            else
+            {
+                Utilities.Error("[Output] Not a valid output path and must be rooted...", "Error", false);
             }
         }
         #endregion

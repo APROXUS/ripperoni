@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Collections.Generic;
+using System.Windows.Media.Imaging;
 
 using Downloader;
 using WebPWrapper;
@@ -232,29 +233,38 @@ namespace Ripper.MVVM.View
                 #region PostMetadata
                 try
                 {
-                    Bitmap bm;
+                    BitmapImage bi = new BitmapImage();
 
                     if (th.Split('.').Last().ToString() == "webp")
                     {
+                        Bitmap bm;
+
                         byte[] i = new WebClient().DownloadData(th);
                         using (WebP w = new WebP())
                         {
                             bm = w.Decode(i);
                         }
+
+                        using (var m = new MemoryStream())
+                        {
+                            bm.Save(m, System.Drawing.Imaging.ImageFormat.Png);
+                            m.Position = 0;
+
+                            bi.BeginInit();
+                            bi.CacheOption = BitmapCacheOption.OnLoad;
+                            bi.StreamSource = m;
+                            bi.EndInit();
+                        }
                     }
                     else
                     {
-                        byte[] i = new WebClient().DownloadData(th);
-
-                        MemoryStream s = new MemoryStream();
-                        byte[] d = i;
-                        s.Write(d, 0, Convert.ToInt32(d.Length));
-                        bm = new Bitmap(s, false);
-                        s.Dispose();
+                        bi.BeginInit();
+                        bi.UriSource = new Uri(th, UriKind.Absolute);
+                        bi.EndInit();
                     }
 
                     Dispatcher.Invoke(delegate () {
-                        Thumbnail.ImageSource = Utilities.Bitmapper(bm);
+                        Thumbnail.ImageSource = bi;
                     });
                 }
                 catch

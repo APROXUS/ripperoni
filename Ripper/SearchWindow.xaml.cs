@@ -1,29 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
+using System.Diagnostics;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using System.Collections.Generic;
+
+using Ripper.MVVM.View;
 
 namespace Ripper
 {
     public partial class SearchWindow : Window
     {
-        public SearchWindow(List<string[]> videos)
+        private readonly List<string[]> videos;
+        public readonly MainWindow main;
+        private readonly string query;
+
+        public SearchWindow(MainWindow m, string q, List<string[]> v)
         {
             InitializeComponent();
+
+            main = m;
+            query = q;
+            videos = v;
+
+            List();
         }
 
+        private void List()
+        {
+            foreach (var video in videos)
+            {
+                var ResultView = new ResultView(this, video);
+
+                Results.Children.Add(ResultView);
+            }
+        }
+
+        #region Input UI...
         private void DragBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DragMove();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Process.Start("https://www.youtube.com/results?search_query=" + query);
+        }
+        #endregion
     }
 }

@@ -10,11 +10,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Themes/MenuButtonTheme.xaml"/>
                 <ResourceDictionary Source="Themes/MenuScrollTheme.xaml"/>
+                <ResourceDictionary Source="Themes/MenuBorderTheme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
-            <DataTemplate DataType="{x:Type vm:DownloadsViewModel}">
-                <v:DownloadsView/>
-            </DataTemplate>
 
             <DataTemplate DataType="{x:Type vm:PropertiesViewModel}">
                 <v:PropertiesView/>
