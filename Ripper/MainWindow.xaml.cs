@@ -124,9 +124,13 @@ namespace Ripper
         {
             if (Utilities.Internet())
             {
+                // Request environment variables (api keys) from albienet
+
+                DotNetEnv.Env.Load();
+
                 var youtube = new YouTubeService(new BaseClientService.Initializer()
                 {
-                    ApiKey = "AIzaSyDNbyuJeVJlSq5jBwKzai4xcYflRbXSs5w",
+                    ApiKey = Environment.GetEnvironmentVariable("YOUTUBE"),
                     ApplicationName = GetType().ToString()
                 });
 
