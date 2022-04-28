@@ -8,11 +8,11 @@ namespace Ripper
 {
     public partial class ErrorWindow : Window
     {
-        public ErrorWindow(string m, string t, bool f)
+        public ErrorWindow(string m, string t, string n, bool f)
         {
             InitializeComponent();
 
-            Titled.Text = t;
+            Titled.Text = n + ": " + t;
             Message.Text = m;
 
             if (f)

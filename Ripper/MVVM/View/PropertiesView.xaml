@@ -70,34 +70,34 @@
                 </Grid.ColumnDefinitions>
 
                 <RadioButton Content=".mp4" Grid.Column="0" Grid.Row="0" x:Name="mp4"
-                             Style="{StaticResource MenuButtonTheme}" Checked="mp4_Checked"/>
+                             Style="{StaticResource MenuButtonTheme}" Checked="MP4_Checked"/>
 
                 <RadioButton Content=".webm" Grid.Column="1" Grid.Row="0" x:Name="webm"
-                             Style="{StaticResource MenuButtonTheme}" Checked="webm_Checked"/>
+                             Style="{StaticResource MenuButtonTheme}" Checked="WebM_Checked"/>
 
                 <RadioButton Content=".mov" Grid.Column="2" Grid.Row="0" x:Name="mov"
-                             Style="{StaticResource MenuButtonTheme}" Checked="mov_Checked"/>
+                             Style="{StaticResource MenuButtonTheme}" Checked="MOV_Checked"/>
 
                 <RadioButton Content=".avi" Grid.Column="3" Grid.Row="0" x:Name="avi"
-                             Style="{StaticResource MenuButtonTheme}" Checked="avi_Checked"/>
+                             Style="{StaticResource MenuButtonTheme}" Checked="AVI_Checked"/>
 
                 <RadioButton Content=".flv" Grid.Column="4" Grid.Row="0" x:Name="flv"
-                             Style="{StaticResource MenuButtonTheme}" Checked="flv_Checked"/>
+                             Style="{StaticResource MenuButtonTheme}" Checked="FLV_Checked"/>
 
                 <RadioButton Content=".mp3" Grid.Column="0" Grid.Row="1" x:Name="mp3"
-                             Style="{StaticResource MenuButtonTheme}" Checked="mp3_Checked"/>
+                             Style="{StaticResource MenuButtonTheme}" Checked="MP3_Checked"/>
 
                 <RadioButton Content=".m4a" Grid.Column="1" Grid.Row="1" x:Name="m4a"
-                             Style="{StaticResource MenuButtonTheme}" Checked="m4a_Checked"/>
+                             Style="{StaticResource MenuButtonTheme}" Checked="M4A_Checked"/>
 
                 <RadioButton Content=".wav" Grid.Column="2" Grid.Row="1" x:Name="wav"
-                             Style="{StaticResource MenuButtonTheme}" Checked="wav_Checked"/>
+                             Style="{StaticResource MenuButtonTheme}" Checked="WAV_Checked"/>
 
                 <RadioButton Content=".ogg" Grid.Column="3" Grid.Row="1" x:Name="ogg"
-                             Style="{StaticResource MenuButtonTheme}" Checked="ogg_Checked"/>
+                             Style="{StaticResource MenuButtonTheme}" Checked="OGG_Checked"/>
 
                 <RadioButton Content=".pcm" Grid.Column="4" Grid.Row="1" x:Name="pcm"
-                             Style="{StaticResource MenuButtonTheme}" Checked="pcm_Checked"/>
+                             Style="{StaticResource MenuButtonTheme}" Checked="PCM_Checked"/>
             </Grid>
         </Border>
 
@@ -125,32 +125,32 @@
                 </Grid.ColumnDefinitions>
 
                 <RadioButton Content="4320p (8K)" Grid.Column="0" Grid.Row="0" x:Name="p4320"
-                             Style="{StaticResource MenuButtonTheme}" Checked="p4320_Checked"/>
+                             Style="{StaticResource MenuButtonTheme}" Checked="P4320_Checked"/>
 
                 <RadioButton Content="2160p (4K)" Grid.Column="1" Grid.Row="0" x:Name="p2160"
-                             Style="{StaticResource MenuButtonTheme}" Checked="p2160_Checked"/>
+                             Style="{StaticResource MenuButtonTheme}" Checked="P2160_Checked"/>
 
                 <RadioButton Content="1440p (QHD)" Grid.Column="2" Grid.Row="0" x:Name="p1440"
-                             Style="{StaticResource MenuButtonTheme}" Checked="p1440_Checked"/>
+                             Style="{StaticResource MenuButtonTheme}" Checked="P1440_Checked"/>
 
                 <RadioButton Content="1080p (FHD)" Grid.Column="3" Grid.Row="0" x:Name="p1080"
-                             Style="{StaticResource MenuButtonTheme}" Checked="p1080_Checked"/>
+                             Style="{StaticResource MenuButtonTheme}" Checked="P1080_Checked"/>
 
                 <RadioButton Content="720p (HD)" Grid.Column="0" Grid.Row="1" x:Name="p720"
-                             Style="{StaticResource MenuButtonTheme}" Checked="p720_Checked"/>
+                             Style="{StaticResource MenuButtonTheme}" Checked="P720_Checked"/>
 
                 <RadioButton Content="480p (SD)" Grid.Column="1" Grid.Row="1" x:Name="p480"
-                             Style="{StaticResource MenuButtonTheme}" Checked="p480_Checked"/>
+                             Style="{StaticResource MenuButtonTheme}" Checked="P480_Checked"/>
 
                 <RadioButton Content="360p" Grid.Column="2" Grid.Row="1" x:Name="p360"
-                             Style="{StaticResource MenuButtonTheme}" Checked="p360_Checked"/>
+                             Style="{StaticResource MenuButtonTheme}" Checked="P360_Checked"/>
 
                 <RadioButton Content="240p" Grid.Column="3" Grid.Row="1" x:Name="p240"
-                             Style="{StaticResource MenuButtonTheme}" Checked="p240_Checked"/>
+                             Style="{StaticResource MenuButtonTheme}" Checked="P240_Checked"/>
             </Grid>
         </Border>
 
-        <Label Foreground="#969696" FontSize="10" Margin="0,-10,0,0" Height="225"
+        <Label Foreground="#969696" FontSize="10" Margin="0,-10,0,0" Height="205"
                HorizontalAlignment="Center" VerticalContentAlignment="Bottom"
                Content="*YouTube video and audio default to .mp4/.webm and .m4a respectively..."/>
     </StackPanel>

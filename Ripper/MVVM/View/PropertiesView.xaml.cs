@@ -85,15 +85,22 @@ namespace Ripper.MVVM.View
         {
             Directory.CreateDirectory(Globals.Output);
 
-            CommonOpenFileDialog dialog = new CommonOpenFileDialog
+            try
             {
-                InitialDirectory = Globals.Output,
-                IsFolderPicker = true
-            };
+                CommonOpenFileDialog dialog = new CommonOpenFileDialog
+                {
+                    InitialDirectory = Globals.Output,
+                    IsFolderPicker = true
+                };
 
-            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+                if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+                {
+                    OutputText.Text = dialog.FileName;
+                }
+            }
+            catch
             {
-                OutputText.Text = dialog.FileName;
+                Utilities.Error("Could not open an explorer instance...", "Executable Error", "020", false);
             }
 
             Json.Write();
@@ -106,43 +113,43 @@ namespace Ripper.MVVM.View
         #endregion
 
         #region Format Switch UI...
-        private void mp4_Checked(object sender, RoutedEventArgs e) { mp4.IsChecked = true; Globals.Format = "mp4"; Json.Write(); }
+        private void MP4_Checked(object sender, RoutedEventArgs e) { mp4.IsChecked = true; Globals.Format = "mp4"; Json.Write(); }
 
-        private void webm_Checked(object sender, RoutedEventArgs e) { webm.IsChecked = true; Globals.Format = "webm"; Json.Write(); }
+        private void WebM_Checked(object sender, RoutedEventArgs e) { webm.IsChecked = true; Globals.Format = "webm"; Json.Write(); }
 
-        private void mov_Checked(object sender, RoutedEventArgs e) { mov.IsChecked = true; Globals.Format = "mov"; Json.Write(); }
+        private void MOV_Checked(object sender, RoutedEventArgs e) { mov.IsChecked = true; Globals.Format = "mov"; Json.Write(); }
 
-        private void avi_Checked(object sender, RoutedEventArgs e) { avi.IsChecked = true; Globals.Format = "avi"; Json.Write(); }
+        private void AVI_Checked(object sender, RoutedEventArgs e) { avi.IsChecked = true; Globals.Format = "avi"; Json.Write(); }
 
-        private void flv_Checked(object sender, RoutedEventArgs e) { flv.IsChecked = true; Globals.Format = "flv"; Json.Write(); }
+        private void FLV_Checked(object sender, RoutedEventArgs e) { flv.IsChecked = true; Globals.Format = "flv"; Json.Write(); }
 
-        private void mp3_Checked(object sender, RoutedEventArgs e) { mp3.IsChecked = true; Globals.Format = "mp3"; Json.Write(); }
+        private void MP3_Checked(object sender, RoutedEventArgs e) { mp3.IsChecked = true; Globals.Format = "mp3"; Json.Write(); }
 
-        private void m4a_Checked(object sender, RoutedEventArgs e) { m4a.IsChecked = true; Globals.Format = "m4a"; Json.Write(); }
+        private void M4A_Checked(object sender, RoutedEventArgs e) { m4a.IsChecked = true; Globals.Format = "m4a"; Json.Write(); }
 
-        private void wav_Checked(object sender, RoutedEventArgs e) { wav.IsChecked = true; Globals.Format = "wav"; Json.Write(); }
+        private void WAV_Checked(object sender, RoutedEventArgs e) { wav.IsChecked = true; Globals.Format = "wav"; Json.Write(); }
 
-        private void ogg_Checked(object sender, RoutedEventArgs e) { ogg.IsChecked = true; Globals.Format = "ogg"; Json.Write(); }
+        private void OGG_Checked(object sender, RoutedEventArgs e) { ogg.IsChecked = true; Globals.Format = "ogg"; Json.Write(); }
 
-        private void pcm_Checked(object sender, RoutedEventArgs e) { pcm.IsChecked = true; Globals.Format = "pcm"; Json.Write(); }
+        private void PCM_Checked(object sender, RoutedEventArgs e) { pcm.IsChecked = true; Globals.Format = "pcm"; Json.Write(); }
         #endregion
 
         #region Resolution Switch UI...
-        private void p4320_Checked(object sender, RoutedEventArgs e) { p4320.IsChecked = true; Globals.Resolution = 4320; Json.Write(); }
+        private void P4320_Checked(object sender, RoutedEventArgs e) { p4320.IsChecked = true; Globals.Resolution = 4320; Json.Write(); }
 
-        private void p2160_Checked(object sender, RoutedEventArgs e) { p2160.IsChecked = true; Globals.Resolution = 2160; Json.Write(); }
+        private void P2160_Checked(object sender, RoutedEventArgs e) { p2160.IsChecked = true; Globals.Resolution = 2160; Json.Write(); }
 
-        private void p1440_Checked(object sender, RoutedEventArgs e) { p1440.IsChecked = true; Globals.Resolution = 1440; Json.Write(); }
+        private void P1440_Checked(object sender, RoutedEventArgs e) { p1440.IsChecked = true; Globals.Resolution = 1440; Json.Write(); }
 
-        private void p1080_Checked(object sender, RoutedEventArgs e) { p1080.IsChecked = true; Globals.Resolution = 1080; Json.Write(); }
+        private void P1080_Checked(object sender, RoutedEventArgs e) { p1080.IsChecked = true; Globals.Resolution = 1080; Json.Write(); }
 
-        private void p720_Checked(object sender, RoutedEventArgs e) { p720.IsChecked = true; Globals.Resolution = 720; Json.Write(); }
+        private void P720_Checked(object sender, RoutedEventArgs e) { p720.IsChecked = true; Globals.Resolution = 720; Json.Write(); }
 
-        private void p480_Checked(object sender, RoutedEventArgs e) { p480.IsChecked = true; Globals.Resolution = 480; Json.Write(); }
+        private void P480_Checked(object sender, RoutedEventArgs e) { p480.IsChecked = true; Globals.Resolution = 480; Json.Write(); }
 
-        private void p360_Checked(object sender, RoutedEventArgs e) { p360.IsChecked = true; Globals.Resolution = 360; Json.Write(); }
+        private void P360_Checked(object sender, RoutedEventArgs e) { p360.IsChecked = true; Globals.Resolution = 360; Json.Write(); }
 
-        private void p240_Checked(object sender, RoutedEventArgs e) { p240.IsChecked = true; Globals.Resolution = 240; Json.Write(); }
+        private void P240_Checked(object sender, RoutedEventArgs e) { p240.IsChecked = true; Globals.Resolution = 240; Json.Write(); }
         #endregion
     }
 }

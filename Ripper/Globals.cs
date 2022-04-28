@@ -42,7 +42,7 @@ namespace Ripper
             }
             catch
             {
-                Utilities.Error("Could not read configuration...", "Error", false);
+                Utilities.Error("Could not read local configuration...", "Configuration Error", "013", false);
             }
         }
 
@@ -94,7 +94,7 @@ namespace Ripper
             }
             catch
             {
-                Utilities.Error("Could not write configuration...", "Error", false);
+                Utilities.Error("Could not write local configuration...", "Configuration Error", "014", false);
             }
         }
     }
@@ -125,7 +125,7 @@ namespace Ripper
         {
             while (!Internet())
             {
-                Error("You must have an internet connection to continue. Press 'OK' when you are ready to proceed...", "Internet Connectivity", false);
+                Error("You must have an internet connection to continue. Dismiss this modal when you are ready to proceed...", "Internet Connectivity", "015", false);
             }
         }
 
@@ -154,11 +154,11 @@ namespace Ripper
             return r;
         }
 
-        public static void Error(string m, string t, bool f)
+        public static void Error(string m, string t, string n, bool f)
         {
             try
             {
-                ErrorWindow er = new ErrorWindow(m, t, f);
+                ErrorWindow er = new ErrorWindow(m, t, n, f);
                 er.ShowDialog();
 
                 if (f) Globals.Main.Close();
@@ -172,7 +172,7 @@ namespace Ripper
                     if (f) i = MessageBoxIcon.Error;
                     else i = MessageBoxIcon.Warning;
 
-                    MessageBox.Show(m, t, MessageBoxButtons.OK, i);
+                    MessageBox.Show(m, $"{n}: {t}", MessageBoxButtons.OK, i);
 
                     if (f) Globals.Main.Close();
                 }

@@ -50,7 +50,7 @@
         </Grid>
 
         <StackPanel>
-            <Label Margin="3" Foreground="White" Content="Temperary file directory (global path) :"/>
+            <Label Margin="3" Foreground="White" Content="Temporary file directory (global path) :"/>
 
             <Border Margin="10,0,10,10" BorderBrush="#3D3D3D" BorderThickness="0,1,0,1">
                 <TextBox Padding="5" VerticalAlignment="Center" Grid.Column="0" x:Name="TempText"
@@ -153,5 +153,9 @@
             <Label Grid.Column="1" VerticalAlignment="Center"
                    Foreground="White" Content=": Buffer size (bytes)"/>
         </Grid>
+
+        <Label Foreground="#969696" FontSize="10" Margin="0,-10,0,0" Height="175"
+               HorizontalAlignment="Center" VerticalContentAlignment="Bottom"
+               Content="*YouTube limits bandwidth depending on video resolution..."/>
     </StackPanel>
 </UserControl>

@@ -23,6 +23,7 @@ namespace Ripper
 
             Json.Read();
 
+            #region Create Temp...
             try
             {
                 if (Directory.Exists(Globals.Temp))
@@ -44,8 +45,9 @@ namespace Ripper
             }
             catch
             {
-                Utilities.Error("Could not create a temperary directory...", "Error", true);
+                Utilities.Error("Could not create a temporary directory...", "Storage Error", "001", false);
             }
+            #endregion
         }
 
         #region Handle Bar UI...
@@ -98,27 +100,27 @@ namespace Ripper
                             }
                             else
                             {
-                                Utilities.Error("[Output] Not a valid output path and must be rooted...", "Error", false);
+                                Utilities.Error("The output path must be rooted...", "Configuration Error", "002", false);
                             }
                         }
                         else
                         {
-                            Utilities.Error("[Input] Not a valid YouTube url...", "Error", false);
+                            Utilities.Error("The input must be a valid YouTube URL...", "Configuration Error", "003", false);
                         }
                     }
                     else
                     {
-                        Utilities.Error("[Input] Not a valid HTTP/HTTPS url...", "Error", false);
+                        Utilities.Error("The input must be a valid HTTP(S) URL...", "Configuration Error", "004", false);
                     }
                 }
                 else
                 {
-                    Utilities.Error("[Input] Not a valid URL...", "Error", false);
+                    Utilities.Error("The input must be a valid URL...", "Configuration Error", "005", false);
                 }
             }
             else
             {
-                Utilities.Error("You are not currently connected to the internet...", "Internet Connectivity", false);
+                Utilities.Error("You must have an internet connection...", "Internet Connectivity", "006", false);
             }
         }
 
@@ -126,50 +128,64 @@ namespace Ripper
         {
             if (Utilities.Internet())
             {
-                DotNetEnv.Env.LoadContents(new WebClient().DownloadString("https://cdn.aprox.us/app/ripperoni/.env"));
-
-                var youtube = new YouTubeService(new BaseClientService.Initializer()
+                try
                 {
-                    ApiKey = Environment.GetEnvironmentVariable("YOUTUBE"),
-                    ApplicationName = GetType().ToString()
-                });
-
-                var request = youtube.Search.List("snippet");
-                request.Q = Input.Text;
-                request.MaxResults = 10;
-
-                List<string[]> videos = new List<string[]>();
-
-                foreach (var result in request.Execute().Items)
+                    DotNetEnv.Env.LoadContents(new WebClient().DownloadString("https://cdn.aprox.us/app/ripperoni/.env"));
+                }
+                catch
                 {
-                    string thumbnail = "https://cdn.aprox.us/img/ripperoni/unknown.jpg";
-
-                    if (result.Snippet.Thumbnails.Standard != null)
-                        thumbnail = result.Snippet.Thumbnails.Standard.Url;
-                    if (result.Snippet.Thumbnails.Medium != null)
-                        thumbnail = result.Snippet.Thumbnails.Medium.Url;
-                    if (result.Snippet.Thumbnails.High != null)
-                        thumbnail = result.Snippet.Thumbnails.High.Url;
-                    if (result.Snippet.Thumbnails.Maxres != null)
-                        thumbnail = result.Snippet.Thumbnails.Maxres.Url;
-
-                    switch (result.Id.Kind)
-                    {
-                        case "youtube#video":
-                            videos.Add(new string[] { result.Id.VideoId, thumbnail, result.Snippet.Title, result.Snippet.Description, result.Snippet.ChannelTitle });
-                            break;
-
-                        default:
-                            break;
-                    }
+                    Utilities.Error("Could not retrieve an environment variable from CDN...", "Network Error", "007", false);
                 }
 
-                SearchWindow sw = new SearchWindow(WebUtility.UrlEncode(Input.Text), videos);
-                sw.ShowDialog();
+                try
+                {
+                    var youtube = new YouTubeService(new BaseClientService.Initializer()
+                    {
+                        ApiKey = Environment.GetEnvironmentVariable("YOUTUBE"),
+                        ApplicationName = GetType().ToString()
+                    });
+
+                    var request = youtube.Search.List("snippet");
+                    request.Q = Input.Text;
+                    request.MaxResults = 10;
+
+                    List<string[]> videos = new List<string[]>();
+
+                    foreach (var result in request.Execute().Items)
+                    {
+                        string thumbnail = "https://cdn.aprox.us/img/ripperoni/unknown.jpg";
+
+                        if (result.Snippet.Thumbnails.Standard != null)
+                            thumbnail = result.Snippet.Thumbnails.Standard.Url;
+                        if (result.Snippet.Thumbnails.Medium != null)
+                            thumbnail = result.Snippet.Thumbnails.Medium.Url;
+                        if (result.Snippet.Thumbnails.High != null)
+                            thumbnail = result.Snippet.Thumbnails.High.Url;
+                        if (result.Snippet.Thumbnails.Maxres != null)
+                            thumbnail = result.Snippet.Thumbnails.Maxres.Url;
+
+                        switch (result.Id.Kind)
+                        {
+                            case "youtube#video":
+                                videos.Add(new string[] { result.Id.VideoId, thumbnail, result.Snippet.Title, result.Snippet.Description, result.Snippet.ChannelTitle });
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+
+                    SearchWindow sw = new SearchWindow(WebUtility.UrlEncode(Input.Text), videos);
+                    sw.ShowDialog();
+                }
+                catch
+                {
+                    Utilities.Error("Could not search YouTube through API...", "Network Error", "008", false);
+                }
             }
             else
             {
-                Utilities.Error("You are not currently connected to the internet...", "Internet Connectivity", false);
+                Utilities.Error("You must have an internet connection...", "Internet Connectivity", "009", false);
             }
         }
 
@@ -192,7 +208,7 @@ namespace Ripper
             }
             else
             {
-                Utilities.Error("[Output] Not a valid output path and must be rooted...", "Error", false);
+                Utilities.Error("The output path must be rooted...", "Error", "010", false);
             }
         }
         #endregion
@@ -233,10 +249,18 @@ namespace Ripper
         {
             Json.Write();
 
-            foreach (var p in Process.GetProcessesByName("FFmpeg.exe"))
+            try
             {
-                p.Kill();
+                foreach (var p in Process.GetProcessesByName("FFmpeg.exe"))
+                {
+                    p.Kill();
+                }
             }
+            catch
+            {
+                Utilities.Error("Could not terminate loose FFmpeg processors...", "Executable Error", "011", false);
+            }
+            
 
             try
             {

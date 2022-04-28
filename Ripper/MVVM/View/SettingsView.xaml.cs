@@ -25,14 +25,16 @@ namespace Ripper.MVVM.View
         {
             try
             {
-                ProcessStartInfo psi = new ProcessStartInfo();
-                psi.FileName = "Firewall.bat";
-                psi.Verb = "runas";
+                ProcessStartInfo psi = new ProcessStartInfo
+                {
+                    FileName = "Firewall.bat",
+                    Verb = "runas"
+                };
                 Process.Start(psi);
             }
             catch
             {
-                Utilities.Error("Could not run console as administator...", "Error", true);
+                Utilities.Error("Could not run batch script as administrator...", "Executable Error", "021", true);
             }
         }
         #endregion
@@ -41,6 +43,7 @@ namespace Ripper.MVVM.View
         private void TempText_TextChanged(object sender, TextChangedEventArgs e)
         {
             Globals.Temp = TempText.Text;
+
             Json.Write();
         }
         #endregion

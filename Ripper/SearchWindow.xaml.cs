@@ -24,11 +24,18 @@ namespace Ripper
 
         private void List()
         {
-            foreach (var video in videos)
+            try
             {
-                var ResultView = new ResultView(this, video);
+                foreach (var video in videos)
+                {
+                    var ResultView = new ResultView(this, video);
 
-                Results.Children.Add(ResultView);
+                    Results.Children.Add(ResultView);
+                }
+            }
+            catch
+            {
+                Utilities.Error("Could not list all available videos...", "Executable Error", "012", false);
             }
         }
 

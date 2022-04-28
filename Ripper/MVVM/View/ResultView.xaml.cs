@@ -60,7 +60,7 @@ namespace Ripper.MVVM.View
             }
             catch
             {
-                Utilities.Error("Could not fetch thumbnail image...", "Error", false);
+                Utilities.Error("Could not display thumbnail image...", "Executable Error", "038", false);
             }
             #endregion
 

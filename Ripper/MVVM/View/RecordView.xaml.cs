@@ -7,6 +7,7 @@ using System.Threading;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Threading;
 using System.Collections.Generic;
 using System.Windows.Media.Imaging;
 
@@ -77,7 +78,14 @@ namespace Ripper.MVVM.View
             source = new CancellationTokenSource();
             token = source.Token;
 
-            Task.Factory.StartNew(() => Processor(), token);
+            try
+            {
+                Task.Factory.StartNew(() => Processor(), token);
+            }
+            catch
+            {
+                Utilities.Error("Could not start worker process...", "Executable Error", "022", false);
+            }
         }
 
         private void Remove_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -94,7 +102,8 @@ namespace Ripper.MVVM.View
             {
                 token.ThrowIfCancellationRequested();
 
-                Dispatcher.Invoke(delegate () {
+                Dispatcher.Invoke(delegate ()
+                {
                     Status.Text = "Starting...";
                 });
 
@@ -129,7 +138,7 @@ namespace Ripper.MVVM.View
                 }
                 catch
                 {
-                    Utilities.Error("Could not create download progress event listener...", "Error", false);
+                    Utilities.Error("Could not start a progress event listener...", "Error", "023", false);
                 }
 
                 ffmpeg = new FFmpeg(Globals.Real + @"FFmpeg.exe");
@@ -140,18 +149,18 @@ namespace Ripper.MVVM.View
                 }
                 catch
                 {
-                    Utilities.Error("Could not create process progress event listener...", "Error", false);
+                    Utilities.Error("Could not start a progress event listener...", "Error", "024", false);
                 }
                 #endregion
 
                 token.ThrowIfCancellationRequested();
 
-                #region GetMetadata
+                #region Get Metadata...
                 try
                 {
                     var y = new YoutubeDL
                     {
-                        YoutubeDLPath = Globals.Real + "DownloaderP.exe"
+                        YoutubeDLPath = Globals.Real + "YTDLP.exe"
                     };
 
                     var r = await y.RunVideoDataFetch(i);
@@ -166,7 +175,7 @@ namespace Ripper.MVVM.View
                 {
                     source.Cancel();
 
-                    Utilities.Error("Could not fetch data regarding URL: " + i + " ...", "Error", true);
+                    Utilities.Error($"Could not fetch data regarding the URL: {i} ...", "Worker Error", "025", false);
                 }
 
                 try
@@ -222,7 +231,7 @@ namespace Ripper.MVVM.View
                 {
                     source.Cancel();
 
-                    Utilities.Error("Could not find a viable or valid media record...", "Error", true);
+                    Utilities.Error("Could not find a viable media record...", "Worker Error", "026", false);
                 }
 
                 vi = re.Url;
@@ -230,7 +239,7 @@ namespace Ripper.MVVM.View
 
                 token.ThrowIfCancellationRequested();
 
-                #region PostMetadata
+                #region Post Metadata...
                 try
                 {
                     BitmapImage bi = new BitmapImage();
@@ -263,16 +272,18 @@ namespace Ripper.MVVM.View
                         bi.EndInit();
                     }
 
-                    Dispatcher.Invoke(delegate () {
+                    Dispatcher.Invoke(delegate ()
+                    {
                         Thumbnail.ImageSource = bi;
                     });
                 }
                 catch
                 {
-                    Utilities.Error("Could not fetch thumbnail image...", "Error", false);
+                    Utilities.Error("Could not display thumbnail image...", "Worker Error", "027", false);
                 }
 
-                Dispatcher.Invoke(delegate () {
+                Dispatcher.Invoke(delegate ()
+                {
                     Title.Text = ti;
 
                     Author.Text = up;
@@ -283,14 +294,10 @@ namespace Ripper.MVVM.View
 
                 token.ThrowIfCancellationRequested();
 
-                #region GetBase
+                #region Get Base...
                 te = Globals.Temp + "\\" + ti + "." + e + "." + fr;
 
                 s = FileSize(new Uri(vi));
-
-                Dispatcher.Invoke(delegate () {
-                    Title.Text = "V: " + ti;
-                });
 
                 Json.Read();
 
@@ -306,7 +313,7 @@ namespace Ripper.MVVM.View
                     {
                         source.Cancel();
 
-                        Utilities.Error("Could not download required files (primary)...", "Error", false);
+                        Utilities.Error("Could not download base media files...", "Worker Error", "028", false);
                     }
 
                     downloading = false;
@@ -324,7 +331,7 @@ namespace Ripper.MVVM.View
 
                 if (l)
                 {
-                    #region GetAdditional
+                    #region Get Additional...
                     try
                     {
                         fs.ToList().FindAll(a => a.Extension == "m4a").ForEach(a =>
@@ -336,7 +343,7 @@ namespace Ripper.MVVM.View
                     {
                         source.Cancel();
 
-                        Utilities.Error("Could not find a viable or valid media record...", "Error", false);
+                        Utilities.Error("Could not find a viable media record...", "Worker Error", "029", false);
                     }
 
                     vi = re.Url;
@@ -344,10 +351,6 @@ namespace Ripper.MVVM.View
                     te = Globals.Temp + "\\" + ti + "." + e + ".m4a";
 
                     s = FileSize(new Uri(vi));
-
-                    Dispatcher.Invoke(delegate () {
-                        Title.Text = "A: " + ti;
-                    });
 
                     Json.Read();
 
@@ -363,7 +366,7 @@ namespace Ripper.MVVM.View
                         {
                             source.Cancel();
 
-                            Utilities.Error("Could not download required files (secondary)...", "Error", false);
+                            Utilities.Error("Could not download addition media files...", "Worker Error", "030", false);
                         }
 
                         downloading = false;
@@ -382,15 +385,14 @@ namespace Ripper.MVVM.View
 
                 if (fr != f || l)
                 {
-                    #region GetProcessing
+                    #region Get Processing...
                     p = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
 
                     tm = Globals.Temp + "\\" + ti + "." + p + "." + fr;
                     tc = Globals.Temp + "\\" + ti + "." + e + "." + f;
 
-                    Dispatcher.Invoke(delegate () {
-                        Title.Text = "P: " + ti;
-
+                    Dispatcher.Invoke(delegate ()
+                    {
                         Status.Text = "Processing...";
 
                         Progress.IsIndeterminate = true;
@@ -404,7 +406,8 @@ namespace Ripper.MVVM.View
                     {
                         f2 = Globals.Temp + "\\" + ti + "." + e + ".m4a";
 
-                        Dispatcher.Invoke(delegate () {
+                        Dispatcher.Invoke(delegate ()
+                        {
                             Status.Text = "Multiplexing...";
                         });
 
@@ -426,7 +429,8 @@ namespace Ripper.MVVM.View
 
                     if (f != fr)
                     {
-                        Dispatcher.Invoke(delegate () {
+                        Dispatcher.Invoke(delegate ()
+                        {
                             Status.Text = "Converting...";
                         });
 
@@ -448,13 +452,12 @@ namespace Ripper.MVVM.View
                     token.ThrowIfCancellationRequested();
                 }
 
-                #region Completed
+                #region Completed...
                 string so;
                 string de;
 
-                Dispatcher.Invoke(delegate () {
-                    Title.Text = ti;
-
+                Dispatcher.Invoke(delegate ()
+                {
                     Status.Text = "Completing...";
                 });
 
@@ -478,7 +481,7 @@ namespace Ripper.MVVM.View
                 {
                     source.Cancel();
 
-                    Utilities.Error("Could not transfer completed files...", "Error", false);
+                    Utilities.Error("Could not transfer completed files...", "Storage Error", "031", false);
                 }
 
                 try
@@ -498,10 +501,11 @@ namespace Ripper.MVVM.View
                 }
                 catch
                 {
-                    Utilities.Error("Could not delete temperary files...", "Error", false);
+                    Utilities.Error("Could not delete temperary files...", "Storage Error", "032", false);
                 }
 
-                Dispatcher.Invoke(delegate () {
+                Dispatcher.Invoke(delegate ()
+                {
                     Status.Text = "Completed!";
 
                     Progress.IsIndeterminate = false;
@@ -545,7 +549,7 @@ namespace Ripper.MVVM.View
                 {
                     source.Cancel();
 
-                    Utilities.Error("Could not run FFmpeg process without error (Multiplexer)...", "Error", false);
+                    Utilities.Error("Could not run multiplexer without error...", "Worker Error", "033", false);
                 }
                 
             }
@@ -595,7 +599,7 @@ namespace Ripper.MVVM.View
                 {
                     source.Cancel();
 
-                    Utilities.Error("Could not run FFmpeg process without error (Converter)...", "Error", false);
+                    Utilities.Error("Could not run converter without error...", "Worker Error", "034", false);
                 }
             }
 
@@ -631,16 +635,16 @@ namespace Ripper.MVVM.View
                 using (var r = w.GetResponse())
                 {
                     var f = r.Headers.Get("Content-Length");
-                    var m = Math.Round(Convert.ToDouble(f) / 1024.0 / 1024.0, 2);
-                    return m + " MB";
+                    var m = Math.Round(Convert.ToDouble(f) / 1024.0 / 1024.0, 0);
+                    return m.ToString();
                 }
             }
             catch
             {
-                Utilities.Error("Could not compute the size of remote files...", "Error", false);
+                Utilities.Error("Could not make HEAD request for remote files...", "Network Error", "035", false);
             }
 
-            return 0 + " MB";
+            return "0";
         }
 
         private void DownloadProgression(object sender, Downloader.DownloadProgressChangedEventArgs e)
@@ -648,7 +652,8 @@ namespace Ripper.MVVM.View
             try
             {
                 Dispatcher.Invoke(delegate () {
-                    Status.Text = Math.Round(Convert.ToDouble(e.ReceivedBytesSize) / 1024.0 / 1024.0, 2) + " / " + s;
+                    Status.Text = Math.Round(Convert.ToDouble(e.ReceivedBytesSize) / 1024.0 / 1024.0, 0) + 
+                    $"/{s}MB ({Math.Round(Convert.ToDouble(e.BytesPerSecondSpeed) / 1024.0 / 1024.0, 1)}MB/s)";
 
                     Progress.IsIndeterminate = false;
                     Progress.Value = (Int32)e.ProgressPercentage;
@@ -656,7 +661,7 @@ namespace Ripper.MVVM.View
             }
             catch
             {
-                Utilities.Error("Could not invoke UI controls on progress event...", "Error", false);
+                Utilities.Error("Could not invoke UI dispatcher on progress event...", "Worker Error", "036", false);
             }
         }
 
@@ -671,7 +676,7 @@ namespace Ripper.MVVM.View
             }
             catch
             {
-                Utilities.Error("Could not invoke UI controls on progress event...", "Error", false);
+                Utilities.Error("Could not invoke UI dispatcher on progress event...", "Worker Error", "037", false);
             }
         }
         #endregion

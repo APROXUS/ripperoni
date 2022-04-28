@@ -43,22 +43,50 @@ namespace Ripper.MVVM.ViewModel
             #region Relay Commands...
             DownloadsVC = new RelayCommand(o =>
             {
-                CurrentView = null;
+                try
+                {
+                    CurrentView = null;
+                }
+                catch
+                {
+                    Utilities.Error("Could not change current view...", "Executable Error", "016", false);
+                }
             });
 
             PropertiesVC = new RelayCommand(o =>
             {
-                CurrentView = PropertiesVM;
+                try
+                {
+                    CurrentView = PropertiesVM;
+                }
+                catch
+                {
+                    Utilities.Error("Could not change current view...", "Executable Error", "017", false);
+                }
             });
 
             SettingsVC = new RelayCommand(o =>
             {
-                CurrentView = SettingsVM;
+                try
+                {
+                    CurrentView = SettingsVM;
+                }
+                catch
+                {
+                    Utilities.Error("Could not change current view...", "Executable Error", "018", false);
+                }
             });
 
             AboutVC = new RelayCommand(o =>
             {
-                CurrentView = AboutVM;
+                try
+                {
+                    CurrentView = AboutVM;
+                }
+                catch
+                {
+                    Utilities.Error("Could not change current view...", "Executable Error", "019", false);
+                }
             });
             #endregion
         }
