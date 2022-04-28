@@ -279,7 +279,7 @@ namespace Ripper.MVVM.View
                 }
                 catch
                 {
-                    Utilities.Error("Could not display thumbnail image...", "Worker Error", "027", false);
+                    //Utilities.Error("Could not display thumbnail image...", "Worker Error", "027", false);
                 }
 
                 Dispatcher.Invoke(delegate ()
