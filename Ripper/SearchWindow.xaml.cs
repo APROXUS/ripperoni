@@ -10,14 +10,12 @@ namespace Ripper
     public partial class SearchWindow : Window
     {
         private readonly List<string[]> videos;
-        public readonly MainWindow main;
         private readonly string query;
 
-        public SearchWindow(MainWindow m, string q, List<string[]> v)
+        public SearchWindow(string q, List<string[]> v)
         {
             InitializeComponent();
 
-            main = m;
             query = q;
             videos = v;
 

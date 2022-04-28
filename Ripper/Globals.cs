@@ -101,6 +101,8 @@ namespace Ripper
 
     public static class Globals
     {
+        public static MainWindow Main { get; set; }
+
         public static string Real = AppDomain.CurrentDomain.BaseDirectory;
 
         public static string Input { get; set; } = "";
@@ -156,18 +158,28 @@ namespace Ripper
         {
             try
             {
-                MessageBoxIcon i;
+                ErrorWindow er = new ErrorWindow(m, t, f);
+                er.ShowDialog();
 
-                if (f) i = MessageBoxIcon.Error;
-                else i = MessageBoxIcon.Warning;
-
-                MessageBox.Show(m, t, MessageBoxButtons.OK, i);
-
-                if (f) Application.Exit();
+                if (f) Globals.Main.Close();
             }
             catch
             {
-                //You're seriously fucked!
+                try
+                {
+                    MessageBoxIcon i;
+
+                    if (f) i = MessageBoxIcon.Error;
+                    else i = MessageBoxIcon.Warning;
+
+                    MessageBox.Show(m, t, MessageBoxButtons.OK, i);
+
+                    if (f) Globals.Main.Close();
+                }
+                catch
+                {
+                    //You're seriously fucked!
+                }
             }
         }
     }

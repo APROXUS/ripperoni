@@ -19,6 +19,7 @@
                 <Image Source="/Images/Downloader.png" Margin="5"/>
                 <Image Source="/Images/Javi FFmpeg.png" Margin="5"/>
                 <Image Source="/Images/Newtonsoft JSON.png" Margin="5"/>
+                <Image Source="/Images/dotENV.png" Margin="5"/>
                 <Image Source="/Images/Google API.png" Margin="5"/>
                 <Image Source="/Images/Windows Shell.png" Margin="5"/>
             </StackPanel>
@@ -82,7 +83,15 @@
                            x:Name="ng" MouseDown="NG_MouseDown"/>
                     <Label Foreground="#007ACC" Content="Newtonsoft.JSON by James Newton-King: License"
                            x:Name="nl" MouseDown="NL_MouseDown"/>
-                        
+                    
+                    <Label/>
+                    <Label Foreground="#007ACC" Content="DotNetEnv by Toni Solarin-Sodara: Nuget"
+                           x:Name="en" MouseDown="EN_MouseDown"/>
+                    <Label Foreground="#007ACC" Content="DotNetEnv by Toni Solarin-Sodara: Github"
+                          x:Name="eg" MouseDown="EG_MouseDown"/>
+                    <Label Foreground="#007ACC" Content="DotNetEnv by Toni Solarin-Sodara: License"
+                           x:Name="el" MouseDown="EL_MouseDown"/>
+                    
                     <Label/>
                     <Label Foreground="#007ACC" Content="Google.API by Google LLC: Nuget"
                            x:Name="gn" MouseDown="GN_MouseDown"/>

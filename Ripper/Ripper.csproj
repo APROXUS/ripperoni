@@ -270,6 +270,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ErrorWindow.xaml.cs">
+      <DependentUpon>ErrorWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MVVM\View\ResultView.xaml.cs">
       <DependentUpon>ResultView.xaml</DependentUpon>
     </Compile>
@@ -277,6 +280,10 @@
       <DependentUpon>SearchWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="WebPWrapper.cs" />
+    <Page Include="ErrorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -436,6 +443,11 @@
     <Resource Include="Images\Greyscale\Ripperoni.png" />
     <Resource Include="Images\WebP.png" />
     <Resource Include="Images\Greyscale\WebP.png" />
+    <Resource Include="Images\Error.png" />
+    <Resource Include="Images\Info.png" />
+    <Resource Include="Images\Warning.png" />
+    <Resource Include="Images\dotENV.png" />
+    <Resource Include="Images\Greyscale\dotENV.png" />
     <Content Include="LibWebPx64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

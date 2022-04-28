@@ -71,7 +71,7 @@ namespace Ripper.MVVM.View
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            search.main.Request("https://youtu.be/" + video[0]);
+            Globals.Main.Request("https://youtu.be/" + video[0]);
 
             search.Close();
         }

@@ -19,6 +19,8 @@ namespace Ripper
         {
             InitializeComponent();
 
+            Globals.Main = this;
+
             Json.Read();
 
             try
@@ -124,9 +126,7 @@ namespace Ripper
         {
             if (Utilities.Internet())
             {
-                // Request environment variables (api keys) from albienet
-
-                DotNetEnv.Env.Load();
+                DotNetEnv.Env.LoadContents(new WebClient().DownloadString("https://cdn.aprox.us/app/ripperoni/.env"));
 
                 var youtube = new YouTubeService(new BaseClientService.Initializer()
                 {
@@ -164,7 +164,7 @@ namespace Ripper
                     }
                 }
 
-                SearchWindow sw = new SearchWindow(this, WebUtility.UrlEncode(Input.Text), videos);
+                SearchWindow sw = new SearchWindow(WebUtility.UrlEncode(Input.Text), videos);
                 sw.ShowDialog();
             }
             else
@@ -229,7 +229,7 @@ namespace Ripper
             WindowState = WindowState.Minimized;
         }
 
-        private void ExitProcess()
+        public void ExitProcess()
         {
             Json.Write();
 

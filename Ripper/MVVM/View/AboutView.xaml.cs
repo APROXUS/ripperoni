@@ -98,6 +98,21 @@ namespace Ripper.MVVM.View
             Process.Start("https://github.com/JamesNK/Newtonsoft.Json/blob/master/LICENSE.md");
         }
 
+        private void EN_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Process.Start("https://www.nuget.org/packages/DotNetEnv/");
+        }
+
+        private void EG_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Process.Start("https://github.com/tonerdo/dotnet-env");
+        }
+
+        private void EL_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Process.Start("https://github.com/tonerdo/dotnet-env/blob/master/LICENSE");
+        }
+
         private void GN_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Process.Start("https://www.nuget.org/packages/Google.Apis");
