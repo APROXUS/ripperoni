@@ -69,5 +69,15 @@ namespace Ripper.Install.Properties {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Ripper_Uninstall {
+            get {
+                object obj = ResourceManager.GetObject("Ripper_Uninstall", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

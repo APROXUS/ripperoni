@@ -1,23 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.IO;
-using Microsoft.Win32;
-using System.Reflection;
+using System.Windows;
 using System.Diagnostics;
+using System.Windows.Input;
 using System.Windows.Forms;
+using System.Threading.Tasks;
+using System.Windows.Media.Animation;
+
+using Microsoft.Win32;
 
 namespace Ripper.Uninstall
 {
@@ -30,39 +20,38 @@ namespace Ripper.Uninstall
         private readonly string path;
         private readonly string temp;
 
-        public MainWindow(string[] a)
+        public MainWindow()
         {
-            if (a.Length > 0) if (a[0] == "-silent") silent = true;
+            string[] args = Environment.GetCommandLineArgs();
+
+            if (args.Length > 1) if (args[1] == "-silent") silent = true;
 
             InitializeComponent();
 
-            if (silent)
-            {
-                Opacity = 0;
-            }
+            if (silent) Opacity = 0;
+
+            real = AppDomain.CurrentDomain.BaseDirectory;
+            path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\APROX Ripperoni\";
+            temp = Path.GetTempPath() + @"APROX TEMP\";
+            start = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Microsoft\Windows\Start Menu\Programs\APROX Project\";
 
             Task.Factory.StartNew(() => Uninstallation());
         }
 
         private void Uninstallation()
         {
-            real = AppDomain.CurrentDomain.BaseDirectory;
-            path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\APROX Ripperoni\";
-            temp = System.IO.Path.GetTempPath() + @"APROX TEMP\";
-            start = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Microsoft\Windows\Start Menu\Programs\APROX Project\";
-
             try
             {
-                if (real != temp)
+                if (real == path)
                 {
                     Directory.CreateDirectory(temp);
                     File.Copy(real + "Uninstall.exe", temp + "Uninstall.exe", true);
-                    //Process.Start(temp + "Uninstall.exe");
+                    Process.Start(temp + "Uninstall.exe");
 
-                    //Invoke((MethodInvoker)delegate
-                    //{
-                    //    Close();
-                    //});
+                    Dispatcher.Invoke(delegate ()
+                    {
+                        Close();
+                    });
                 }
             }
             catch
@@ -82,15 +71,13 @@ namespace Ripper.Uninstall
                 Error("Could not determine if Ripperoni is running...", false);
             }
 
-            Stat("Build: " + Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString());
-            System.Threading.Thread.Sleep(5000);
-            Progress(0);
+            Progression(0);
 
             try
             {
                 Stat("Deleting installation directory...");
                 if (Directory.Exists(path)) Directory.Delete(path, true);
-                Progress(20);
+                Progression(20);
             }
             catch
             {
@@ -101,7 +88,7 @@ namespace Ripper.Uninstall
             {
                 Stat("Removing shortcut from start menu...");
                 File.Delete(start + "Ripperoni.lnk");
-                Progress(40);
+                Progression(40);
             }
             catch
             {
@@ -112,7 +99,7 @@ namespace Ripper.Uninstall
             {
                 Stat("Removing uninstall shortcut from start menu...");
                 File.Delete(start + "Uninstall.lnk");
-                Progress(60);
+                Progression(60);
             }
             catch
             {
@@ -124,7 +111,7 @@ namespace Ripper.Uninstall
                 Stat("Removing shortcut from desktop...");
                 string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\Ripperoni.lnk";
                 File.Delete(desktop);
-                Progress(80);
+                Progression(80);
             }
             catch
             {
@@ -152,22 +139,9 @@ namespace Ripper.Uninstall
             }
 
             Stat("Cleaning up...");
-            Progress(100);
-            System.Threading.Thread.Sleep(1000);
+            Progression(100);
 
-            if (!silent)
-            {
-                try
-                {
-                    //Process.Start("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
-                }
-                catch
-                {
-
-                }
-            }
-
-            Invoke((MethodInvoker)delegate
+            Dispatcher.Invoke(delegate ()
             {
                 Close();
             });
@@ -188,7 +162,7 @@ namespace Ripper.Uninstall
                 if (f) i = MessageBoxIcon.Error;
                 else i = MessageBoxIcon.Warning;
 
-                System.Windows.Forms.MessageBox.Show(m, $"{n}: {t}", MessageBoxButtons.OK, i);
+                System.Windows.Forms.MessageBox.Show(m, "Error!", MessageBoxButtons.OK, i);
 
                 if (f) Close();
 
@@ -207,13 +181,9 @@ namespace Ripper.Uninstall
         {
             try
             {
-                string stat = s?.Length > 36
-                ? s.Substring(0, 36) + "..."
-                : s;
-
                 Dispatcher.Invoke(delegate ()
                 {
-                    Status.Text = stat;
+                    Status.Text = s;
                 });
             }
             catch
@@ -222,14 +192,14 @@ namespace Ripper.Uninstall
             }
         }
 
-        private void Progress(int p)
+        private void Progression(int p)
         {
             try
             {
-                Dispatcher.Invoke((Action)delegate ()
+                Dispatcher.Invoke(delegate ()
                 {
-                    this.Progress.IsIndeterminate = false;
-                    this.Progress.Value = p;
+                    Progress.IsIndeterminate = false;
+                    Progress.Value = p;
                 });
             }
             catch

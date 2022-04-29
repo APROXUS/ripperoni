@@ -1,26 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.IO;
-using Microsoft.Win32;
-using Ripper.Install.Properties;
-using System.Reflection;
-using IWshRuntimeLibrary;
+using System.Windows;
 using System.Diagnostics;
-using System.IO.Compression;
 using System.Windows.Forms;
+using System.Windows.Input;
+using System.IO.Compression;
+using System.Threading.Tasks;
+using System.Windows.Threading;
+using System.Windows.Media.Animation;
+
+using Microsoft.Win32;
+using IWshRuntimeLibrary;
 
 namespace Ripper.Install
 {
@@ -28,30 +18,29 @@ namespace Ripper.Install
     {
         private readonly bool silent;
 
-        private string start;
-        private string path;
-        private string zip;
+        private readonly string start;
+        private readonly string path;
+        private readonly string zip;
 
-        public MainWindow(string[] a)
+        public MainWindow()
         {
-            if (a.Length > 0) if (a[0] == "-silent") silent = true;
+            string[] args = Environment.GetCommandLineArgs();
+
+            if (args.Length > 1) if (args[1] == "-silent") silent = true;
 
             InitializeComponent();
 
-            if (silent)
-            {
-                Opacity = 0;
-            }
+            if (silent) Opacity = 0;
+
+            start = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Microsoft\Windows\Start Menu\Programs\APROX Project\";
+            path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\APROX Ripperoni\";
+            zip = Path.GetTempPath() + @"APROX TEMP\Ripperoni.zip";
 
             Task.Factory.StartNew(() => Installation());
         }
 
         private void Installation()
         {
-            start = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Microsoft\Windows\Start Menu\Programs\APROX Project\";
-            path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\APROX Ripperoni\";
-            zip = System.IO.Path.GetTempPath() + @"APROX TEMP\Ripperoni.zip";
-
             try
             {
                 int expected = 0;
@@ -70,15 +59,13 @@ namespace Ripper.Install
                 Error("Could not determine if Ripperoni is running...", false);
             }
 
-            Stat("Build: " + Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString());
-            System.Threading.Thread.Sleep(1000);
-            Progress(0);
+            Progression(0);
 
             try
             {
                 Stat("Creating temporary directory...");
                 Directory.CreateDirectory(System.IO.Path.GetTempPath() + "APROX TEMP");
-                Progress(4);
+                Progression(4);
             }
             catch
             {
@@ -88,8 +75,8 @@ namespace Ripper.Install
             try
             {
                 Stat("Extracting compressed media...");
-                System.IO.File.WriteAllBytes(zip, Resources.Release);
-                Progress(16);
+                System.IO.File.WriteAllBytes(zip, Properties.Resources.Release);
+                Progression(16);
             }
             catch
             {
@@ -101,7 +88,7 @@ namespace Ripper.Install
                 Stat("Deleting current installation...");
                 if (Directory.Exists(path)) Directory.Delete(path, true);
                 Directory.CreateDirectory(path);
-                Progress(28);
+                Progression(28);
             }
             catch
             {
@@ -112,7 +99,7 @@ namespace Ripper.Install
             {
                 Stat("Extracting installation media...");
                 ZipFile.ExtractToDirectory(zip, path);
-                Progress(40);
+                Progression(40);
             }
             catch
             {
@@ -122,8 +109,8 @@ namespace Ripper.Install
             try
             {
                 Stat("Extracting compressed executable...");
-                System.IO.File.WriteAllBytes(path + "Uninstall.exe", Resources.Uninstall);
-                Progress(52);
+                System.IO.File.WriteAllBytes(path + "Uninstall.exe", Properties.Resources.Ripper_Uninstall);
+                Progression(52);
             }
             catch
             {
@@ -141,7 +128,7 @@ namespace Ripper.Install
                 shortstart.IconLocation = path + "Ripperoni.exe";
                 shortstart.TargetPath = path + "Ripperoni.exe";
                 shortstart.Save();
-                Progress(64);
+                Progression(64);
             }
             catch
             {
@@ -156,7 +143,7 @@ namespace Ripper.Install
                 shortuninstall.IconLocation = path + "Uninstall.exe";
                 shortuninstall.TargetPath = path + "Uninstall.exe";
                 shortuninstall.Save();
-                Progress(76);
+                Progression(76);
             }
             catch
             {
@@ -172,7 +159,7 @@ namespace Ripper.Install
                 shortdesktop.IconLocation = path + "Ripperoni.exe";
                 shortdesktop.TargetPath = path + "Ripperoni.exe";
                 shortdesktop.Save();
-                Progress(88);
+                Progression(88);
             }
             catch
             {
@@ -200,7 +187,7 @@ namespace Ripper.Install
             }
 
             Stat("Cleaning up...");
-            Progress(100);
+            Progression(100);
             System.Threading.Thread.Sleep(1000);
 
             if (!silent)
@@ -216,7 +203,10 @@ namespace Ripper.Install
 
             }
 
-            Close();
+            Dispatcher.Invoke(delegate ()
+            {
+                Close();
+            });
         }
 
         #region Auxiliary
@@ -253,13 +243,9 @@ namespace Ripper.Install
         {
             try
             {
-                string stat = s?.Length > 36
-                    ? s.Substring(0, 36) + "..."
-                    : s;
-
                 Dispatcher.Invoke(delegate ()
                 {
-                    Status.Text = stat;
+                    Status.Text = s;
                 });
             }
             catch
@@ -268,14 +254,14 @@ namespace Ripper.Install
             }
         }
 
-        private void Progress(int p)
+        private void Progression(int p)
         {
             try
             {
-                Dispatcher.Invoke((Action)delegate ()
+                Dispatcher.Invoke(delegate ()
                 {
-                    this.Progress.IsIndeterminate = false;
-                    this.Progress.Value = p;
+                    Progress.IsIndeterminate = false;
+                    Progress.Value = p;
                 });
             }
             catch
