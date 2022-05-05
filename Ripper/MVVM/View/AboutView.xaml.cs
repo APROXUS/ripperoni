@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Reflection;
+using System.Diagnostics;
 using System.Windows.Controls;
 
 namespace Ripper.MVVM.View
@@ -8,6 +10,10 @@ namespace Ripper.MVVM.View
         public AboutView()
         {
             InitializeComponent();
+
+            Version v = Assembly.GetExecutingAssembly().GetName().Version;
+
+            Handle.Text = $"APROX Project: Ripperoni: {v.Major}.{v.Minor}.{v.Build}.{v.Revision:X}";
 
             Json.Write();
         }

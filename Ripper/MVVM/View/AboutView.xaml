@@ -26,7 +26,7 @@
 
             <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="1">
                 <StackPanel Margin="10">
-                    <TextBlock Background="Transparent" Foreground="White"
+                    <TextBlock Background="Transparent" Foreground="White" x:Name="Handle"
                                TextAlignment="Justify" TextWrapping="Wrap" Margin="0,5,0,5"><Bold>APROX Project: Ripperoni:</Bold></TextBlock>
                         
                     <TextBlock Background="Transparent" Foreground="White"
