@@ -58,9 +58,9 @@ namespace Ripper.MVVM.View
 
                 Thumbnail.ImageSource = bi;
             }
-            catch
+            catch (Exception ex)
             {
-                Utilities.Error("Could not display thumbnail image...", "Executable Error", "038", false);
+                Utilities.Error("Could not display thumbnail image...", "Executable Error", "038", false, ex);
             }
             #endregion
 

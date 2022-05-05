@@ -43,9 +43,9 @@ namespace Ripper
                     Directory.CreateDirectory(Globals.Temp);
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                Utilities.Error("Could not create a temporary directory...", "Storage Error", "001", false);
+                Utilities.Error("Could not create a temporary directory...", "Storage Error", "001", false, ex);
             }
             #endregion
         }
@@ -100,27 +100,27 @@ namespace Ripper
                             }
                             else
                             {
-                                Utilities.Error("The output path must be rooted...", "Configuration Error", "002", false);
+                                Utilities.Error("The output path must be rooted...", "Configuration Error", "002", false, null);
                             }
                         }
                         else
                         {
-                            Utilities.Error("The input must be a valid YouTube URL...", "Configuration Error", "003", false);
+                            Utilities.Error("The input must be a valid YouTube URL...", "Configuration Error", "003", false, null);
                         }
                     }
                     else
                     {
-                        Utilities.Error("The input must be a valid HTTP(S) URL...", "Configuration Error", "004", false);
+                        Utilities.Error("The input must be a valid HTTP(S) URL...", "Configuration Error", "004", false, null);
                     }
                 }
                 else
                 {
-                    Utilities.Error("The input must be a valid URL...", "Configuration Error", "005", false);
+                    Utilities.Error("The input must be a valid URL...", "Configuration Error", "005", false, null);
                 }
             }
             else
             {
-                Utilities.Error("You must have an internet connection...", "Internet Connectivity", "006", false);
+                Utilities.Error("You must have an internet connection...", "Internet Connectivity", "006", false, null);
             }
         }
 
@@ -132,9 +132,9 @@ namespace Ripper
                 {
                     DotNetEnv.Env.LoadContents(new WebClient().DownloadString("https://cdn.aprox.us/app/ripperoni/.env"));
                 }
-                catch
+                catch (Exception ex)
                 {
-                    Utilities.Error("Could not retrieve an environment variable from CDN...", "Network Error", "007", false);
+                    Utilities.Error("Could not retrieve an environment variable from CDN...", "Network Error", "007", false, ex);
                 }
 
                 try
@@ -178,14 +178,14 @@ namespace Ripper
                     SearchWindow sw = new SearchWindow(WebUtility.UrlEncode(Input.Text), videos);
                     sw.ShowDialog();
                 }
-                catch
+                catch (Exception ex)
                 {
-                    Utilities.Error("Could not search YouTube through API...", "Network Error", "008", false);
+                    Utilities.Error("Could not search YouTube through API...", "Network Error", "008", false, ex);
                 }
             }
             else
             {
-                Utilities.Error("You must have an internet connection...", "Internet Connectivity", "009", false);
+                Utilities.Error("You must have an internet connection...", "Internet Connectivity", "009", false, null);
             }
         }
 
@@ -208,7 +208,7 @@ namespace Ripper
             }
             else
             {
-                Utilities.Error("The output path must be rooted...", "Error", "010", false);
+                Utilities.Error("The output path must be rooted...", "Error", "010", false, null);
             }
         }
         #endregion
@@ -256,9 +256,9 @@ namespace Ripper
                     p.Kill();
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                Utilities.Error("Could not terminate loose FFmpeg processors...", "Executable Error", "011", false);
+                Utilities.Error("Could not terminate loose FFmpeg processors...", "Executable Error", "011", false, ex);
             }
             
 

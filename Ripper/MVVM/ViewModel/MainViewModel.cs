@@ -1,4 +1,5 @@
-﻿using Ripper.Core;
+﻿using System;
+using Ripper.Core;
 
 namespace Ripper.MVVM.ViewModel
 {
@@ -47,9 +48,9 @@ namespace Ripper.MVVM.ViewModel
                 {
                     CurrentView = null;
                 }
-                catch
+                catch (Exception ex)
                 {
-                    Utilities.Error("Could not change current view...", "Executable Error", "016", false);
+                    Utilities.Error("Could not change current view...", "Executable Error", "016", false, ex);
                 }
             });
 
@@ -59,9 +60,9 @@ namespace Ripper.MVVM.ViewModel
                 {
                     CurrentView = PropertiesVM;
                 }
-                catch
+                catch (Exception ex)
                 {
-                    Utilities.Error("Could not change current view...", "Executable Error", "017", false);
+                    Utilities.Error("Could not change current view...", "Executable Error", "017", false, ex);
                 }
             });
 
@@ -71,9 +72,9 @@ namespace Ripper.MVVM.ViewModel
                 {
                     CurrentView = SettingsVM;
                 }
-                catch
+                catch (Exception ex)
                 {
-                    Utilities.Error("Could not change current view...", "Executable Error", "018", false);
+                    Utilities.Error("Could not change current view...", "Executable Error", "018", false, ex);
                 }
             });
 
@@ -83,9 +84,9 @@ namespace Ripper.MVVM.ViewModel
                 {
                     CurrentView = AboutVM;
                 }
-                catch
+                catch (Exception ex)
                 {
-                    Utilities.Error("Could not change current view...", "Executable Error", "019", false);
+                    Utilities.Error("Could not change current view...", "Executable Error", "019", false, ex);
                 }
             });
             #endregion

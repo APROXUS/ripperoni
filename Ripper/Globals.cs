@@ -40,9 +40,9 @@ namespace Ripper
                     Read();
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                Utilities.Error("Could not read local configuration...", "Configuration Error", "013", false);
+                Utilities.Error("Could not read local configuration...", "Configuration Error", "013", false, ex);
             }
         }
 
@@ -92,9 +92,9 @@ namespace Ripper
                     w.WriteEndObject();
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                Utilities.Error("Could not write local configuration...", "Configuration Error", "014", false);
+                Utilities.Error("Could not write local configuration...", "Configuration Error", "014", false, ex);
             }
         }
     }
@@ -125,7 +125,7 @@ namespace Ripper
         {
             while (!Internet())
             {
-                Error("You must have an internet connection to continue. Dismiss this modal when you are ready to proceed...", "Internet Connectivity", "015", false);
+                Error("You must have an internet connection to continue. Dismiss this modal when you are ready to proceed...", "Internet Connectivity", "015", false, null);
             }
         }
 
@@ -154,17 +154,24 @@ namespace Ripper
             return r;
         }
 
-        public static void Error(string m, string t, string n, bool f)
+        public static void Error(string m, string t, string n, bool f, Exception e)
         {
+            string msg;
+
+            if (e != null) msg = $"{m} \n\n {e}";
+            else msg = m;
+
             try
             {
-                ErrorWindow er = new ErrorWindow(m, t, n, f);
+                ErrorWindow er = new ErrorWindow(msg, t, n, f);
                 er.ShowDialog();
 
                 if (f) Globals.Main.Close();
             }
-            catch
+            catch (Exception ex)
             {
+                msg = $"{msg} \n\n {ex}";
+
                 try
                 {
                     MessageBoxIcon i;
@@ -172,7 +179,7 @@ namespace Ripper
                     if (f) i = MessageBoxIcon.Error;
                     else i = MessageBoxIcon.Warning;
 
-                    MessageBox.Show(m, $"{n}: {t}", MessageBoxButtons.OK, i);
+                    MessageBox.Show(msg, $"{n}: {t}", MessageBoxButtons.OK, i);
 
                     if (f) Globals.Main.Close();
                 }

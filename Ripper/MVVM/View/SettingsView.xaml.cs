@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Windows.Controls;
 
 namespace Ripper.MVVM.View
@@ -32,9 +33,9 @@ namespace Ripper.MVVM.View
                 };
                 Process.Start(psi);
             }
-            catch
+            catch (Exception ex)
             {
-                Utilities.Error("Could not run batch script as administrator...", "Executable Error", "021", true);
+                Utilities.Error("Could not run batch script as administrator...", "Executable Error", "021", true, ex);
             }
         }
         #endregion

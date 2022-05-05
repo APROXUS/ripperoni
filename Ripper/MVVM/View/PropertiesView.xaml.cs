@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Windows;
 
 using Microsoft.WindowsAPICodePack.Dialogs;
@@ -98,9 +99,9 @@ namespace Ripper.MVVM.View
                     OutputText.Text = dialog.FileName;
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                Utilities.Error("Could not open an explorer instance...", "Executable Error", "020", false);
+                Utilities.Error("Could not open an explorer instance...", "Executable Error", "020", false, ex);
             }
 
             Json.Write();

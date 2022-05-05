@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Diagnostics;
 using System.Windows.Input;
 using System.Collections.Generic;
@@ -33,9 +34,9 @@ namespace Ripper
                     Results.Children.Add(ResultView);
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                Utilities.Error("Could not list all available videos...", "Executable Error", "012", false);
+                Utilities.Error("Could not list all available videos...", "Executable Error", "012", false, ex);
             }
         }
 
