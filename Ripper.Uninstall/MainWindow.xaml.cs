@@ -31,9 +31,9 @@ namespace Ripper.Uninstall
             if (silent) Opacity = 0;
 
             real = AppDomain.CurrentDomain.BaseDirectory;
-            path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\APROX Ripperoni\";
-            temp = Path.GetTempPath() + @"APROX TEMP\";
-            start = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Microsoft\Windows\Start Menu\Programs\APROX Project\";
+            path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\KPNC Ripperoni\";
+            temp = Path.GetTempPath() + @"KPNC TEMP\";
+            start = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Microsoft\Windows\Start Menu\Programs\KPNC Project\";
 
             Task.Factory.StartNew(() => Uninstallation());
         }

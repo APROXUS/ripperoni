@@ -424,6 +424,7 @@
     <None Include="Domains.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Resource Include="Images\KPNC.png" />
     <Content Include="YTDLP.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

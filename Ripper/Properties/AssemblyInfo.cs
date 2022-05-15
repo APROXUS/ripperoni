@@ -2,12 +2,12 @@
 using System.Runtime.InteropServices;
 using System.Windows;
 
-[assembly: AssemblyTitle("Ripper")]
+[assembly: AssemblyTitle("Ripperoni")]
 [assembly: AssemblyDescription("Download online media quickly with ease")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("APROX Project")]
-[assembly: AssemblyProduct("APROX Ripper")]
-[assembly: AssemblyCopyright("Copyright ©  2022")]
+[assembly: AssemblyCompany("KPNC Technology")]
+[assembly: AssemblyProduct("KPNC Ripperoni")]
+[assembly: AssemblyCopyright("Copyright © KPNC 2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

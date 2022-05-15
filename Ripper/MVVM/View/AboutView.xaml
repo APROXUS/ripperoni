@@ -14,6 +14,7 @@
 
             <StackPanel Margin="10">
                 <Image Source="/Images/Ripperoni.png" Margin="5"/>
+                <Image Source="/Images/KPNC.png" Margin="5"/>
                 <Image Source="/Images/YoutubeDL Sharp.png" Margin="5"/>
                 <Image Source="/Images/WebP.png" Margin="5"/>
                 <Image Source="/Images/Downloader.png" Margin="5"/>
@@ -27,7 +28,7 @@
             <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="1">
                 <StackPanel Margin="10">
                     <TextBlock Background="Transparent" Foreground="White" x:Name="Handle"
-                               TextAlignment="Justify" TextWrapping="Wrap" Margin="0,5,0,5"><Bold>APROX Project: Ripperoni:</Bold></TextBlock>
+                               TextAlignment="Justify" TextWrapping="Wrap" Margin="0,5,0,5"><Bold>KPNC Technology: Ripperoni:</Bold></TextBlock>
                         
                     <TextBlock Background="Transparent" Foreground="White"
                                TextAlignment="Justify" TextWrapping="Wrap" Margin="0,5,0,5"><Bold>About:</Bold> Ripperoni is a simple, open source project that aims to download online media (namely from YouTube). Ripperoni’s main focus is being a fast media downloader, but also includes ease of life features like ten convertible video and audio formats, eight common resolutions, custom network solutions, tunable download client, and YouTube search functionality. We hope these key features increase productivity and efficiency when downloading, processing, and adapting online content.</TextBlock>
@@ -39,11 +40,11 @@
                                TextAlignment="Justify" TextWrapping="Wrap" Margin="0,5,0,5"><Bold>Further Information:</Bold> For bug reports, feature requests, and any further information or contact, please check out the project’s repository below...</TextBlock>
                         
                     <Label/>
-                    <Label Foreground="#007ACC" Content="Ripperoni by APROX Project: Site"
+                    <Label Foreground="#007ACC" Content="Ripperoni by KPNC Technology: Site"
                            x:Name="rs" MouseDown="RS_MouseDown"/>
-                    <Label Foreground="#007ACC" Content="Ripperoni by APROX Project: Github"
+                    <Label Foreground="#007ACC" Content="Ripperoni by KPNC Technology: Github"
                            x:Name="rg" MouseDown="RG_MouseDown"/>
-                    <Label Foreground="#007ACC" Content="Ripperoni by APROX Project: License"
+                    <Label Foreground="#007ACC" Content="Ripperoni by KPNC Technology: License"
                            x:Name="rl" MouseDown="RL_MouseDown"/>
                         
                     <Label/>

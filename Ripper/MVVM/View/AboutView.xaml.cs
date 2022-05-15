@@ -13,7 +13,7 @@ namespace Ripper.MVVM.View
 
             Version v = Assembly.GetExecutingAssembly().GetName().Version;
 
-            Handle.Text = $"APROX Project: Ripperoni: {v.Major}.{v.Minor}.{v.Build}.{v.Revision:X}";
+            Handle.Text = $"KPNC Technology: Ripperoni: {v.Major}.{v.Minor}.{v.Build}.{v.Revision:X}";
 
             Json.Write();
         }
@@ -21,17 +21,17 @@ namespace Ripper.MVVM.View
         #region Packages, Repositories, Licenses...
         private void RS_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Process.Start("https://www.aprox.us/services/ripperoni");
+            Process.Start("https://www.kpnc.io/services/ripperoni");
         }
 
         private void RG_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Process.Start("https://github.com/APROXUS/ripperoni");
+            Process.Start("https://github.com/kpncio/ripperoni");
         }
 
         private void RL_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Process.Start("https://github.com/APROXUS/ripperoni/blob/main/LICENSE");
+            Process.Start("https://github.com/kpncio/ripperoni/blob/main/LICENSE");
         }
 
         private void YN_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)

@@ -29,7 +29,7 @@
 
                     <Image Grid.Column="0" Margin="9,4,9,4" Source="/Pepperoni.ico"/>
 
-                    <TextBlock Text="APROX Ripperoni Uninstaller" Grid.Column="1"
+                    <TextBlock Text="KPNC Ripperoni Uninstaller" Grid.Column="1"
                            VerticalAlignment="Center" FontSize="12"
                            HorizontalAlignment="Left" Foreground="White"/>
                     

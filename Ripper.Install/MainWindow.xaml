@@ -29,7 +29,7 @@
 
                     <Image Grid.Column="0" Margin="9,4,9,4" Source="/Pepperoni.ico"/>
 
-                    <TextBlock Text="APROX Ripperoni Installer" Grid.Column="1"
+                    <TextBlock Text="KPNC Ripperoni Installer" Grid.Column="1"
                            VerticalAlignment="Center" FontSize="12"
                            HorizontalAlignment="Left" Foreground="White"/>
 

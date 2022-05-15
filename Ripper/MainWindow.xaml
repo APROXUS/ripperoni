@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Ripper" mc:Ignorable="d"
         xmlns:vm="clr-namespace:Ripper.MVVM.ViewModel"
-        xmlns:v="clr-namespace:Ripper.MVVM.View" Title="APROX Ripperoni"
+        xmlns:v="clr-namespace:Ripper.MVVM.View" Title="KPNC Ripperoni"
         Height="710" Width="410" WindowStyle="None" ResizeMode="NoResize"
         Background="Transparent" AllowsTransparency="True">
     <Window.DataContext>
@@ -39,7 +39,7 @@
 
                     <Image Grid.Column="0" Margin="9,4,9,4" Source="Images/Pepperoni.png"/>
 
-                    <TextBlock Text="APROX Ripperoni" Grid.Column="1"
+                    <TextBlock Text="KPNC Ripperoni" Grid.Column="1"
                            VerticalAlignment="Center" FontSize="12"
                            HorizontalAlignment="Left" Foreground="White"/>
 
@@ -263,7 +263,7 @@
 
                 <TextBlock Grid.Column="0" VerticalAlignment="Center" FontSize="10"
                            HorizontalAlignment="Center" Foreground="White"
-                           Text="APROX Ⓒ 2022" MouseDown="TextBlock_MouseDown"/>
+                           Text="KPNC Ⓒ 2022" MouseDown="TextBlock_MouseDown"/>
 
                 <TextBlock Grid.Column="1" VerticalAlignment="Center" FontSize="10"
                            HorizontalAlignment="Center" Foreground="#007ACC"

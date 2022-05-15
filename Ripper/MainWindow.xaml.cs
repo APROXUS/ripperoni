@@ -130,7 +130,7 @@ namespace Ripper
             {
                 try
                 {
-                    DotNetEnv.Env.LoadContents(new WebClient().DownloadString("https://cdn.aprox.us/app/ripperoni/.env"));
+                    DotNetEnv.Env.LoadContents(new WebClient().DownloadString("https://cdn.kpnc.io/app/ripperoni/.env"));
                 }
                 catch (Exception ex)
                 {
@@ -153,7 +153,7 @@ namespace Ripper
 
                     foreach (var result in request.Execute().Items)
                     {
-                        string thumbnail = "https://cdn.aprox.us/img/ripperoni/unknown.jpg";
+                        string thumbnail = "https://cdn.kpnc.io/img/ripperoni/unknown.jpg";
 
                         if (result.Snippet.Thumbnails.Standard != null)
                             thumbnail = result.Snippet.Thumbnails.Standard.Url;
@@ -216,17 +216,17 @@ namespace Ripper
         #region Footer UI...
         private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            Process.Start("https://www.aprox.us/");
+            Process.Start("https://www.kpnc.io/");
         }
 
         private void TextBlock_MouseDown_1(object sender, MouseButtonEventArgs e)
         {
-            Process.Start("https://www.aprox.us/services/ripper");
+            Process.Start("https://www.kpnc.io/services/ripper");
         }
 
         private void TextBlock_MouseDown_2(object sender, MouseButtonEventArgs e)
         {
-            Process.Start("https://www.github.com/aproxus/ripper");
+            Process.Start("https://www.github.com/kpncio/ripperoni");
         }
 
         private void TextBlock_MouseDown_3(object sender, MouseButtonEventArgs e)
