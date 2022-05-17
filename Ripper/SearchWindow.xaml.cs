@@ -25,6 +25,8 @@ namespace Ripper
 
         private void List()
         {
+            // Create a result view control for each result...
+
             try
             {
                 foreach (var video in videos)

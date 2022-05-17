@@ -16,6 +16,9 @@ namespace Ripper.MVVM.View
 
             OutputText.Text = Globals.Output;
 
+            #region Radio UI Controller...
+            // Set radio menu via format variable...
+
             switch (Globals.Format)
             {
                 case "mp4":
@@ -51,6 +54,8 @@ namespace Ripper.MVVM.View
 
             }
 
+            // Set radio menu via resolution variable...
+
             switch (Globals.Resolution)
             {
                 case 4320:
@@ -77,13 +82,15 @@ namespace Ripper.MVVM.View
                 case 240:
                     p240.IsChecked = true;
                     break;
-
             }
+            #endregion
         }
 
         #region Output Path UI...
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            // Open file explorer to select output folder...
+
             Directory.CreateDirectory(Globals.Output);
 
             try
@@ -114,6 +121,8 @@ namespace Ripper.MVVM.View
         #endregion
 
         #region Format Switch UI...
+        // Handle selected format...
+
         private void MP4_Checked(object sender, RoutedEventArgs e) { mp4.IsChecked = true; Globals.Format = "mp4"; Json.Write(); }
 
         private void WebM_Checked(object sender, RoutedEventArgs e) { webm.IsChecked = true; Globals.Format = "webm"; Json.Write(); }
@@ -136,6 +145,8 @@ namespace Ripper.MVVM.View
         #endregion
 
         #region Resolution Switch UI...
+        // Handle selected resolution...
+        
         private void P4320_Checked(object sender, RoutedEventArgs e) { p4320.IsChecked = true; Globals.Resolution = 4320; Json.Write(); }
 
         private void P2160_Checked(object sender, RoutedEventArgs e) { p2160.IsChecked = true; Globals.Resolution = 2160; Json.Write(); }

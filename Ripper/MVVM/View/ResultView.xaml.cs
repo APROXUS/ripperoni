@@ -24,45 +24,49 @@ namespace Ripper.MVVM.View
             search = s;
 
             #region Image Processing...
+            // Get online image in WPF compatible form...
+
             try
             {
-                BitmapImage bi = new BitmapImage();
+                BitmapImage bitmapimage = new BitmapImage();
 
                 if (video[1].Split('.').Last().ToString() == "webp")
                 {
-                    Bitmap bm;
+                    Bitmap bitmap;
 
-                    byte[] i = new WebClient().DownloadData(video[1]);
-                    using (WebP w = new WebP())
+                    byte[] image = new WebClient().DownloadData(video[1]);
+                    using (WebP webp = new WebP())
                     {
-                        bm = w.Decode(i);
+                        bitmap = webp.Decode(image);
                     }
 
-                    using (var m = new MemoryStream())
+                    using (MemoryStream stream = new MemoryStream())
                     {
-                        bm.Save(m, System.Drawing.Imaging.ImageFormat.Png);
-                        m.Position = 0;
+                        bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                        stream.Position = 0;
 
-                        bi.BeginInit();
-                        bi.CacheOption = BitmapCacheOption.OnLoad;
-                        bi.StreamSource = m;
-                        bi.EndInit();
+                        bitmapimage.BeginInit();
+                        bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmapimage.StreamSource = stream;
+                        bitmapimage.EndInit();
                     }
                 }
                 else
                 {
-                    bi.BeginInit();
-                    bi.UriSource = new Uri(video[1], UriKind.Absolute);
-                    bi.EndInit();
+                    bitmapimage.BeginInit();
+                    bitmapimage.UriSource = new Uri(video[1], UriKind.Absolute);
+                    bitmapimage.EndInit();
                 }
 
-                Thumbnail.ImageSource = bi;
+                Thumbnail.ImageSource = bitmapimage;
             }
             catch (Exception ex)
             {
                 Utilities.Error("Could not display thumbnail image...", "Executable Error", "038", false, ex);
             }
             #endregion
+
+            // Set video information...
 
             Title.Text = video[2];
             Description.Text = video[3];
@@ -71,6 +75,8 @@ namespace Ripper.MVVM.View
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            // Download video on selection...
+
             Globals.Main.Request("https://youtu.be/" + video[0]);
 
             search.Close();

@@ -22,58 +22,55 @@ namespace Ripper.MVVM.View
     public partial class RecordView : UserControl
     {
         #region Variables...
+        private readonly string input;
+        private readonly string output;
+        private readonly string format;
+        private readonly int resolution;
+        private readonly bool audio;
+        private readonly string epoch1;
+
         private readonly CancellationTokenSource source;
         private CancellationToken token;
 
-        private readonly string i;
-        private readonly string o;
-        private readonly string f;
-        private readonly string e;
-        private readonly bool l;
-        private readonly int r;
-
-        private FormatData[] fs;
-        private FormatData re;
-        private string ti;
-        private string up;
-        private string th;
-        private string fr;
-        private string vi;
-        private string te;
-        private float le;
-
-        private string tm;
-        private string tc;
-        private string f1;
-        private string f2;
-
-        private DownloadService d;
-        private bool downloading;
-        private bool processing;
+        private DownloadService downloader;
         private FFmpeg ffmpeg;
-        private string p;
-        private string s;
-        #endregion
 
-        public RecordView()
+        private string title;
+        private string uploader;
+        private float length;
+        private string thumbnail;
+        private FormatData[] records;
+        private string formatraw;
+        private FormatData record;
+        private string video;
+
+        private string temp;
+        private string size;
+        private bool downloading;
+
+        private string final;
+
+        private string epoch2;
+        private string file1;
+        private string file2;
+        private bool processing;
+        #endregion
+         
+        public RecordView(string i)
         {
             InitializeComponent();
 
-            i = Globals.Input;
-            o = Globals.Output;
-            f = Globals.Format;
-            r = Globals.Resolution;
+            input = i;
+            output = Globals.Output;
+            format = Globals.Format;
+            resolution = Globals.Resolution;
 
-            if (f != "mp4" && f != "webm" && f != "mov" && f != "avi" && f != "flv")
+            if (format != "mp4" && format != "webm" && format != "mov" && format != "avi" && format != "flv")
             {
-                l = false;
-            }
-            else
-            {
-                l = true;
+                audio = true;
             }
 
-            e = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
+            epoch1 = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
 
             source = new CancellationTokenSource();
             token = source.Token;
@@ -108,6 +105,8 @@ namespace Ripper.MVVM.View
                 });
 
                 #region Systems and Events...
+                // Set downloader (package) configuration and events from settings...
+
                 DownloadConfiguration DownloadOption = new DownloadConfiguration()
                 {
                     BufferBlockSize = Globals.Buffer,
@@ -130,16 +129,18 @@ namespace Ripper.MVVM.View
                     }
                 };
 
-                d = new DownloadService(DownloadOption);
+                downloader = new DownloadService(DownloadOption);
 
                 try
                 {
-                    d.DownloadProgressChanged += DownloadProgression;
+                    downloader.DownloadProgressChanged += DownloadProgression;
                 }
                 catch (Exception ex)
                 {
                     Utilities.Error("Could not start a progress event listener...", "Error", "023", false, ex);
                 }
+
+                // Set ffmpeg (package) events from settings...
 
                 ffmpeg = new FFmpeg(Globals.Real + @"FFmpeg.exe");
 
@@ -158,71 +159,79 @@ namespace Ripper.MVVM.View
                 #region Get Metadata...
                 try
                 {
-                    var y = new YoutubeDL
+                    // Set YoutubeDL wrapper settings and get metadata...
+
+                    YoutubeDL y = new YoutubeDL
                     {
                         YoutubeDLPath = Globals.Real + "YTDLP.exe"
                     };
 
-                    var r = await y.RunVideoDataFetch(i);
+                    RunResult<VideoData> r = await y.RunVideoDataFetch(input);
                     VideoData v = r.Data;
-                    ti = v.Title;
-                    up = v.Uploader;
-                    le = v.Duration ?? default;
-                    th = v.Thumbnail;
-                    fs = v.Formats;
+                    title = v.Title;
+                    uploader = v.Uploader;
+                    length = v.Duration ?? default;
+                    thumbnail = v.Thumbnail;
+                    records = v.Formats;
                 }
                 catch (Exception ex)
                 {
                     source.Cancel();
 
-                    Utilities.Error($"Could not fetch data regarding the URL: {i} ...", "Worker Error", "025", false, ex);
+                    Utilities.Error($"Could not fetch data regarding the URL: {input} ...", "Worker Error", "025", false, ex);
                 }
 
                 try
                 {
-                    if (!l)
+                    // Get the requested format object (from the full selection)...
+
+                    if (audio)
                     {
-                        if (fs.ToList().FindAll(a => a.Extension == f).Count < 1)
+                        if (records.ToList().FindAll(a => a.Extension == format).Count < 1)
                         {
-                            fs.ToList().FindAll(a => a.Extension == "m4a").ForEach(a =>
+                            // If there are no records with native format, download in m4a...
+
+                            records.ToList().FindAll(a => a.Extension == "m4a").ForEach(a =>
                             {
-                                fr = "m4a";
-                                re = a;
+                                formatraw = "m4a";
+                                record = a;
                             });
                         }
                         else
                         {
-                            fs.ToList().FindAll(a => a.Extension == f).ForEach(a =>
+                            records.ToList().FindAll(a => a.Extension == format).ForEach(a =>
                             {
-                                fr = f;
-                                re = a;
+                                formatraw = format;
+                                record = a;
                             });
                         }
                     }
                     else
                     {
-                        if (fs.ToList().FindAll(d => d.Extension == f).Count < 1)
+                        if (records.ToList().FindAll(d => d.Extension == format).Count < 1)
                         {
-                            List<int> l = new List<int>() { 0 };
-                            l = fs.ToList().FindAll(a => a.Extension == "mp4").Select(a => a.Height ?? 0).ToList();
-                            int scoped = l.Min(i => (Math.Abs(r - i), i)).i;
+                            // If there are no records with native format, download in mp4...
 
-                            fs.ToList().FindAll(a => a.Height == scoped).ForEach(a =>
+                            List<int> l = new List<int>() { 0 };
+                            l = records.ToList().FindAll(a => a.Extension == "mp4").Select(a => a.Height ?? 0).ToList();
+                            int scoped = l.Min(i => (Math.Abs(resolution - i), i)).i;
+
+                            records.ToList().FindAll(a => a.Height == scoped).ForEach(a =>
                             {
-                                fr = "mp4";
-                                re = a;
+                                formatraw = "mp4";
+                                record = a;
                             });
                         }
                         else
                         {
                             List<int> l = new List<int>() { 0 };
-                            l = fs.ToList().FindAll(a => a.Extension == f).Select(a => a.Height ?? 0).ToList();
-                            int scoped = l.Min(i => (Math.Abs(r - i), i)).i;
+                            l = records.ToList().FindAll(a => a.Extension == format).Select(a => a.Height ?? 0).ToList();
+                            int scoped = l.Min(i => (Math.Abs(resolution - i), i)).i;
 
-                            fs.ToList().FindAll(a => a.Height == scoped).ForEach(a =>
+                            records.ToList().FindAll(a => a.Height == scoped).ForEach(a =>
                             {
-                                fr = f;
-                                re = a;
+                                formatraw = format;
+                                record = a;
                             });
                         }
                     }
@@ -234,70 +243,76 @@ namespace Ripper.MVVM.View
                     Utilities.Error("Could not find a viable media record...", "Worker Error", "026", false, ex);
                 }
 
-                vi = re.Url;
+                video = record.Url;
                 #endregion
 
                 token.ThrowIfCancellationRequested();
 
                 #region Post Metadata...
+                // Post video metadata to record UI...
+
                 try
                 {
-                    BitmapImage bi = new BitmapImage();
+                    // Convert online thumbnail to a WPF compatible form...
 
-                    if (th.Split('.').Last().ToString() == "webp")
+                    BitmapImage bitmapimage = new BitmapImage();
+
+                    if (thumbnail.Split('.').Last().ToString() == "webp")
                     {
-                        Bitmap bm;
+                        Bitmap bitmap;
 
-                        byte[] i = new WebClient().DownloadData(th);
-                        using (WebP w = new WebP())
+                        byte[] image = new WebClient().DownloadData(thumbnail);
+                        using (WebP webp = new WebP())
                         {
-                            bm = w.Decode(i);
+                            bitmap = webp.Decode(image);
                         }
 
-                        using (var m = new MemoryStream())
+                        using (MemoryStream stream = new MemoryStream())
                         {
-                            bm.Save(m, System.Drawing.Imaging.ImageFormat.Png);
-                            m.Position = 0;
+                            bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                            stream.Position = 0;
 
-                            bi.BeginInit();
-                            bi.CacheOption = BitmapCacheOption.OnLoad;
-                            bi.StreamSource = m;
-                            bi.EndInit();
+                            bitmapimage.BeginInit();
+                            bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
+                            bitmapimage.StreamSource = stream;
+                            bitmapimage.EndInit();
                         }
                     }
                     else
                     {
-                        bi.BeginInit();
-                        bi.UriSource = new Uri(th, UriKind.Absolute);
-                        bi.EndInit();
+                        bitmapimage.BeginInit();
+                        bitmapimage.UriSource = new Uri(thumbnail, UriKind.Absolute);
+                        bitmapimage.EndInit();
                     }
 
                     Dispatcher.Invoke(delegate ()
                     {
-                        Thumbnail.ImageSource = bi;
+                        Thumbnail.ImageSource = bitmapimage;
                     });
                 }
                 catch (Exception ex)
                 {
-                    //Utilities.Error("Could not display thumbnail image...", "Worker Error", "027", false, ex);
+                    Utilities.Error("Could not display thumbnail image...", "Worker Error", "027", false, ex);
                 }
 
                 Dispatcher.Invoke(delegate ()
                 {
-                    Title.Text = ti;
+                    Title.Text = title;
 
-                    Author.Text = up;
+                    Author.Text = uploader;
 
-                    Length.Text = TimeSpan.FromSeconds(le).ToString(@"hh\:mm\:ss");
+                    Length.Text = TimeSpan.FromSeconds(length).ToString(@"hh\:mm\:ss");
                 });
                 #endregion
 
                 token.ThrowIfCancellationRequested();
 
                 #region Get Base...
-                te = Globals.Temp + "\\" + ti + "." + e + "." + fr;
+                // Download the base requested media...
 
-                s = FileSize(new Uri(vi));
+                temp = Globals.Temp + "\\" + title + "." + epoch1 + "." + formatraw;
+
+                size = FileSize(new Uri(video));
 
                 Json.Read();
 
@@ -307,7 +322,7 @@ namespace Ripper.MVVM.View
                 {
                     try
                     {
-                        await d.DownloadFileTaskAsync(vi, te);
+                        await downloader.DownloadFileTaskAsync(video, temp);
                     }
                     catch (Exception ex)
                     {
@@ -329,14 +344,16 @@ namespace Ripper.MVVM.View
 
                 token.ThrowIfCancellationRequested();
 
-                if (l)
+                if (!audio)
                 {
                     #region Get Additional...
+                    // Download additional media (like audio files for the base silent video file)...
+
                     try
                     {
-                        fs.ToList().FindAll(a => a.Extension == "m4a").ForEach(a =>
+                        records.ToList().FindAll(a => a.Extension == "m4a").ForEach(a =>
                         {
-                            re = a;
+                            record = a;
                         });
                     }
                     catch (Exception ex)
@@ -346,11 +363,11 @@ namespace Ripper.MVVM.View
                         Utilities.Error("Could not find a viable media record...", "Worker Error", "029", false, ex);
                     }
 
-                    vi = re.Url;
+                    video = record.Url;
 
-                    te = Globals.Temp + "\\" + ti + "." + e + ".m4a";
+                    temp = Globals.Temp + "\\" + title + "." + epoch1 + ".m4a";
 
-                    s = FileSize(new Uri(vi));
+                    size = FileSize(new Uri(video));
 
                     Json.Read();
 
@@ -360,7 +377,7 @@ namespace Ripper.MVVM.View
                     {
                         try
                         {
-                            await d.DownloadFileTaskAsync(vi, te);
+                            await downloader.DownloadFileTaskAsync(video, temp);
                         }
                         catch (Exception ex)
                         {
@@ -383,14 +400,14 @@ namespace Ripper.MVVM.View
                     token.ThrowIfCancellationRequested();
                 }
 
-                tc = Globals.Temp + "\\" + ti + "." + e + "." + f;
+                final = Globals.Temp + "\\" + title + "." + epoch1 + "." + formatraw;
 
-                if (fr != f || l)
+                if (formatraw != format || !audio)
                 {
                     #region Get Processing...
-                    p = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
+                    // If the file needs multiplexing or converting then process...
 
-                    tm = Globals.Temp + "\\" + ti + "." + p + "." + fr;
+                    epoch2 = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
 
                     Dispatcher.Invoke(delegate ()
                     {
@@ -401,11 +418,13 @@ namespace Ripper.MVVM.View
 
                     Json.Read();
 
-                    f1 = Globals.Temp + "\\" + ti + "." + e + "." + fr;
+                    file1 = final;
 
-                    if (l)
+                    if (!audio)
                     {
-                        f2 = Globals.Temp + "\\" + ti + "." + e + ".m4a";
+                        // If media need multiplexing then multiplex...
+
+                        file2 = Globals.Temp + "\\" + title + "." + epoch1 + ".m4a";
 
                         Dispatcher.Invoke(delegate ()
                         {
@@ -413,6 +432,8 @@ namespace Ripper.MVVM.View
                         });
 
                         processing = true;
+
+                        final = Globals.Temp + "\\" + title + "." + epoch2 + "." + formatraw;
 
                         Task.Factory.StartNew(() => GetMultiplex());
 
@@ -423,19 +444,23 @@ namespace Ripper.MVVM.View
                             Thread.Sleep(10);
                         }
 
-                        f1 = tm;
-
                         token.ThrowIfCancellationRequested();
                     }
 
-                    if (f != fr)
+                    if (format != formatraw)
                     {
+                        // If media need converting then convert...
+
                         Dispatcher.Invoke(delegate ()
                         {
                             Status.Text = "Converting...";
                         });
 
                         processing = true;
+
+                        file1 = final;
+
+                        final = Globals.Temp + "\\" + title + "." + epoch2 + "." + format;
 
                         Task.Factory.StartNew(() => GetConvert());
 
@@ -461,8 +486,12 @@ namespace Ripper.MVVM.View
 
                 try
                 {
-                    File.Delete(o + "\\" + ti + "." + f);
-                    File.Move(tc, o + "\\" + ti + "." + f);
+                    // Move final files to the output directory...
+
+                    string outputted = output + "\\" + title + "." + format;
+
+                    File.Delete(outputted);
+                    File.Move(final, outputted);
                 }
                 catch (Exception ex)
                 {
@@ -473,17 +502,19 @@ namespace Ripper.MVVM.View
 
                 try
                 {
-                    File.Delete(Globals.Temp + "\\" + ti + "." + e + "." + fr);
+                    // Deleted all created temperary files...
 
-                    if (l)
+                    File.Delete(Globals.Temp + "\\" + title + "." + epoch1 + "." + formatraw);
+
+                    if (audio)
                     {
-                        File.Delete(Globals.Temp + "\\" + ti + "." + e + ".m4a");
-                        File.Delete(Globals.Temp + "\\" + ti + "." + p + "." + fr);
+                        File.Delete(Globals.Temp + "\\" + title + "." + epoch1 + ".m4a");
+                        File.Delete(Globals.Temp + "\\" + title + "." + epoch2 + "." + formatraw);
                     }
 
-                    if (f != fr)
+                    if (format != formatraw)
                     {
-                        File.Delete(Globals.Temp + "\\" + ti + "." + e + "." + f);
+                        File.Delete(Globals.Temp + "\\" + title + "." + epoch2 + "." + format);
                     }
                 }
                 catch (Exception ex)
@@ -505,7 +536,7 @@ namespace Ripper.MVVM.View
             {
                 if (downloading)
                 {
-                    d.CancelAsync();
+                    downloader.CancelAsync();
                 }
             }
         }
@@ -516,19 +547,21 @@ namespace Ripper.MVVM.View
         {
             try
             {
-                string c;
+                // Set and run FFmpeg commands and get output...
 
-                switch (f)
+                string console;
+
+                switch (format)
                 {
                     case "webm":
-                        c = string.Format($"-i \"{f1}\"  -i \"{f2}\" -c:v copy -c:a libvorbis \"{tm}\"");
+                        console = string.Format($"-i \"{file1}\"  -i \"{file2}\" -c:v copy -c:a libvorbis \"{final}\"");
                         break;
                     default:
-                        c = string.Format($"-i \"{f1}\" -i \"{f2}\" -c:v copy -c:a aac \"{tm}\"");
+                        console = string.Format($"-i \"{file1}\" -i \"{file2}\" -c:v copy -c:a aac \"{final}\"");
                         break;
                 }
 
-                ffmpeg.Run(f1, tm, c, token);
+                ffmpeg.Run(file1, final, console, token);
             }
             catch (Exception ex)
             {
@@ -548,37 +581,39 @@ namespace Ripper.MVVM.View
         {
             try
             {
-                string c;
+                // Set and run FFmpeg commands and get output...
 
-                switch (f)
+                string console;
+
+                switch (format)
                 {
                     case "webm":
-                        c = string.Format($"-i \"{f1}\" -c:v vp9 -c:a libvorbis \"{tc}\"");
+                        console = string.Format($"-i \"{file1}\" -c:v vp9 -c:a libvorbis \"{final}\"");
                         break;
                     case "flv":
-                        c = string.Format($"-i \"{f1}\" -c:v libx264 -ar 22050 -crf 28 \"{tc}\"");
+                        console = string.Format($"-i \"{file1}\" -c:v libx264 -ar 22050 -crf 28 \"{final}\"");
                         break;
                     case "mov":
-                        c = string.Format($"-i \"{f1}\" -f mov \"{tc}\"");
+                        console = string.Format($"-i \"{file1}\" -f mov \"{final}\"");
                         break;
                     case "mp3":
-                        c = string.Format($"-i \"{f1}\" -c:a libmp3lame \"{tc}\"");
+                        console = string.Format($"-i \"{file1}\" -c:a libmp3lame \"{final}\"");
                         break;
                     case "wav":
-                        c = string.Format($"-i \"{f1}\" -c:a pcm_s16le \"{tc}\"");
+                        console = string.Format($"-i \"{file1}\" -c:a pcm_s16le \"{final}\"");
                         break;
                     case "ogg":
-                        c = string.Format($"-i \"{f1}\" -c:a libvorbis \"{tc}\"");
+                        console = string.Format($"-i \"{file1}\" -c:a libvorbis \"{final}\"");
                         break;
                     case "pcm":
-                        c = string.Format($"-i \"{f1}\" -c:a pcm_s16le -f s16le -ac 1 -ar 16000 \"{tc}\"");
+                        console = string.Format($"-i \"{file1}\" -c:a pcm_s16le -f s16le -ac 1 -ar 16000 \"{final}\"");
                         break;
                     default:
-                        c = string.Format($"-i \"{f1}\" -c:v copy -c:a copy \"{tc}\"");
+                        console = string.Format($"-i \"{file1}\" -c:v copy -c:a copy \"{final}\"");
                         break;
                 }
 
-                ffmpeg.Run(f1, tc, c, token);
+                ffmpeg.Run(file1, final, console, token);
             }
             catch (Exception ex)
             {
@@ -597,6 +632,8 @@ namespace Ripper.MVVM.View
         #region Auxiliary...
         protected virtual bool FileLocked(FileInfo f)
         {
+            // Check if a file is locked by Windows...
+
             try
             {
                 using (FileStream s = f.Open(FileMode.Open, FileAccess.Read, FileShare.None))
@@ -614,15 +651,17 @@ namespace Ripper.MVVM.View
 
         private static string FileSize(Uri u)
         {
+            // Get internet file size...
+
             try
             {
-                var w = HttpWebRequest.Create(u);
+                WebRequest w = WebRequest.Create(u);
                 w.Method = "HEAD";
 
-                using (var r = w.GetResponse())
+                using (WebResponse r = w.GetResponse())
                 {
-                    var f = r.Headers.Get("Content-Length");
-                    var m = Math.Round(Convert.ToDouble(f) / 1024.0 / 1024.0, 0);
+                    string f = r.Headers.Get("Content-Length");
+                    double m = Math.Round(Convert.ToDouble(f) / 1024.0 / 1024.0, 0);
                     return m.ToString();
                 }
             }
@@ -636,11 +675,13 @@ namespace Ripper.MVVM.View
 
         private void DownloadProgression(object sender, Downloader.DownloadProgressChangedEventArgs e)
         {
+            // Post the downloader progression...
+
             try
             {
                 Dispatcher.Invoke(delegate () {
                     Status.Text = Math.Round(Convert.ToDouble(e.ReceivedBytesSize) / 1024.0 / 1024.0, 0) + 
-                    $"/{s}MB ({Math.Round(Convert.ToDouble(e.BytesPerSecondSpeed) / 1024.0 / 1024.0, 1)}MB/s)";
+                    $"/{size}MB ({Math.Round(Convert.ToDouble(e.BytesPerSecondSpeed) / 1024.0 / 1024.0, 1)}MB/s)";
 
                     Progress.IsIndeterminate = false;
                     Progress.Value = (Int32)e.ProgressPercentage;
@@ -654,6 +695,8 @@ namespace Ripper.MVVM.View
 
         private void ProcessProgression(object sender, FFmpegProgressEventArgs e)
         {
+            // Post the ffmpeg progression...
+
             try
             {
                 Dispatcher.Invoke(delegate () {

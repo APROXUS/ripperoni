@@ -3,7 +3,7 @@ using Ripper.Core;
 
 namespace Ripper.MVVM.ViewModel
 {
-    class MainViewModel : ObservableObject
+    internal class MainViewModel : ObservableObject
     {
         #region View Variables...
         public RelayCommand DownloadsVC { get; set; }
@@ -35,6 +35,8 @@ namespace Ripper.MVVM.ViewModel
 
         public MainViewModel()
         {
+            // Available views...
+
             PropertiesVM = new PropertiesViewModel();
             SettingsVM = new SettingsViewModel();
             AboutVM = new AboutViewModel();
@@ -42,6 +44,8 @@ namespace Ripper.MVVM.ViewModel
             CurrentView = null;
 
             #region Relay Commands...
+            // Open selected view...
+
             DownloadsVC = new RelayCommand(o =>
             {
                 try

@@ -1,6 +1,6 @@
 ﻿namespace Ripper.MVVM.ViewModel
 {
-    class PropertiesViewModel
+    internal class PropertiesViewModel
     {
 
     }

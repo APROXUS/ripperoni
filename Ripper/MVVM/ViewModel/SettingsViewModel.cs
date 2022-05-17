@@ -1,6 +1,6 @@
 ﻿namespace Ripper.MVVM.ViewModel
 {
-    class SettingsViewModel
+    internal class SettingsViewModel
     {
 
     }

@@ -24,6 +24,8 @@ namespace Ripper.MVVM.View
         #region Firewall Fix UI...
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            // Try running firewall configuration script (Firewall.bat) as admin...
+
             try
             {
                 ProcessStartInfo psi = new ProcessStartInfo
@@ -50,6 +52,8 @@ namespace Ripper.MVVM.View
         #endregion
 
         #region Downloader Settings UI...
+        // Downloader (package) settings handler...
+
         private void OnflyCheck_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             try { Globals.OnFly = OnflyCheck.IsChecked ?? false; } catch { }

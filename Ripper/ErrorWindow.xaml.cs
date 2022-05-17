@@ -12,6 +12,8 @@ namespace Ripper
         {
             InitializeComponent();
 
+            // Set error title, number, message, and image (fatal or warning)...
+
             Titled.Text = n + ": " + t;
             Message.Text = m;
 

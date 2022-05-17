@@ -68,13 +68,10 @@ namespace Ripper
         #endregion
 
         #region Input UI...
-        private void Input_Changed(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-            Globals.Input = Input.Text;
-        }
-
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
+            // Download button handler...
+
             if (Utilities.Internet())
             {
                 if (Uri.IsWellFormedUriString(Input.Text, UriKind.Absolute))
@@ -85,11 +82,11 @@ namespace Ripper
                         {
                             if (Path.IsPathRooted(Globals.Output))
                             {
+                                // Create video record handler/UI...
+
                                 Directory.CreateDirectory(Globals.Output);
 
-                                Globals.Input = Input.Text;
-
-                                var RecordView = new RecordView();
+                                var RecordView = new RecordView(Input.Text);
 
                                 Records.Children.Add(RecordView);
 
@@ -126,11 +123,15 @@ namespace Ripper
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
+            // Search button handler...
+
             if (Utilities.Internet())
             {
+                // Gettings YouTube search API key from online...
+
                 try
                 {
-                    DotNetEnv.Env.LoadContents(new WebClient().DownloadString("https://cdn.kpnc.io/app/ripperoni/.env"));
+                    DotNetEnv.Env.LoadContents(new WebClient().DownloadString("https://content.kpnc.io/app/ripperoni/.env"));
                 }
                 catch (Exception ex)
                 {
@@ -139,6 +140,8 @@ namespace Ripper
 
                 try
                 {
+                    // Setting up YouTube API search service and getting results...
+
                     var youtube = new YouTubeService(new BaseClientService.Initializer()
                     {
                         ApiKey = Environment.GetEnvironmentVariable("YOUTUBE"),
@@ -153,7 +156,7 @@ namespace Ripper
 
                     foreach (var result in request.Execute().Items)
                     {
-                        string thumbnail = "https://cdn.kpnc.io/img/ripperoni/unknown.jpg";
+                        string thumbnail = "https://content.kpnc.io/img/ripperoni/unknown.jpg";
 
                         if (result.Snippet.Thumbnails.Standard != null)
                             thumbnail = result.Snippet.Thumbnails.Standard.Url;
@@ -191,13 +194,15 @@ namespace Ripper
 
         public void Request(string v)
         {
+            // Search result (clicked on) handler...
+
             if (Path.IsPathRooted(Globals.Output))
             {
+                // Create video record handler/UI...
+
                 Directory.CreateDirectory(Globals.Output);
 
-                Globals.Input = v;
-
-                var RecordView = new RecordView();
+                var RecordView = new RecordView(v);
 
                 Records.Children.Add(RecordView);
 
@@ -221,7 +226,7 @@ namespace Ripper
 
         private void TextBlock_MouseDown_1(object sender, MouseButtonEventArgs e)
         {
-            Process.Start("https://www.kpnc.io/services/ripper");
+            Process.Start("https://www.kpnc.io/services/ripperoni");
         }
 
         private void TextBlock_MouseDown_2(object sender, MouseButtonEventArgs e)
@@ -251,6 +256,8 @@ namespace Ripper
 
             try
             {
+                // Kill rogue FFmpeg executables...
+
                 foreach (var p in Process.GetProcessesByName("FFmpeg.exe"))
                 {
                     p.Kill();
@@ -270,6 +277,8 @@ namespace Ripper
             {
 
             }
+
+            // Fade out animation on close...
 
             var a = new DoubleAnimation(0, TimeSpan.FromSeconds(0.5));
             a.Completed += (s, _) => Close();

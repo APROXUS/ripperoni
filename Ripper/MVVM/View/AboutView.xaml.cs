@@ -11,6 +11,8 @@ namespace Ripper.MVVM.View
         {
             InitializeComponent();
 
+            // Show current version and generated revision number (in hexidecimal)...
+
             Version v = Assembly.GetExecutingAssembly().GetName().Version;
 
             Handle.Text = $"KPNC Technology: Ripperoni: {v.Major}.{v.Minor}.{v.Build}.{v.Revision:X}";
@@ -19,6 +21,8 @@ namespace Ripper.MVVM.View
         }
 
         #region Packages, Repositories, Licenses...
+        // Link handlers...
+
         private void RS_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Process.Start("https://www.kpnc.io/services/ripperoni");

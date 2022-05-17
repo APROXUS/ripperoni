@@ -14,6 +14,8 @@ namespace Ripper
     {
         public static void Read()
         {
+            // Logic to read Config.json with Newtonsoft.JSON
+
             try
             {
                 if (File.Exists(Globals.Real + "Config.json"))
@@ -48,6 +50,8 @@ namespace Ripper
 
         public static void Write()
         {
+            // Logic to write Config.json with Newtonsoft.JSON
+
             try
             {
                 StreamWriter sw = new StreamWriter(Globals.Real + "Config.json");
@@ -101,11 +105,12 @@ namespace Ripper
 
     public static class Globals
     {
+        // Global variables that may be volatile...
+
         public static MainWindow Main { get; set; }
 
         public static string Real = AppDomain.CurrentDomain.BaseDirectory;
-
-        public static string Input { get; set; } = "";
+        
         public static string Output { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
         public static string Format { get; set; } = "mp4";
         public static int Resolution { get; set; } = 1080;
@@ -123,6 +128,8 @@ namespace Ripper
     {
         public static void ForceInternet()
         {
+            // Only allow users to continue with a valid internet connection...
+
             while (!Internet())
             {
                 Error("You must have an internet connection to continue. Dismiss this modal when you are ready to proceed...", "Internet Connectivity", "015", false, null);
@@ -131,11 +138,15 @@ namespace Ripper
 
         public static bool Internet()
         {
+            // Get internet connectivity status from Windows NETWORKLIST...
+
             return new NetworkListManager().IsConnectedToInternet;
         }
 
         public static bool Exists(string u)
         {
+            // Check if an internet file exists...
+
             bool r = true;
 
             WebRequest webRequest = WebRequest.Create(u);
@@ -163,6 +174,8 @@ namespace Ripper
 
             try
             {
+                // Error handler will try to show custom message box...
+
                 ErrorWindow er = new ErrorWindow(msg, t, n, f);
                 er.ShowDialog();
 
@@ -174,6 +187,8 @@ namespace Ripper
 
                 try
                 {
+                    // Error handler will then try to show a winforms message box...
+
                     MessageBoxIcon i;
 
                     if (f) i = MessageBoxIcon.Error;

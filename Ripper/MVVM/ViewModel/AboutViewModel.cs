@@ -1,6 +1,6 @@
 ﻿namespace Ripper.MVVM.ViewModel
 {
-    class AboutViewModel
+    internal class AboutViewModel
     {
 
     }
