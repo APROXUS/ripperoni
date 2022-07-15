@@ -1,4 +1,4 @@
-# Ripperoni
+# Ripper
 
 *(WPF, YT-DLP)*
 
