@@ -33,8 +33,8 @@ namespace Ripper.Install
             if (silent) Opacity = 0;
 
             start = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Microsoft\Windows\Start Menu\Programs\KPNC Technology\";
-            path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\KPNC Technology\";
-            zip = Path.GetTempPath() + @"KPNC TEMP\Ripperoni.zip";
+            path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\KPNC Technology\Ripper\";
+            zip = Path.GetTempPath() + @"KPNC TEMP\Ripper.zip";
 
             Task.Factory.StartNew(() => Installation());
         }
@@ -47,16 +47,16 @@ namespace Ripper.Install
 
                 if (silent) expected = 1;
 
-                while (Process.GetProcessesByName("Ripperoni").Length > expected)
+                while (Process.GetProcessesByName("Ripper").Length > expected)
                 {
-                    Error("You must close all instances of Ripperoni before installing...", false);
+                    Error("You must close all instances of Ripper before installing...", false);
 
                     System.Threading.Thread.Sleep(100);
                 }
             }
             catch
             {
-                Error("Could not determine if Ripperoni is running...", false);
+                Error("Could not determine if Ripper is running...", false);
             }
 
             Progression(0);
@@ -123,10 +123,10 @@ namespace Ripper.Install
             try
             {
                 Stat("Adding shortcut to start menu...");
-                IWshShortcut shortstart = shell.CreateShortcut(start + "Ripperoni.lnk");
-                shortstart.Description = "KPNC Ripperoni";
-                shortstart.IconLocation = path + "Ripperoni.exe";
-                shortstart.TargetPath = path + "Ripperoni.exe";
+                IWshShortcut shortstart = shell.CreateShortcut(start + "Ripper.lnk");
+                shortstart.Description = "KPNC Ripper";
+                shortstart.IconLocation = path + "Ripper.exe";
+                shortstart.TargetPath = path + "Ripper.exe";
                 shortstart.Save();
                 Progression(64);
             }
@@ -139,7 +139,7 @@ namespace Ripper.Install
             {
                 Stat("Adding uninstall shortcut to start menu...");
                 IWshShortcut shortuninstall = shell.CreateShortcut(start + "Uninstall.lnk");
-                shortuninstall.Description = "KPNC Ripperoni Uninstaller";
+                shortuninstall.Description = "KPNC Ripper Uninstaller";
                 shortuninstall.IconLocation = path + "Uninstall.exe";
                 shortuninstall.TargetPath = path + "Uninstall.exe";
                 shortuninstall.Save();
@@ -153,11 +153,11 @@ namespace Ripper.Install
             try
             {
                 Stat("Adding shortcut to desktop...");
-                string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\Ripperoni.lnk";
+                string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\Ripper.lnk";
                 IWshShortcut shortdesktop = shell.CreateShortcut(desktop);
-                shortdesktop.Description = "KPNC Ripperoni";
-                shortdesktop.IconLocation = path + "Ripperoni.exe";
-                shortdesktop.TargetPath = path + "Ripperoni.exe";
+                shortdesktop.Description = "KPNC Ripper";
+                shortdesktop.IconLocation = path + "Ripper.exe";
+                shortdesktop.TargetPath = path + "Ripper.exe";
                 shortdesktop.Save();
                 Progression(88);
             }
@@ -170,9 +170,9 @@ namespace Ripper.Install
             {
                 Stat("Adding application to registry...");
                 long size = new FileInfo(zip).Length / 1024;
-                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Ripperoni");
+                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Ripper");
                 key.SetValue("DisplayIcon", path + "Uninstall.ico");
-                key.SetValue("DisplayName", "KPNC Ripperoni");
+                key.SetValue("DisplayName", "KPNC Ripper");
                 key.SetValue("EstimatedSize", size.ToString(), RegistryValueKind.DWord);
                 key.SetValue("NoModify", "1", RegistryValueKind.DWord);
                 key.SetValue("NoRepair", "1", RegistryValueKind.DWord);
@@ -194,11 +194,11 @@ namespace Ripper.Install
             {
                 try
                 {
-                    Process.Start(path + "Ripperoni.exe");
+                    Process.Start(path + "Ripper.exe");
                 }
                 catch
                 {
-                    Error("Could not open Ripperoni...", false);
+                    Error("Could not open Ripper...", false);
                 }
 
             }

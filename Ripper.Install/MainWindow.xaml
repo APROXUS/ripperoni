@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Ripper.Install" mc:Ignorable="d"
-        Title="Ripperoni Setup" Height="110" Width="410" WindowStyle="None"
+        Title="Ripper Setup" Height="110" Width="410" WindowStyle="None"
         ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True">
     <Border Margin="10" Background="#202020" CornerRadius="8">
         <Border.Effect>
@@ -27,9 +27,9 @@
                         <ColumnDefinition Width="40"/>
                     </Grid.ColumnDefinitions>
 
-                    <Image Grid.Column="0" Margin="9,4,9,4" Source="/Pepperoni.ico"/>
+                    <Image Grid.Column="0" Margin="9,4,9,4" Source="/Ripper.ico"/>
 
-                    <TextBlock Text="KPNC Ripperoni Installer" Grid.Column="1"
+                    <TextBlock Text="KPNC Ripper Installer" Grid.Column="1"
                            VerticalAlignment="Center" FontSize="12"
                            HorizontalAlignment="Left" Foreground="White"/>
 

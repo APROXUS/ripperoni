@@ -15,7 +15,7 @@ namespace Ripper.MVVM.View
 
             Version v = Assembly.GetExecutingAssembly().GetName().Version;
 
-            Handle.Text = $"KPNC Technology: Ripperoni: {v.Major}.{v.Minor}.{v.Build}.{v.Revision:X}";
+            Handle.Text = $"KPNC Technology: Ripper: {v.Major}.{v.Minor}.{v.Build}.{v.Revision:X}";
 
             Json.Write();
         }
@@ -25,17 +25,17 @@ namespace Ripper.MVVM.View
 
         private void RS_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Process.Start("https://www.kpnc.io/services/ripperoni");
+            Process.Start("https://www.kpnc.io/services/ripper");
         }
 
         private void RG_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Process.Start("https://github.com/kpncio/ripperoni");
+            Process.Start("https://github.com/kpncio/ripper");
         }
 
         private void RL_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Process.Start("https://github.com/kpncio/ripperoni/blob/main/LICENSE");
+            Process.Start("https://github.com/kpncio/ripper/blob/main/LICENSE");
         }
 
         private void YN_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)

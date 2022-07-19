@@ -115,7 +115,7 @@ namespace Ripper
         public static string Format { get; set; } = "mp4";
         public static int Resolution { get; set; } = 1080;
 
-        public static string Temp { get; set; } = Path.GetTempPath() + "Ripperoni";
+        public static string Temp { get; set; } = Path.GetTempPath() + "Ripper";
         public static bool OnFly { get; set; } = false;
         public static long Bytes { get; set; } = 0;
         public static int Timeout { get; set; } = 1000;

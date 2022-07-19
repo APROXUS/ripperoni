@@ -40,7 +40,7 @@ namespace Ripper
 
         private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            Process.Start("https://github.com/kpncio/ripperoni/issues");
+            Process.Start("https://github.com/kpncio/ripper/issues");
         }
         #endregion
     }

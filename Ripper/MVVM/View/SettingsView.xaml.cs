@@ -37,7 +37,7 @@ namespace Ripper.MVVM.View
             }
             catch (Exception ex)
             {
-                Utilities.Error("Could not run batch script as administrator...", "Executable Error", "021", true, ex);
+                Utilities.Error("Could not run batch script as administrator...", "Executable Error", "021", false, ex);
             }
         }
         #endregion

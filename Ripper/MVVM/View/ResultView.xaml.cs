@@ -8,15 +8,16 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
 using WebPWrapper;
+using YouTubeApiSharp;
 
 namespace Ripper.MVVM.View
 {
     public partial class ResultView : UserControl
     {
+        private readonly VideoSearchComponents video;
         private readonly SearchWindow search;
-        private readonly string[] video;
 
-        public ResultView(SearchWindow s, string[] v)
+        public ResultView(SearchWindow s, VideoSearchComponents v)
         {
             InitializeComponent();
 
@@ -25,16 +26,14 @@ namespace Ripper.MVVM.View
 
             #region Image Processing...
             // Get online image in WPF compatible form...
-
+            BitmapImage bitmapimage = new BitmapImage();
             try
             {
-                BitmapImage bitmapimage = new BitmapImage();
-
-                if (video[1].Split('.').Last().ToString() == "webp")
+                if (video.getThumbnail().Split('.').Last().ToString() == "webp")
                 {
                     Bitmap bitmap;
 
-                    byte[] image = new WebClient().DownloadData(video[1]);
+                    byte[] image = new WebClient().DownloadData(video.getThumbnail());
                     using (WebP webp = new WebP())
                     {
                         bitmap = webp.Decode(image);
@@ -54,7 +53,7 @@ namespace Ripper.MVVM.View
                 else
                 {
                     bitmapimage.BeginInit();
-                    bitmapimage.UriSource = new Uri(video[1], UriKind.Absolute);
+                    bitmapimage.UriSource = new Uri(video.getThumbnail(), UriKind.Absolute);
                     bitmapimage.EndInit();
                 }
 
@@ -68,16 +67,16 @@ namespace Ripper.MVVM.View
 
             // Set video information...
 
-            Title.Text = video[2];
-            Description.Text = video[3];
-            Author.Text = video[4];
+            Title.Text = video.getTitle();
+            Author.Text = video.getAuthor();
+            Duration.Text = video.getDuration();
         }
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
             // Download video on selection...
 
-            Globals.Main.Request("https://youtu.be/" + video[0]);
+            Globals.Main.Request(video);
 
             search.Close();
         }

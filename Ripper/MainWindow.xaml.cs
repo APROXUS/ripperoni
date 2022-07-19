@@ -1,15 +1,20 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Linq;
 using System.Windows;
+using System.Drawing;
 using System.Diagnostics;
 using System.Windows.Input;
 using System.Collections.Generic;
+using System.Windows.Media.Imaging;
 using System.Windows.Media.Animation;
 
+using WebPWrapper;
+using YouTubeApiSharp;
 using Ripper.MVVM.View;
-using Google.Apis.Services;
-using Google.Apis.YouTube.v3;
+using YoutubeDLSharp;
+using YoutubeDLSharp.Metadata;
 
 namespace Ripper
 {
@@ -68,51 +73,58 @@ namespace Ripper
         #endregion
 
         #region Input UI...
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private async void Button_Click_2(object sender, RoutedEventArgs e)
         {
             // Download button handler...
 
             if (Utilities.Internet())
             {
+                bool query = true;
+
                 if (Uri.IsWellFormedUriString(Input.Text, UriKind.Absolute))
                 {
                     if (Input.Text.Split(':')[0].ToLower() == "http" || Input.Text.Split(':')[0].ToLower() == "https")
                     {
                         if (File.ReadAllText("Domains.txt").Contains(Input.Text.Split('/')[2].ToLower()))
                         {
-                            if (Path.IsPathRooted(Globals.Output))
+                            try
                             {
-                                // Create video record handler/UI...
+                                // Setting up YouTube DLP service and getting first result...
 
-                                Directory.CreateDirectory(Globals.Output);
-
-                                var RecordView = new RecordView(Input.Text);
-
-                                Records.Children.Add(RecordView);
-
-                                RecordView.Remove.Click += (o, args) =>
+                                YoutubeDL y = new YoutubeDL
                                 {
-                                    Records.Children.Remove(RecordView);
+                                    YoutubeDLPath = Globals.Real + "YTDLP.exe"
                                 };
+
+                                RunResult<VideoData> r = await y.RunVideoDataFetch(Input.Text);
+                                VideoData v = r.Data;
+                                
+                                Request(new VideoSearchComponents(v.Title, v.Uploader, "-", TimeSpan.FromSeconds(v.Duration ?? default).ToString(@"hh\:mm\:ss"), Input.Text, v.Thumbnail, "-"));
+
+                                query = false;
                             }
-                            else
+                            catch (Exception ex)
                             {
-                                Utilities.Error("The output path must be rooted...", "Configuration Error", "002", false, null);
+                                Utilities.Error("Could not get YouTube video through DLP...", "Network Error", "008", false, ex);
                             }
                         }
-                        else
-                        {
-                            Utilities.Error("The input must be a valid YouTube URL...", "Configuration Error", "003", false, null);
-                        }
-                    }
-                    else
-                    {
-                        Utilities.Error("The input must be a valid HTTP(S) URL...", "Configuration Error", "004", false, null);
                     }
                 }
-                else
+
+                if (query)
                 {
-                    Utilities.Error("The input must be a valid URL...", "Configuration Error", "005", false, null);
+                    try
+                    {
+                        // Setting up YouTube API search service and getting first result...
+
+                        List<VideoSearchComponents> videos = await new VideoSearch().GetVideos(Input.Text, 1);
+
+                        Request(videos[0]);
+                    }
+                    catch (Exception ex)
+                    {
+                        Utilities.Error("Could not get YouTube video through API...", "Network Error", "008", false, ex);
+                    }
                 }
             }
             else
@@ -121,62 +133,17 @@ namespace Ripper
             }
         }
 
-        private void Button_Click_3(object sender, RoutedEventArgs e)
+        private async void Button_Click_3(object sender, RoutedEventArgs e)
         {
             // Search button handler...
 
             if (Utilities.Internet())
             {
-                // Gettings YouTube search API key from online...
-
-                try
-                {
-                    DotNetEnv.Env.LoadContents(new WebClient().DownloadString("https://content.kpnc.io/app/ripperoni/.env"));
-                }
-                catch (Exception ex)
-                {
-                    Utilities.Error("Could not retrieve an environment variable from CDN...", "Network Error", "007", false, ex);
-                }
-
                 try
                 {
                     // Setting up YouTube API search service and getting results...
 
-                    var youtube = new YouTubeService(new BaseClientService.Initializer()
-                    {
-                        ApiKey = Environment.GetEnvironmentVariable("YOUTUBE"),
-                        ApplicationName = GetType().ToString()
-                    });
-
-                    var request = youtube.Search.List("snippet");
-                    request.Q = Input.Text;
-                    request.MaxResults = 10;
-
-                    List<string[]> videos = new List<string[]>();
-
-                    foreach (var result in request.Execute().Items)
-                    {
-                        string thumbnail = "https://content.kpnc.io/img/ripperoni/unknown.jpg";
-
-                        if (result.Snippet.Thumbnails.Standard != null)
-                            thumbnail = result.Snippet.Thumbnails.Standard.Url;
-                        if (result.Snippet.Thumbnails.Medium != null)
-                            thumbnail = result.Snippet.Thumbnails.Medium.Url;
-                        if (result.Snippet.Thumbnails.High != null)
-                            thumbnail = result.Snippet.Thumbnails.High.Url;
-                        if (result.Snippet.Thumbnails.Maxres != null)
-                            thumbnail = result.Snippet.Thumbnails.Maxres.Url;
-
-                        switch (result.Id.Kind)
-                        {
-                            case "youtube#video":
-                                videos.Add(new string[] { result.Id.VideoId, thumbnail, result.Snippet.Title, result.Snippet.Description, result.Snippet.ChannelTitle });
-                                break;
-
-                            default:
-                                break;
-                        }
-                    }
+                    List<VideoSearchComponents> videos = await new VideoSearch().GetVideos(Input.Text, 1);
 
                     SearchWindow sw = new SearchWindow(WebUtility.UrlEncode(Input.Text), videos);
                     sw.ShowDialog();
@@ -192,9 +159,48 @@ namespace Ripper
             }
         }
 
-        public void Request(string v)
+        public void Request(VideoSearchComponents video)
         {
-            // Search result (clicked on) handler...
+            // Selected video request handler...
+
+            #region Image Processing...
+            // Get online image in WPF compatible form...
+            BitmapImage bitmapimage = new BitmapImage();
+            try
+            {
+                if (video.getThumbnail().Split('.').Last().ToString() == "webp")
+                {
+                    Bitmap bitmap;
+
+                    byte[] image = new WebClient().DownloadData(video.getThumbnail());
+                    using (WebP webp = new WebP())
+                    {
+                        bitmap = webp.Decode(image);
+                    }
+
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                        stream.Position = 0;
+
+                        bitmapimage.BeginInit();
+                        bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmapimage.StreamSource = stream;
+                        bitmapimage.EndInit();
+                    }
+                }
+                else
+                {
+                    bitmapimage.BeginInit();
+                    bitmapimage.UriSource = new Uri(video.getThumbnail(), UriKind.Absolute);
+                    bitmapimage.EndInit();
+                }
+            }
+            catch (Exception ex)
+            {
+                Utilities.Error("Could not display thumbnail image...", "Executable Error", "038", false, ex);
+            }
+            #endregion
 
             if (Path.IsPathRooted(Globals.Output))
             {
@@ -202,7 +208,7 @@ namespace Ripper
 
                 Directory.CreateDirectory(Globals.Output);
 
-                var RecordView = new RecordView(v);
+                RecordView RecordView = new RecordView(video, bitmapimage);
 
                 Records.Children.Add(RecordView);
 
@@ -226,12 +232,12 @@ namespace Ripper
 
         private void TextBlock_MouseDown_1(object sender, MouseButtonEventArgs e)
         {
-            Process.Start("https://www.kpnc.io/services/ripperoni");
+            Process.Start("https://www.kpnc.io/services/ripper");
         }
 
         private void TextBlock_MouseDown_2(object sender, MouseButtonEventArgs e)
         {
-            Process.Start("https://www.github.com/kpncio/ripperoni");
+            Process.Start("https://www.github.com/kpncio/ripper");
         }
 
         private void TextBlock_MouseDown_3(object sender, MouseButtonEventArgs e)

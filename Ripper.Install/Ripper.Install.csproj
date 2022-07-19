@@ -38,7 +38,7 @@
     <StartupObject>Ripper.Install.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Pepperoni.ico</ApplicationIcon>
+    <ApplicationIcon>Ripper.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -110,9 +110,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Pepperoni.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <COMReference Include="IWshRuntimeLibrary">
       <Guid>{F935DC20-1CF0-11D0-ADB9-00C04FD58A0B}</Guid>
       <VersionMajor>1</VersionMajor>
@@ -125,6 +122,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Ripper.Uninstall.exe" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Ripper.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

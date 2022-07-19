@@ -2,7 +2,6 @@
 using System.IO;
 using System.Net;
 using System.Linq;
-using System.Drawing;
 using System.Threading;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -12,22 +11,25 @@ using System.Collections.Generic;
 using System.Windows.Media.Imaging;
 
 using Downloader;
-using WebPWrapper;
 using Javi.FFmpeg;
+using YouTubeApiSharp;
 using YoutubeDLSharp;
 using YoutubeDLSharp.Metadata;
+
 
 namespace Ripper.MVVM.View
 {
     public partial class RecordView : UserControl
     {
         #region Variables...
-        private readonly string input;
+        private readonly VideoSearchComponents video;
+        private readonly BitmapImage image;
+
+        private readonly int resolution;
         private readonly string output;
         private readonly string format;
-        private readonly int resolution;
-        private readonly bool audio;
         private readonly string epoch1;
+        private readonly bool audio;
 
         private readonly CancellationTokenSource source;
         private CancellationToken token;
@@ -35,35 +37,33 @@ namespace Ripper.MVVM.View
         private DownloadService downloader;
         private FFmpeg ffmpeg;
 
-        private string title;
-        private string uploader;
-        private float length;
-        private string thumbnail;
         private FormatData[] records;
-        private string formatraw;
         private FormatData record;
-        private string video;
+        private string formatraw;
+        private string url;
 
+        private bool downloading;
         private string temp;
         private string size;
-        private bool downloading;
 
         private string final;
 
+        private bool processing;
         private string epoch2;
         private string file1;
         private string file2;
-        private bool processing;
         #endregion
          
-        public RecordView(string i)
+        public RecordView(VideoSearchComponents v, BitmapImage bm)
         {
             InitializeComponent();
 
-            input = i;
+            image = bm;
+            video = v;
+
+            resolution = Globals.Resolution;
             output = Globals.Output;
             format = Globals.Format;
-            resolution = Globals.Resolution;
 
             if (format != "mp4" && format != "webm" && format != "mov" && format != "avi" && format != "flv")
             {
@@ -103,6 +103,33 @@ namespace Ripper.MVVM.View
                 {
                     Status.Text = "Starting...";
                 });
+
+                #region Post Metadata...
+                // Post video metadata to record UI...
+
+                try
+                {
+                    Dispatcher.Invoke(delegate ()
+                    {
+                        Thumbnail.ImageSource = image;
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Utilities.Error("Could not display thumbnail image...", "Worker Error", "027", false, ex);
+                }
+
+                Dispatcher.Invoke(delegate ()
+                {
+                    Title.Text = video.getTitle();
+
+                    Author.Text = video.getAuthor();
+
+                    Length.Text = video.getDuration();
+                });
+                #endregion
+
+                token.ThrowIfCancellationRequested();
 
                 #region Systems and Events...
                 // Set downloader (package) configuration and events from settings...
@@ -159,6 +186,21 @@ namespace Ripper.MVVM.View
                 #region Get Metadata...
                 try
                 {
+                    foreach (var c in Path.GetInvalidFileNameChars())
+                    {
+                        video.setTitle(video.getTitle().Replace(c, '-'));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    source.Cancel();
+
+                    Utilities.Error($"Could not set path safe title...", "Worker Error", "025", false, ex);
+                }
+                
+
+                try
+                {
                     // Set YoutubeDL wrapper settings and get metadata...
 
                     YoutubeDL y = new YoutubeDL
@@ -166,19 +208,14 @@ namespace Ripper.MVVM.View
                         YoutubeDLPath = Globals.Real + "YTDLP.exe"
                     };
 
-                    RunResult<VideoData> r = await y.RunVideoDataFetch(input);
-                    VideoData v = r.Data;
-                    title = v.Title;
-                    uploader = v.Uploader;
-                    length = v.Duration ?? default;
-                    thumbnail = v.Thumbnail;
-                    records = v.Formats;
+                    RunResult<VideoData> r = await y.RunVideoDataFetch(video.getUrl());
+                    records = r.Data.Formats;
                 }
                 catch (Exception ex)
                 {
                     source.Cancel();
 
-                    Utilities.Error($"Could not fetch data regarding the URL: {input} ...", "Worker Error", "025", false, ex);
+                    Utilities.Error($"Could not fetch data regarding the URL: {video.getUrl()} ...", "Worker Error", "025", false, ex);
                 }
 
                 try
@@ -243,66 +280,7 @@ namespace Ripper.MVVM.View
                     Utilities.Error("Could not find a viable media record...", "Worker Error", "026", false, ex);
                 }
 
-                video = record.Url;
-                #endregion
-
-                token.ThrowIfCancellationRequested();
-
-                #region Post Metadata...
-                // Post video metadata to record UI...
-
-                try
-                {
-                    // Convert online thumbnail to a WPF compatible form...
-
-                    BitmapImage bitmapimage = new BitmapImage();
-
-                    if (thumbnail.Split('.').Last().ToString() == "webp")
-                    {
-                        Bitmap bitmap;
-
-                        byte[] image = new WebClient().DownloadData(thumbnail);
-                        using (WebP webp = new WebP())
-                        {
-                            bitmap = webp.Decode(image);
-                        }
-
-                        using (MemoryStream stream = new MemoryStream())
-                        {
-                            bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
-                            stream.Position = 0;
-
-                            bitmapimage.BeginInit();
-                            bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
-                            bitmapimage.StreamSource = stream;
-                            bitmapimage.EndInit();
-                        }
-                    }
-                    else
-                    {
-                        bitmapimage.BeginInit();
-                        bitmapimage.UriSource = new Uri(thumbnail, UriKind.Absolute);
-                        bitmapimage.EndInit();
-                    }
-
-                    Dispatcher.Invoke(delegate ()
-                    {
-                        Thumbnail.ImageSource = bitmapimage;
-                    });
-                }
-                catch (Exception ex)
-                {
-                    Utilities.Error("Could not display thumbnail image...", "Worker Error", "027", false, ex);
-                }
-
-                Dispatcher.Invoke(delegate ()
-                {
-                    Title.Text = title;
-
-                    Author.Text = uploader;
-
-                    Length.Text = TimeSpan.FromSeconds(length).ToString(@"hh\:mm\:ss");
-                });
+                url = record.Url;
                 #endregion
 
                 token.ThrowIfCancellationRequested();
@@ -310,9 +288,9 @@ namespace Ripper.MVVM.View
                 #region Get Base...
                 // Download the base requested media...
 
-                temp = Globals.Temp + "\\" + title + "." + epoch1 + "." + formatraw;
+                temp = Globals.Temp + "\\" + video.getTitle() + "." + epoch1 + "." + formatraw;
 
-                size = FileSize(new Uri(video));
+                size = FileSize(new Uri(url));
 
                 Json.Read();
 
@@ -322,7 +300,7 @@ namespace Ripper.MVVM.View
                 {
                     try
                     {
-                        await downloader.DownloadFileTaskAsync(video, temp);
+                        await downloader.DownloadFileTaskAsync(url, temp);
                     }
                     catch (Exception ex)
                     {
@@ -363,11 +341,11 @@ namespace Ripper.MVVM.View
                         Utilities.Error("Could not find a viable media record...", "Worker Error", "029", false, ex);
                     }
 
-                    video = record.Url;
+                    url = record.Url;
 
-                    temp = Globals.Temp + "\\" + title + "." + epoch1 + ".m4a";
+                    temp = Globals.Temp + "\\" + video.getTitle() + "." + epoch1 + ".m4a";
 
-                    size = FileSize(new Uri(video));
+                    size = FileSize(new Uri(url));
 
                     Json.Read();
 
@@ -377,7 +355,7 @@ namespace Ripper.MVVM.View
                     {
                         try
                         {
-                            await downloader.DownloadFileTaskAsync(video, temp);
+                            await downloader.DownloadFileTaskAsync(url, temp);
                         }
                         catch (Exception ex)
                         {
@@ -400,7 +378,7 @@ namespace Ripper.MVVM.View
                     token.ThrowIfCancellationRequested();
                 }
 
-                final = Globals.Temp + "\\" + title + "." + epoch1 + "." + formatraw;
+                final = Globals.Temp + "\\" + video.getTitle() + "." + epoch1 + "." + formatraw;
 
                 if (formatraw != format || !audio)
                 {
@@ -424,7 +402,7 @@ namespace Ripper.MVVM.View
                     {
                         // If media need multiplexing then multiplex...
 
-                        file2 = Globals.Temp + "\\" + title + "." + epoch1 + ".m4a";
+                        file2 = Globals.Temp + "\\" + video.getTitle() + "." + epoch1 + ".m4a";
 
                         Dispatcher.Invoke(delegate ()
                         {
@@ -433,7 +411,7 @@ namespace Ripper.MVVM.View
 
                         processing = true;
 
-                        final = Globals.Temp + "\\" + title + "." + epoch2 + "." + formatraw;
+                        final = Globals.Temp + "\\" + video.getTitle() + "." + epoch2 + "." + formatraw;
 
                         Task.Factory.StartNew(() => GetMultiplex());
 
@@ -460,7 +438,7 @@ namespace Ripper.MVVM.View
 
                         file1 = final;
 
-                        final = Globals.Temp + "\\" + title + "." + epoch2 + "." + format;
+                        final = Globals.Temp + "\\" + video.getTitle() + "." + epoch2 + "." + format;
 
                         Task.Factory.StartNew(() => GetConvert());
 
@@ -488,7 +466,7 @@ namespace Ripper.MVVM.View
                 {
                     // Move final files to the output directory...
 
-                    string outputted = output + "\\" + title + "." + format;
+                    string outputted = output + "\\" + video.getTitle() + "." + format;
 
                     File.Delete(outputted);
                     File.Move(final, outputted);
@@ -504,18 +482,10 @@ namespace Ripper.MVVM.View
                 {
                     // Deleted all created temperary files...
 
-                    File.Delete(Globals.Temp + "\\" + title + "." + epoch1 + "." + formatraw);
-
-                    if (audio)
-                    {
-                        File.Delete(Globals.Temp + "\\" + title + "." + epoch1 + ".m4a");
-                        File.Delete(Globals.Temp + "\\" + title + "." + epoch2 + "." + formatraw);
-                    }
-
-                    if (format != formatraw)
-                    {
-                        File.Delete(Globals.Temp + "\\" + title + "." + epoch2 + "." + format);
-                    }
+                    File.Delete(Globals.Temp + "\\" + video.getTitle() + "." + epoch1 + "." + formatraw);
+                    File.Delete(Globals.Temp + "\\" + video.getTitle() + "." + epoch1 + ".m4a");
+                    File.Delete(Globals.Temp + "\\" + video.getTitle() + "." + epoch2 + "." + formatraw);
+                    File.Delete(Globals.Temp + "\\" + video.getTitle() + "." + epoch2 + "." + format);
                 }
                 catch (Exception ex)
                 {

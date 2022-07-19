@@ -76,7 +76,7 @@
             </Border>
 
             <TextBlock Grid.Row="2" VerticalAlignment="Center" FontSize="10" HorizontalAlignment="Center"
-                       Foreground="#007ACC" Text="View this query at YouTube.com" MouseDown="TextBlock_MouseDown"/>
+                       Foreground="#007ACC" Text="View this query on YouTube.com" MouseDown="TextBlock_MouseDown"/>
         </Grid>
     </Border>
 </Window>

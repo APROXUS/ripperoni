@@ -12,7 +12,7 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Margin="10">
-                <Image Source="/Images/Ripperoni.png" Margin="5"/>
+                <Image Source="/Images/Ripper.png" Margin="5"/>
                 
                 <Image Source="/Images/KPNC.png" Margin="5"/>
                 
@@ -36,10 +36,10 @@
             <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="1">
                 <StackPanel Margin="10">
                     <TextBlock Background="Transparent" Foreground="White" x:Name="Handle"
-                               TextAlignment="Justify" TextWrapping="Wrap" Margin="0,5,0,5"><Bold>KPNC Technology: Ripperoni:</Bold></TextBlock>
+                               TextAlignment="Justify" TextWrapping="Wrap" Margin="0,5,0,5"><Bold>KPNC Technology: Ripper:</Bold></TextBlock>
                         
                     <TextBlock Background="Transparent" Foreground="White"
-                               TextAlignment="Justify" TextWrapping="Wrap" Margin="0,5,0,5"><Bold>About:</Bold> Ripperoni is a simple, open source project that aims to download online media (namely from YouTube). Ripperoni’s main focus is being a fast media downloader, but also includes ease of life features like ten convertible video and audio formats, eight common resolutions, custom network solutions, tunable download client, and YouTube search functionality. We hope these key features increase productivity and efficiency when downloading, processing, and adapting online content.</TextBlock>
+                               TextAlignment="Justify" TextWrapping="Wrap" Margin="0,5,0,5"><Bold>About:</Bold> Ripper is a simple, open source project that aims to download online media (namely from YouTube). Ripper’s main focus is being a fast media downloader, but also includes ease of life features like ten convertible video and audio formats, eight common resolutions, custom network solutions, tunable download client, and YouTube search functionality. We hope these key features increase productivity and efficiency when downloading, processing, and adapting online content.</TextBlock>
                             
                     <TextBlock Background="Transparent" Foreground="White"
                                TextAlignment="Justify" TextWrapping="Wrap" Margin="0,5,0,5"><Bold>Introduction:</Bold> There are four main tabs. In the “Downloads” tab you can see the progress of media being downloaded. In the “Properties” tab you can change the default output folder, the preferred format , and the preferred resolution. In the “Settings” tab you can tune downloader options like temporary file folder, enable on-fly caching, maximum transfer speed, timeout delay, concurrent threads, reattempts before hard fail, and buffer size. You may also find other custom solutions for fixes with network problems such as those within the Charter Communication network. In the “About” tab you will find this message along with the links to other open source projects used in this application. The lower interface includes the text box where you can input a direct link by clicking the download button or search keywords that will be queried through YouTube Search by clicking the search button. Finally, you may open the current output folder via the link in the applications footer.</TextBlock> 
@@ -48,11 +48,11 @@
                                TextAlignment="Justify" TextWrapping="Wrap" Margin="0,5,0,5"><Bold>Further Information:</Bold> For bug reports, feature requests, and any further information or contact, please check out the project’s repository below...</TextBlock>
                         
                     <Label />
-                    <Label Foreground="#007ACC" Content="Ripperoni by KPNC Technology: Site"
+                    <Label Foreground="#007ACC" Content="Ripper by KPNC Technology: Site"
                            x:Name="rs" MouseDown="RS_MouseDown"/>
-                    <Label Foreground="#007ACC" Content="Ripperoni by KPNC Technology: Github"
+                    <Label Foreground="#007ACC" Content="Ripper by KPNC Technology: Github"
                            x:Name="rg" MouseDown="RG_MouseDown"/>
-                    <Label Foreground="#007ACC" Content="Ripperoni by KPNC Technology: License"
+                    <Label Foreground="#007ACC" Content="Ripper by KPNC Technology: License"
                            x:Name="rl" MouseDown="RL_MouseDown"/>
                         
                     <Label />

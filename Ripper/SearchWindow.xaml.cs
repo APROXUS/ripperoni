@@ -4,21 +4,22 @@ using System.Diagnostics;
 using System.Windows.Input;
 using System.Collections.Generic;
 
+using YouTubeApiSharp;
 using Ripper.MVVM.View;
 
 namespace Ripper
 {
     public partial class SearchWindow : Window
     {
-        private readonly List<string[]> videos;
+        private readonly List<VideoSearchComponents> videos;
         private readonly string query;
 
-        public SearchWindow(string q, List<string[]> v)
+        public SearchWindow(string q, List<VideoSearchComponents> v)
         {
             InitializeComponent();
 
-            query = q;
             videos = v;
+            query = q;
 
             List();
         }
@@ -31,7 +32,7 @@ namespace Ripper
             {
                 foreach (var video in videos)
                 {
-                    var ResultView = new ResultView(this, video);
+                    ResultView ResultView = new ResultView(this, video);
 
                     Results.Children.Add(ResultView);
                 }

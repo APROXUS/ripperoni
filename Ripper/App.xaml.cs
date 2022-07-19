@@ -7,5 +7,6 @@ namespace Ripper
     /// </summary>
     public partial class App : Application
     {
+
     }
 }

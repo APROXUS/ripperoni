@@ -31,9 +31,9 @@ namespace Ripper.Uninstall
             if (silent) Opacity = 0;
 
             real = AppDomain.CurrentDomain.BaseDirectory;
-            path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\KPNC Ripperoni\";
+            path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\KPNC Technology\Ripper\";
             temp = Path.GetTempPath() + @"KPNC TEMP\";
-            start = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Microsoft\Windows\Start Menu\Programs\KPNC Project\";
+            start = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Microsoft\Windows\Start Menu\Programs\KPNC Technology\";
 
             Task.Factory.StartNew(() => Uninstallation());
         }
@@ -61,14 +61,14 @@ namespace Ripper.Uninstall
 
             try
             {
-                while (Process.GetProcessesByName("Ripperoni").Length > 0)
+                while (Process.GetProcessesByName("Ripper").Length > 0)
                 {
-                    Error("You must close all instances of Ripperoni before installing...", false);
+                    Error("You must close all instances of Ripper before installing...", false);
                 }
             }
             catch
             {
-                Error("Could not determine if Ripperoni is running...", false);
+                Error("Could not determine if Ripper is running...", false);
             }
 
             Progression(0);
@@ -87,7 +87,7 @@ namespace Ripper.Uninstall
             try
             {
                 Stat("Removing shortcut from start menu...");
-                File.Delete(start + "Ripperoni.lnk");
+                File.Delete(start + "Ripper.lnk");
                 Progression(40);
             }
             catch
@@ -109,7 +109,7 @@ namespace Ripper.Uninstall
             try
             {
                 Stat("Removing shortcut from desktop...");
-                string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\Ripperoni.lnk";
+                string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\Ripper.lnk";
                 File.Delete(desktop);
                 Progression(80);
             }
@@ -121,12 +121,12 @@ namespace Ripper.Uninstall
             try
             {
                 Stat("Removing application from registry...");
-                Registry.CurrentUser.DeleteSubKeyTree(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Ripperoni");
+                Registry.CurrentUser.DeleteSubKeyTree(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Ripper");
 
                 try
                 {
                     Stat("Removing application from 64-Bit registry...");
-                    Registry.CurrentUser.DeleteSubKeyTree(@"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Ripperoni");
+                    Registry.CurrentUser.DeleteSubKeyTree(@"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Ripper");
                 }
                 catch
                 {
