@@ -83,49 +83,52 @@ namespace Ripper
 
             if (Utilities.Internet())
             {
-                bool query = true;
-
-                if (Uri.IsWellFormedUriString(Input.Text, UriKind.Absolute))
+                try
                 {
-                    if (Input.Text.Split(':')[0].ToLower() == "http" || Input.Text.Split(':')[0].ToLower() == "https")
+                    // Setting up YouTube API search service and getting first result...
+
+                    List<VideoSearchComponents> videos = await new VideoSearch().GetVideos(Input.Text, 1);
+
+                    Request(videos[0]);
+                }
+                catch (Exception ex)
+                {
+                    if (Uri.IsWellFormedUriString(Input.Text, UriKind.Absolute))
                     {
-                        if (File.ReadAllText("Domains.txt").Contains(Input.Text.Split('/')[2].ToLower()))
+                        if (Input.Text.Split(':')[0].ToLower() == "http" || Input.Text.Split(':')[0].ToLower() == "https")
                         {
-                            try
+                            if (Globals.Domains.Contains(Input.Text.Split('/')[2].ToLower()))
                             {
-                                // Setting up YouTube DLP service and getting first result...
-
-                                YoutubeDL y = new YoutubeDL
+                                try
                                 {
-                                    YoutubeDLPath = Globals.Real + "YTDLP.exe"
-                                };
+                                    // Setting up YouTube DLP service and getting first result...
 
-                                RunResult<VideoData> r = await y.RunVideoDataFetch(Input.Text);
-                                VideoData v = r.Data;
-                                
-                                Request(new VideoSearchComponents(v.Title, v.Uploader, "-", TimeSpan.FromSeconds(v.Duration ?? default).ToString(@"hh\:mm\:ss"), Input.Text, v.Thumbnail, "-"));
+                                    YoutubeDL y = new YoutubeDL
+                                    {
+                                        YoutubeDLPath = Globals.Real + "YTDLP.exe"
+                                    };
 
-                                query = false;
+                                    RunResult<VideoData> r = await y.RunVideoDataFetch(Input.Text);
+                                    VideoData v = r.Data;
+
+                                    Request(new VideoSearchComponents(v.Title, v.Uploader, "-", TimeSpan.FromSeconds(v.Duration ?? default).ToString(@"hh\:mm\:ss"), Input.Text, v.Thumbnail, "-"));
+                                }
+                                catch (Exception exc)
+                                {
+                                    Utilities.Error("Could not get YouTube video through DLP...", "Network Error", "008", false, exc);
+                                }
                             }
-                            catch (Exception ex)
+                            else
                             {
-                                Utilities.Error("Could not get YouTube video through DLP...", "Network Error", "008", false, ex);
+                                Utilities.Error("Could not get YouTube video through API...", "Network Error", "008", false, ex);
                             }
                         }
+                        else
+                        {
+                            Utilities.Error("Could not get YouTube video through API...", "Network Error", "008", false, ex);
+                        }
                     }
-                }
-
-                if (query)
-                {
-                    try
-                    {
-                        // Setting up YouTube API search service and getting first result...
-
-                        List<VideoSearchComponents> videos = await new VideoSearch().GetVideos(Input.Text, 1);
-
-                        Request(videos[0]);
-                    }
-                    catch (Exception ex)
+                    else
                     {
                         Utilities.Error("Could not get YouTube video through API...", "Network Error", "008", false, ex);
                     }
@@ -135,6 +138,8 @@ namespace Ripper
             {
                 Utilities.Error("You must have an internet connection...", "Internet Connectivity", "006", false, null);
             }
+
+            Spinner.Visibility = Visibility.Hidden;
         }
 
         private async void Button_Click_3(object sender, RoutedEventArgs e)
@@ -151,8 +156,7 @@ namespace Ripper
 
                     List<VideoSearchComponents> videos = await new VideoSearch().GetVideos(Input.Text, 1);
 
-                    SearchWindow sw = new SearchWindow(WebUtility.UrlEncode(Input.Text), videos);
-                    sw.Owner = this;
+                    SearchWindow sw = new SearchWindow(WebUtility.UrlEncode(Input.Text), videos) { Owner = this };
                     sw.ShowDialog();
 
                     Spinner.Visibility = Visibility.Hidden;
@@ -166,6 +170,8 @@ namespace Ripper
             {
                 Utilities.Error("You must have an internet connection...", "Internet Connectivity", "009", false, null);
             }
+
+            Spinner.Visibility = Visibility.Hidden;
         }
 
         public void Request(VideoSearchComponents video)
