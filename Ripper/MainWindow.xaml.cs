@@ -11,9 +11,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Animation;
 
 using WebPWrapper;
+using YoutubeDLSharp;
 using YouTubeApiSharp;
 using Ripper.MVVM.View;
-using YoutubeDLSharp;
 using YoutubeDLSharp.Metadata;
 
 namespace Ripper
@@ -53,6 +53,8 @@ namespace Ripper
                 Utilities.Error("Could not create a temporary directory...", "Storage Error", "001", false, ex);
             }
             #endregion
+
+            Spinner.Visibility = Visibility.Hidden;
         }
 
         #region Handle Bar UI...
@@ -75,6 +77,8 @@ namespace Ripper
         #region Input UI...
         private async void Button_Click_2(object sender, RoutedEventArgs e)
         {
+            Spinner.Visibility = Visibility.Visible;
+
             // Download button handler...
 
             if (Utilities.Internet())
@@ -135,6 +139,8 @@ namespace Ripper
 
         private async void Button_Click_3(object sender, RoutedEventArgs e)
         {
+            Spinner.Visibility = Visibility.Visible;
+
             // Search button handler...
 
             if (Utilities.Internet())
@@ -146,7 +152,10 @@ namespace Ripper
                     List<VideoSearchComponents> videos = await new VideoSearch().GetVideos(Input.Text, 1);
 
                     SearchWindow sw = new SearchWindow(WebUtility.UrlEncode(Input.Text), videos);
+                    sw.Owner = this;
                     sw.ShowDialog();
+
+                    Spinner.Visibility = Visibility.Hidden;
                 }
                 catch (Exception ex)
                 {
@@ -201,6 +210,8 @@ namespace Ripper
                 Utilities.Error("Could not display thumbnail image...", "Executable Error", "038", false, ex);
             }
             #endregion
+
+            Spinner.Visibility = Visibility.Hidden;
 
             if (Path.IsPathRooted(Globals.Output))
             {

@@ -47,7 +47,7 @@ namespace Ripper.Install
 
                 if (silent) expected = 1;
 
-                while (Process.GetProcessesByName("Ripper").Length > expected)
+                while (Process.GetProcessesByName("Ripper.exe").Length > expected)
                 {
                     Error("You must close all instances of Ripper before installing...", false);
 

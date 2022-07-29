@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d" d:DesignHeight="75" d:DesignWidth="390">
-    <Border Grid.Column="0" CornerRadius="15" BorderBrush="#3D3D3D"
+    <Border Grid.Column="0" CornerRadius="8" BorderBrush="#3D3D3D"
             BorderThickness="1" Background="#202020" Margin="5" Height="65">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -21,7 +21,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <Border Margin="2" CornerRadius="15" Grid.RowSpan="3">
+            <Border CornerRadius="8" Grid.RowSpan="3">
                 <Border.Background>
                     <ImageBrush Stretch="UniformToFill" ImageSource="/Images/YouTube.jpg" x:Name="Thumbnail"/>
                 </Border.Background>
@@ -46,7 +46,7 @@
             <ProgressBar Margin="5,0,5,0" x:Name="Progress" Grid.Column="1" Grid.Row="2" Height="5"
                          VerticalAlignment="Center"  Grid.ColumnSpan="3" IsIndeterminate="True"/>
 
-            <Border Grid.Column="4" Height="30" Grid.RowSpan="2" Width="30"
+            <Border Grid.Column="4" Height="25" Grid.RowSpan="2" Width="25" Margin="3"
                     VerticalAlignment="Top" HorizontalAlignment="Right">
                 <Button Grid.Column="3" FontFamily="Segoe MDL2 Assets" x:Name="Remove"
                         Content="&#xE10A;" BorderThickness="0" Foreground="White" Click="Remove_Click">

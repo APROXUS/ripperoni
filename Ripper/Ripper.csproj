@@ -403,6 +403,7 @@
     <Resource Include="Images\Rip.png" />
     <Resource Include="Images\Ripper.ico" />
     <Resource Include="Images\Ripper.png" />
+    <Resource Include="Images\Spinner.png" />
     <Content Include="YTDLP.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
