@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:Ripper.MVVM.ViewModel"
         Height="710" Width="410" WindowStyle="None" ResizeMode="NoResize"
-        Background="Transparent" AllowsTransparency="True">
+        Background="Transparent" AllowsTransparency="True" WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
@@ -152,7 +152,6 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="40"/>
-                        <ColumnDefinition Width="40"/>
                     </Grid.ColumnDefinitions>
 
                     <Grid Grid.ColumnSpan="3" Canvas.ZIndex="1" x:Name="Spinner">
@@ -206,37 +205,6 @@
                             BorderBrush="White" BorderThickness="1">
                         <Button Grid.Column="3" FontFamily="Segoe MDL2 Assets" Background="#191919"
                                 Content="&#xE896;" BorderThickness="0" Foreground="White" Click="Button_Click_2">
-                            <Button.Resources>
-                                <Style TargetType="{x:Type Border}">
-                                    <Setter Property="CornerRadius" Value="15"/>
-                                </Style>
-
-                                <Style TargetType="{x:Type Button}">
-                                    <Setter Property="Background" Value="Transparent"/>
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="{x:Type Button}">
-                                                <Border Background="{TemplateBinding Background}">
-                                                    <ContentPresenter HorizontalAlignment="Center"
-                                                                      VerticalAlignment="Center"/>
-                                                </Border>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                    <Style.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="#3D3D3D"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Resources>
-                        </Button>
-                    </Border>
-
-                    <Border Grid.Column="2" CornerRadius="15" Height="30" Margin="5"
-                            BorderBrush="White" BorderThickness="1">
-                        <Button Grid.Column="3" FontFamily="Segoe MDL2 Assets" Background="#191919"
-                                Content="&#xE094;" BorderThickness="0" Foreground="White" Click="Button_Click_3">
                             <Button.Resources>
                                 <Style TargetType="{x:Type Border}">
                                     <Setter Property="CornerRadius" Value="15"/>

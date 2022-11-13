@@ -12,102 +12,64 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Margin="10">
-                <Image Source="/Images/Ripper.png" Margin="5"/>
-                
-                <Image Source="/Images/KPNC.png" Margin="5"/>
-                
-                <Image Source="/Images/YoutubeDL Sharp.png" Margin="5"/>
-                
-                <Image Source="/Images/WebP.png" Margin="5"/>
-                
-                <Image Source="/Images/Downloader.png" Margin="5"/>
-                
-                <Image Source="/Images/Javi FFmpeg.png" Margin="5"/>
-                
-                <Image Source="/Images/Newtonsoft JSON.png" Margin="5"/>
-                
-                <Image Source="/Images/dotENV.png" Margin="5"/>
-                
-                <Image Source="/Images/Google API.png" Margin="5"/>
-                
-                <Image Source="/Images/Windows Shell.png" Margin="5"/>
+                <Image Source="/Images/Ripper.png" Margin="5">
+                    <Image.Effect>
+                        <DropShadowEffect/>
+                    </Image.Effect>
+                </Image>
+                <Image Source="/Images/YoutubeDL.png" Margin="5">
+                    <Image.Effect>
+                        <DropShadowEffect/>
+                    </Image.Effect>
+                </Image>
+                <Image Source="/Images/WebP.png" Margin="5">
+                    <Image.Effect>
+                        <DropShadowEffect/>
+                    </Image.Effect>
+                </Image>
+                <Image Source="/Images/Downloader.png" Margin="5">
+                    <Image.Effect>
+                        <DropShadowEffect/>
+                    </Image.Effect>
+                </Image>
+                <Image Source="/Images/Javi.png" Margin="5">
+                    <Image.Effect>
+                        <DropShadowEffect/>
+                    </Image.Effect>
+                </Image>
+                <Image Source="/Images/Newtonsoft.png" Margin="5">
+                    <Image.Effect>
+                        <DropShadowEffect/>
+                    </Image.Effect>
+                </Image>
             </StackPanel>
 
             <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="1">
                 <StackPanel Margin="10">
-                    <TextBlock Background="Transparent" Foreground="White" x:Name="Handle"
-                               TextAlignment="Justify" TextWrapping="Wrap" Margin="0,5,0,5"><Bold>KPNC Technology: Ripper:</Bold></TextBlock>
-                        
+                    <TextBlock Background="Transparent" Foreground="White" x:Name="Handle" FontWeight="Bold"
+                               TextAlignment="Justify" TextWrapping="Wrap" Margin="0,5,0,5">KPNC Technology: Ripper:
+                               </TextBlock>
+
                     <TextBlock Background="Transparent" Foreground="White"
-                               TextAlignment="Justify" TextWrapping="Wrap" Margin="0,5,0,5"><Bold>About:</Bold> Ripper is a simple, open source project that aims to download online media (namely from YouTube). Ripper’s main focus is being a fast media downloader, but also includes ease of life features like ten convertible video and audio formats, eight common resolutions, custom network solutions, tunable download client, and YouTube search functionality. We hope these key features increase productivity and efficiency when downloading, processing, and adapting online content.</TextBlock>
-                            
+                               TextAlignment="Justify" TextWrapping="Wrap" Margin="0,5,0,5"><Bold>About:</Bold> Ripper is an open source project that aims to download online media (mainly from YouTube) quickly. While it mainly serves to download media, it also includes many quality-of-life functionalities.</TextBlock>
+
                     <TextBlock Background="Transparent" Foreground="White"
-                               TextAlignment="Justify" TextWrapping="Wrap" Margin="0,5,0,5"><Bold>Introduction:</Bold> There are four main tabs. In the “Downloads” tab you can see the progress of media being downloaded. In the “Properties” tab you can change the default output folder, the preferred format , and the preferred resolution. In the “Settings” tab you can tune downloader options like temporary file folder, enable on-fly caching, maximum transfer speed, timeout delay, concurrent threads, reattempts before hard fail, and buffer size. You may also find other custom solutions for fixes with network problems such as those within the Charter Communication network. In the “About” tab you will find this message along with the links to other open source projects used in this application. The lower interface includes the text box where you can input a direct link by clicking the download button or search keywords that will be queried through YouTube Search by clicking the search button. Finally, you may open the current output folder via the link in the applications footer.</TextBlock> 
-                                
+                               TextAlignment="Justify" TextWrapping="Wrap" Margin="0,5,0,5"><Bold>Introduction:</Bold> There are four main tabs. In the “Downloads” tab you can see the progress of media being downloaded. In the “Properties” tab you can change the default output folder, the preferred format, and the preferred resolution. In the “Settings” tab you can tune downloader options like temporary file folder, enable memory caching, maximum transfer speed, timeout delay, concurrent threads, reattempts before hard fail, and buffer size. You may also find other custom solutions for fixes with network problems such as those within the Charter Communication network. In the “About” tab you will find this message along with the links to the open source projects used in this application. The lower interface includes the text box where you can input a direct link by clicking the download button or search keywords that will be queried through YouTube Search by clicking the search button. Finally, you may find useful links in the application's footer.</TextBlock> 
+
                     <TextBlock Background="Transparent" Foreground="White"
-                               TextAlignment="Justify" TextWrapping="Wrap" Margin="0,5,0,5"><Bold>Further Information:</Bold> For bug reports, feature requests, and any further information or contact, please check out the project’s repository below...</TextBlock>
-                        
+                               TextAlignment="Justify" TextWrapping="Wrap" Margin="0,5,0,5"><Bold>Further Information:</Bold> For bug reports, feature requests, documentation, and/or contact information, please check out the project’s repository below...</TextBlock>
+
                     <Label />
-                    <Label Foreground="#007ACC" Content="Ripper by KPNC Technology: Site"
-                           x:Name="rs" MouseDown="RS_MouseDown"/>
-                    <Label Foreground="#007ACC" Content="Ripper by KPNC Technology: Github"
-                           x:Name="rg" MouseDown="RG_MouseDown"/>
-                    <Label Foreground="#007ACC" Content="Ripper by KPNC Technology: License"
-                           x:Name="rl" MouseDown="RL_MouseDown"/>
-                        
-                    <Label />
-                    <Label Foreground="#007ACC" Content="YoutubeDLSharp by Bluegrams: Nuget"
-                           x:Name="yn" MouseDown="YN_MouseDown"/>
-                    <Label Foreground="#007ACC" Content="YoutubeDLSharp by Bluegrams: Github"
-                           x:Name="yg" MouseDown="YG_MouseDown"/>
-                    <Label Foreground="#007ACC" Content="YoutubeDLSharp by Bluegrams: License"
-                           x:Name="yl" MouseDown="YL_MouseDown"/>
-                    
-                    <Label />
-                    <Label Foreground="#007ACC" Content="WebPWrapper by Jose M. Piñeiro: Github"
-                           x:Name="wg" MouseDown="WG_MouseDown"/>
-                    <Label Foreground="#007ACC" Content="WebPWrapper by Jose M. Piñeiro: License"
-                           x:Name="wl" MouseDown="WL_MouseDown"/>
-                        
-                    <Label />
-                    <Label Foreground="#007ACC" Content="Downloader by Behzad Khosravifar: Nuget"
-                           x:Name="dn" MouseDown="DN_MouseDown"/>
-                    <Label Foreground="#007ACC" Content="Downloader by Behzad Khosravifar: Github"
-                           x:Name="dg" MouseDown="DG_MouseDown"/>
-                    <Label Foreground="#007ACC" Content="Downloader by Behzad Khosravifar: License"
-                           x:Name="dl" MouseDown="DL_MouseDown"/>
-                        
-                    <Label />
-                    <Label Foreground="#007ACC" Content="Javi.FFmpeg by Jaco Vis: Nuget"
-                           x:Name="jn" MouseDown="JN_MouseDown"/>
-                    <Label Foreground="#007ACC" Content="Javi.FFmpeg by Jaco Vis: Github"
-                           x:Name="jg" MouseDown="JG_MouseDown"/>
-                    <Label Foreground="#007ACC" Content="Javi.FFmpeg by Jaco Vis: License"
-                           x:Name="jl" MouseDown="JL_MouseDown"/>
-                        
-                    <Label />
-                    <Label Foreground="#007ACC" Content="Newtonsoft.JSON by James Newton-King: Nuget"
-                           x:Name="nn" MouseDown="NN_MouseDown"/>
-                    <Label Foreground="#007ACC" Content="Newtonsoft.JSON by James Newton-King: Github"
-                           x:Name="ng" MouseDown="NG_MouseDown"/>
-                    <Label Foreground="#007ACC" Content="Newtonsoft.JSON by James Newton-King: License"
-                           x:Name="nl" MouseDown="NL_MouseDown"/>
-                    
-                    <Label />
-                    <Label Foreground="#007ACC" Content="DotNetEnv by Toni Solarin-Sodara: Nuget"
-                           x:Name="en" MouseDown="EN_MouseDown"/>
-                    <Label Foreground="#007ACC" Content="DotNetEnv by Toni Solarin-Sodara: Github"
-                          x:Name="eg" MouseDown="EG_MouseDown"/>
-                    <Label Foreground="#007ACC" Content="DotNetEnv by Toni Solarin-Sodara: License"
-                           x:Name="el" MouseDown="EL_MouseDown"/>
-                    
-                    <Label />
-                    <Label Foreground="#007ACC" Content="Google.API by Google LLC: Nuget"
-                           x:Name="gn" MouseDown="GN_MouseDown"/>
-                    <Label Foreground="#007ACC" Content="Google.API by Google LLC: Github"
-                          x:Name="gg" MouseDown="GG_MouseDown"/>
-                    <Label Foreground="#007ACC" Content="Google.API by Google LLC: License"
-                           x:Name="gl" MouseDown="GL_MouseDown"/>
+                    <Label Foreground="#007ACC" Content="James Newton-King: Newtonsoft.JSON"
+                           x:Name="n" MouseDown="N_MouseDown"/>
+                    <Label Foreground="#007ACC" Content="Behzad Khosravifar: Downloader"
+                           x:Name="d" MouseDown="D_MouseDown"/>
+                    <Label Foreground="#007ACC" Content="Jose M. Piñeiro: WebPWrapper"
+                           x:Name="w" MouseDown="W_MouseDown"/>
+                    <Label Foreground="#007ACC" Content="Bluegrams: YoutubeDLSharp"
+                           x:Name="y" MouseDown="Y_MouseDown"/>
+                    <Label Foreground="#007ACC" Content="Jaco Vis: Javi.FFmpeg"
+                           x:Name="j" MouseDown="J_MouseDown"/>
                 </StackPanel>
             </ScrollViewer>
         </Grid>

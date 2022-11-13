@@ -79,58 +79,58 @@ namespace Ripper
         {
             Spinner.Visibility = Visibility.Visible;
 
-            // Download button handler...
-
+            // Input handler...
             if (Utilities.Internet())
             {
-                try
+                if (Uri.IsWellFormedUriString(Input.Text, UriKind.Absolute))
                 {
-                    // Setting up YouTube API search service and getting first result...
-
-                    List<VideoSearchComponents> videos = await new VideoSearch().GetVideos(Input.Text, 1);
-
-                    Request(videos[0]);
-                }
-                catch (Exception ex)
-                {
-                    if (Uri.IsWellFormedUriString(Input.Text, UriKind.Absolute))
+                    if (Input.Text.Split(':')[0].ToLower() == "http" || Input.Text.Split(':')[0].ToLower() == "https")
                     {
-                        if (Input.Text.Split(':')[0].ToLower() == "http" || Input.Text.Split(':')[0].ToLower() == "https")
+                        if (Globals.Domains.Contains(Input.Text.Split('/')[2].ToLower()))
                         {
-                            if (Globals.Domains.Contains(Input.Text.Split('/')[2].ToLower()))
+                            try
                             {
-                                try
+                                // Setting up YouTube DLP service and getting first result...
+                                YoutubeDL y = new YoutubeDL
                                 {
-                                    // Setting up YouTube DLP service and getting first result...
+                                    YoutubeDLPath = Globals.Real + "YTDLP.exe"
+                                };
 
-                                    YoutubeDL y = new YoutubeDL
-                                    {
-                                        YoutubeDLPath = Globals.Real + "YTDLP.exe"
-                                    };
+                                RunResult<VideoData> r = await y.RunVideoDataFetch(Input.Text);
+                                VideoData v = r.Data;
 
-                                    RunResult<VideoData> r = await y.RunVideoDataFetch(Input.Text);
-                                    VideoData v = r.Data;
-
-                                    Request(new VideoSearchComponents(v.Title, v.Uploader, "-", TimeSpan.FromSeconds(v.Duration ?? default).ToString(@"hh\:mm\:ss"), Input.Text, v.Thumbnail, "-"));
-                                }
-                                catch (Exception exc)
-                                {
-                                    Utilities.Error("Could not get YouTube video through DLP...", "Network Error", "008", false, exc);
-                                }
+                                Request(new VideoSearchComponents(v.Title, v.Uploader, "-", TimeSpan.FromSeconds(v.Duration ?? default).ToString(@"hh\:mm\:ss"), Input.Text, v.Thumbnail, "-"));
                             }
-                            else
+                            catch (Exception ex)
                             {
-                                Utilities.Error("Could not get YouTube video through API...", "Network Error", "008", false, ex);
+                                Utilities.Error("Could not get YouTube video through DLP...", "Network Error", "008", false, ex);
                             }
                         }
                         else
                         {
-                            Utilities.Error("Could not get YouTube video through API...", "Network Error", "008", false, ex);
+                            Utilities.Error("Could not get YouTube video through API...", "Network Error", "008", false, null);
                         }
                     }
                     else
                     {
-                        Utilities.Error("Could not get YouTube video through API...", "Network Error", "008", false, ex);
+                        Utilities.Error("Could not get YouTube video through API...", "Network Error", "008", false, null);
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        // Setting up YouTube API search service and getting results...
+                        List<VideoSearchComponents> videos = await new VideoSearch().GetVideos(Input.Text, 1);
+
+                        SearchWindow sw = new SearchWindow(WebUtility.UrlEncode(Input.Text), videos) { Owner = this };
+                        sw.ShowDialog();
+
+                        Spinner.Visibility = Visibility.Hidden;
+                    }
+                    catch (Exception ex)
+                    {
+                        Utilities.Error("Could not open search...", "Network Error", "009", false, ex);
                     }
                 }
             }
@@ -142,42 +142,9 @@ namespace Ripper
             Spinner.Visibility = Visibility.Hidden;
         }
 
-        private async void Button_Click_3(object sender, RoutedEventArgs e)
-        {
-            Spinner.Visibility = Visibility.Visible;
-
-            // Search button handler...
-
-            if (Utilities.Internet())
-            {
-                try
-                {
-                    // Setting up YouTube API search service and getting results...
-
-                    List<VideoSearchComponents> videos = await new VideoSearch().GetVideos(Input.Text, 1);
-
-                    SearchWindow sw = new SearchWindow(WebUtility.UrlEncode(Input.Text), videos) { Owner = this };
-                    sw.ShowDialog();
-
-                    Spinner.Visibility = Visibility.Hidden;
-                }
-                catch (Exception ex)
-                {
-                    Utilities.Error("Could not search YouTube through API...", "Network Error", "008", false, ex);
-                }
-            }
-            else
-            {
-                Utilities.Error("You must have an internet connection...", "Internet Connectivity", "009", false, null);
-            }
-
-            Spinner.Visibility = Visibility.Hidden;
-        }
-
         public void Request(VideoSearchComponents video)
         {
             // Selected video request handler...
-
             #region Image Processing...
             // Get online image in WPF compatible form...
             BitmapImage bitmapimage = new BitmapImage();
@@ -222,7 +189,6 @@ namespace Ripper
             if (Path.IsPathRooted(Globals.Output))
             {
                 // Create video record handler/UI...
-
                 Directory.CreateDirectory(Globals.Output);
 
                 RecordView RecordView = new RecordView(video, bitmapimage);
@@ -302,7 +268,6 @@ namespace Ripper
             }
 
             // Fade out animation on close...
-
             var a = new DoubleAnimation(0, TimeSpan.FromSeconds(0.5));
             a.Completed += (s, _) => Close();
             BeginAnimation(OpacityProperty, a);

@@ -399,7 +399,6 @@
     <None Include="Domains.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Resource Include="Images\KPNC.png" />
     <Resource Include="Images\Rip.png" />
     <Resource Include="Images\Ripper.ico" />
     <Resource Include="Images\Ripper.png" />
@@ -412,25 +411,13 @@
     </Content>
     <Resource Include="Images\YouTube.jpg" />
     <Resource Include="Images\Downloader.png" />
-    <Resource Include="Images\Google API.png" />
-    <Resource Include="Images\Greyscale\Downloader.png" />
-    <Resource Include="Images\Greyscale\Google API.png" />
-    <Resource Include="Images\Greyscale\Javi FFmpeg.png" />
-    <Resource Include="Images\Greyscale\Newtonsoft JSON.png" />
-    <Resource Include="Images\Greyscale\Windows Shell.png" />
-    <Resource Include="Images\Greyscale\YoutubeDL Sharp.png" />
-    <Resource Include="Images\Javi FFmpeg.png" />
-    <Resource Include="Images\Newtonsoft JSON.png" />
-    <Resource Include="Images\Windows Shell.png" />
-    <Resource Include="Images\YoutubeDL Sharp.png" />
-    <Resource Include="Images\Greyscale\Ripperoni.png" />
+    <Resource Include="Images\Javi.png" />
+    <Resource Include="Images\Newtonsoft.png" />
+    <Resource Include="Images\YoutubeDL.png" />
     <Resource Include="Images\WebP.png" />
-    <Resource Include="Images\Greyscale\WebP.png" />
     <Resource Include="Images\Error.png" />
     <Resource Include="Images\Info.png" />
     <Resource Include="Images\Warning.png" />
-    <Resource Include="Images\dotENV.png" />
-    <Resource Include="Images\Greyscale\dotENV.png" />
     <Content Include="LibWebPx64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
