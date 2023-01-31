@@ -106,11 +106,15 @@
         </Border>
 
         <Label Margin="3" Foreground="White">Output Resolution:</Label>
-        
+
         <Label Foreground="#969696" FontSize="10" Margin="3,-10,0,0">
             *If set resolution does not match any available, the closest resolution will be choosen
         </Label>
-        
+
+        <Label Foreground="#969696" FontSize="10" Margin="3,-10,0,0">
+            *Use the WebP format for the best quality downloads (especially above 1080p)
+        </Label>
+
         <Label Foreground="#969696" FontSize="10" Margin="3,-10,0,0">
             *All audio is downloaded at the highest available bitrate
         </Label>
@@ -155,8 +159,8 @@
             </Grid>
         </Border>
 
-        <Label Foreground="#969696" FontSize="10" Margin="0,-10,0,0" Height="205"
+        <Label Foreground="#969696" FontSize="10" Margin="0,-10,0,0" Height="190"
                HorizontalAlignment="Center" VerticalContentAlignment="Bottom"
-               Content="*YouTube video and audio default to .mp4/.webm and .m4a respectively..."/>
+               Content="*YouTube video and audio default to .webm (.mp4 ≤ QHD) and .m4a respectively..."/>
     </StackPanel>
 </UserControl>

@@ -140,9 +140,7 @@ namespace Ripper.MVVM.View
                     ChunkCount = Globals.Chunks,
                     MaximumBytesPerSecond = Globals.Bytes,
                     MaxTryAgainOnFailover = Globals.Tries,
-                    OnTheFlyDownload = Globals.OnFly,
                     ParallelDownload = true,
-                    TempDirectory = Globals.Temp,
                     Timeout = Globals.Timeout,
                     RequestConfiguration = {
                         Accept = "*/*",
@@ -169,7 +167,7 @@ namespace Ripper.MVVM.View
 
                 // Set ffmpeg (package) events from settings...
 
-                ffmpeg = new FFmpeg(Globals.Real + @"FFmpeg.exe");
+                ffmpeg = new FFmpeg(Globals.Real + @"Includes\ffmpeg.exe");
 
                 try
                 {
@@ -197,7 +195,6 @@ namespace Ripper.MVVM.View
 
                     Utilities.Error($"Could not set path safe title...", "Worker Error", "025", false, ex);
                 }
-                
 
                 try
                 {
@@ -205,7 +202,7 @@ namespace Ripper.MVVM.View
 
                     YoutubeDL y = new YoutubeDL
                     {
-                        YoutubeDLPath = Globals.Real + "YTDLP.exe"
+                        YoutubeDLPath = Globals.Real + @"Includes\yt-dlp.exe"
                     };
 
                     RunResult<VideoData> r = await y.RunVideoDataFetch(video.getUrl());
@@ -561,10 +558,10 @@ namespace Ripper.MVVM.View
                         console = string.Format($"-i \"{file1}\" -c:v vp9 -c:a libvorbis \"{final}\"");
                         break;
                     case "flv":
-                        console = string.Format($"-i \"{file1}\" -c:v libx264 -ar 22050 -crf 28 \"{final}\"");
+                        console = string.Format($"-i \"{file1}\" -c:v libx264 -crf 20 \"{final}\"");
                         break;
                     case "mov":
-                        console = string.Format($"-i \"{file1}\" -f mov \"{final}\"");
+                        console = string.Format($"-i \"{file1}\" -c:v copy -c:a copy -f mov \"{final}\"");
                         break;
                     case "mp3":
                         console = string.Format($"-i \"{file1}\" -c:a libmp3lame \"{final}\"");

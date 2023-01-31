@@ -93,7 +93,7 @@ namespace Ripper
                                 // Setting up YouTube DLP service and getting first result...
                                 YoutubeDL y = new YoutubeDL
                                 {
-                                    YoutubeDLPath = Globals.Real + "YTDLP.exe"
+                                    YoutubeDLPath = Globals.Real + @"Includes\yt-dlp.exe"
                                 };
 
                                 RunResult<VideoData> r = await y.RunVideoDataFetch(Input.Text);
@@ -247,7 +247,7 @@ namespace Ripper
             {
                 // Kill rogue FFmpeg executables...
 
-                foreach (var p in Process.GetProcessesByName("FFmpeg.exe"))
+                foreach (var p in Process.GetProcessesByName(@"Includes\ffmpeg.exe"))
                 {
                     p.Kill();
                 }

@@ -42,6 +42,11 @@
                         <DropShadowEffect/>
                     </Image.Effect>
                 </Image>
+                <Image Source="/Images/YTDLP.png" Margin="5">
+                    <Image.Effect>
+                        <DropShadowEffect/>
+                    </Image.Effect>
+                </Image>
             </StackPanel>
 
             <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="1">
@@ -70,6 +75,10 @@
                            x:Name="y" MouseDown="Y_MouseDown"/>
                     <Label Foreground="#007ACC" Content="Jaco Vis: Javi.FFmpeg"
                            x:Name="j" MouseDown="J_MouseDown"/>
+                    <Label Foreground="#007ACC" Content="FFmpeg: FFmpeg"
+                           x:Name="f" MouseDown="F_MouseDown"/>
+                    <Label Foreground="#007ACC" Content="YT-DLP: YT-DLP"
+                           x:Name="p" MouseDown="P_MouseDown"/>
                 </StackPanel>
             </ScrollViewer>
         </Grid>

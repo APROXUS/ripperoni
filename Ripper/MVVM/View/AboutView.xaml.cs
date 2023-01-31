@@ -57,6 +57,16 @@ namespace Ripper.MVVM.View
         {
             Process.Start("https://github.com/googleapis/google-api-dotnet-client");
         }
+
+        private void F_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Process.Start("https://git.ffmpeg.org/gitweb/ffmpeg.git");
+        }
+
+        private void P_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Process.Start("https://github.com/yt-dlp/yt-dlp");
+        }
         #endregion
     }
 }
