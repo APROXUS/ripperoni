@@ -75,6 +75,15 @@ namespace Ripper
         #endregion
 
         #region Input UI...
+        private void Input_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Enter) return;
+
+            e.Handled = true;
+
+            Button_Click_2(sender, e);
+        }
+
         private async void Button_Click_2(object sender, RoutedEventArgs e)
         {
             Spinner.Visibility = Visibility.Visible;
