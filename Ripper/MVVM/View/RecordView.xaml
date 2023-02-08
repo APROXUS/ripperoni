@@ -29,7 +29,7 @@
             </Border>
 
             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left"
-                       Foreground="White" Grid.Column="2"
+                       Foreground="White" Grid.Column="2" Grid.ColumnSpan="3"
                        Margin="5,0,0,0" Text="Retrieving..." x:Name="Title"/>
 
             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left"
