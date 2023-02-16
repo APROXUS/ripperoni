@@ -100,10 +100,8 @@ namespace Ripper
                             try
                             {
                                 // Setting up YouTube DLP service and getting first result...
-                                YoutubeDL y = new YoutubeDL
-                                {
-                                    YoutubeDLPath = Globals.Real + @"Includes\yt-dlp.exe"
-                                };
+                                var y = new YoutubeDL();
+                                y.YoutubeDLPath = Globals.Real + @"Includes\yt-dlp.exe";
 
                                 RunResult<VideoData> r = await y.RunVideoDataFetch(Input.Text);
                                 VideoData v = r.Data;

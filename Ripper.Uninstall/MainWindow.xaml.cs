@@ -31,9 +31,9 @@ namespace Ripper.Uninstall
             if (silent) Opacity = 0;
 
             real = AppDomain.CurrentDomain.BaseDirectory;
-            path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\KPNC Technology\Ripper\";
-            temp = Path.GetTempPath() + @"KPNC TEMP\";
-            start = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Microsoft\Windows\Start Menu\Programs\KPNC Technology\";
+            path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\KPNCIO\Ripper\";
+            temp = Path.GetTempPath() + @"KPNCIO\";
+            start = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Microsoft\Windows\Start Menu\Programs\KPNCIO\";
 
             Task.Factory.StartNew(() => Uninstallation());
         }

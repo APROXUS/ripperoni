@@ -32,9 +32,9 @@ namespace Ripper.Install
 
             if (silent) Opacity = 0;
 
-            start = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Microsoft\Windows\Start Menu\Programs\KPNC Technology\";
-            path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\KPNC Technology\Ripper\";
-            zip = Path.GetTempPath() + @"KPNC TEMP\Ripper.zip";
+            start = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Microsoft\Windows\Start Menu\Programs\KPNCIO\";
+            path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\KPNCIO\Ripper\";
+            zip = Path.GetTempPath() + @"KPNCIO\Ripper.zip";
 
             Task.Factory.StartNew(() => Installation());
         }
@@ -64,7 +64,7 @@ namespace Ripper.Install
             try
             {
                 Stat("Creating temporary directory...");
-                Directory.CreateDirectory(System.IO.Path.GetTempPath() + "KPNC TEMP");
+                Directory.CreateDirectory(System.IO.Path.GetTempPath() + "KPNCIO");
                 Progression(4);
             }
             catch
