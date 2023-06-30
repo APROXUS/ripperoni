@@ -85,8 +85,8 @@
                 <RadioButton Content=".avi" Grid.Column="3" Grid.Row="0" x:Name="avi"
                              Style="{StaticResource MenuButtonTheme}" Checked="AVI_Checked"/>
 
-                <RadioButton Content=".flv" Grid.Column="4" Grid.Row="0" x:Name="flv"
-                             Style="{StaticResource MenuButtonTheme}" Checked="FLV_Checked"/>
+                <RadioButton Content=".mkv" Grid.Column="4" Grid.Row="0" x:Name="mkv"
+                             Style="{StaticResource MenuButtonTheme}" Checked="MKV_Checked"/>
 
                 <RadioButton Content=".mp3" Grid.Column="0" Grid.Row="1" x:Name="mp3"
                              Style="{StaticResource MenuButtonTheme}" Checked="MP3_Checked"/>
@@ -161,6 +161,6 @@
 
         <Label Foreground="#969696" FontSize="10" Margin="0,-10,0,0" Height="190"
                HorizontalAlignment="Center" VerticalContentAlignment="Bottom"
-               Content="*YouTube video and audio default to .webm (.mp4 ≤ QHD) and .m4a respectively..."/>
+               Content="*YouTube video and audio default to .webm (.mp4 ≤ FHD) and .m4a respectively..."/>
     </StackPanel>
 </UserControl>

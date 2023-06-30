@@ -77,6 +77,23 @@
                    Foreground="White" Content=": Cache in memory (requires enough RAM)"/>
         </Grid>
 
+        <Grid Margin="5,5,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="5*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Margin="5" BorderBrush="#3D3D3D" BorderThickness="0,1,0,1">
+                <TextBox Padding="5" VerticalAlignment="Center" Grid.Column="0"
+                         Foreground="#969696" BorderThickness="0" Margin="0,1,5,1" 
+                         Background="Transparent" CaretBrush="#969696" x:Name="QualityText" 
+                         TextChanged="QualityText_TextChanged"/>
+            </Border>
+
+            <Label Grid.Column="1" VerticalAlignment="Center"
+                   Foreground="White" Content=": Converter Quality (FFmpeg CRF)"/>
+        </Grid>
+
         <Grid Margin="5,2,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
@@ -107,7 +124,7 @@
             </Border>
 
             <Label Grid.Column="1" VerticalAlignment="Center"
-                   Foreground="White" Content=": Delay before timeout/fail (ms)"/>
+                   Foreground="White" Content=": Delay before timeout (ms)"/>
         </Grid>
 
         <Grid Margin="5,5,0,0">

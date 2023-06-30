@@ -33,8 +33,8 @@ namespace Ripper.MVVM.View
                 case "avi":
                     avi.IsChecked = true;
                     break;
-                case "flv":
-                    flv.IsChecked = true;
+                case "mkv":
+                    mkv.IsChecked = true;
                     break;
                 case "mp3":
                     mp3.IsChecked = true;
@@ -131,7 +131,7 @@ namespace Ripper.MVVM.View
 
         private void AVI_Checked(object sender, RoutedEventArgs e) { avi.IsChecked = true; Globals.Format = "avi"; Json.Write(); }
 
-        private void FLV_Checked(object sender, RoutedEventArgs e) { flv.IsChecked = true; Globals.Format = "flv"; Json.Write(); }
+        private void MKV_Checked(object sender, RoutedEventArgs e) { mkv.IsChecked = true; Globals.Format = "mkv"; Json.Write(); }
 
         private void MP3_Checked(object sender, RoutedEventArgs e) { mp3.IsChecked = true; Globals.Format = "mp3"; Json.Write(); }
 

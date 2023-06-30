@@ -83,11 +83,25 @@ namespace Ripper.Install
                 Error("Could not extract compressed...", true);
             }
 
+            //try
+            //{
+            //    Stat("Uninstalling current installation...");
+            //    Process process = Process.Start(path + "Uninstall.exe");
+            //    process.WaitForExit();
+
+            //    Progression(22);
+            //}
+            //catch
+            //{
+            //    Error("Could not uninstall current installation...", true);
+            //}
+
             try
             {
                 Stat("Deleting current installation...");
                 if (Directory.Exists(path)) Directory.Delete(path, true);
                 Directory.CreateDirectory(path);
+
                 Progression(28);
             }
             catch
@@ -171,7 +185,7 @@ namespace Ripper.Install
                 Stat("Adding application to registry...");
                 long size = new FileInfo(zip).Length / 1024;
                 RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Ripper");
-                key.SetValue("DisplayIcon", path + "Uninstall.ico");
+                key.SetValue("DisplayIcon", path + "Uninstall.exe");
                 key.SetValue("DisplayName", "KPNC Ripper");
                 key.SetValue("EstimatedSize", size.ToString(), RegistryValueKind.DWord);
                 key.SetValue("NoModify", "1", RegistryValueKind.DWord);

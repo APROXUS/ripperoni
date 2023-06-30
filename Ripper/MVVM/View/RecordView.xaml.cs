@@ -16,7 +16,6 @@ using YouTubeApiSharp;
 using YoutubeDLSharp;
 using YoutubeDLSharp.Metadata;
 
-
 namespace Ripper.MVVM.View
 {
     public partial class RecordView : UserControl
@@ -65,7 +64,7 @@ namespace Ripper.MVVM.View
             output = Globals.Output;
             format = Globals.Format;
 
-            if (format != "mp4" && format != "webm" && format != "mov" && format != "avi" && format != "flv")
+            if (format != "mp4" && format != "webm" && format != "mov" && format != "avi" && format != "mkv")
             {
                 audio = true;
             }
@@ -124,8 +123,6 @@ namespace Ripper.MVVM.View
                     Title.Text = video.getTitle();
 
                     Author.Text = video.getAuthor();
-
-                    Length.Text = video.getDuration();
                 });
                 #endregion
 
@@ -242,17 +239,17 @@ namespace Ripper.MVVM.View
                     }
                     else
                     {
-                        if (records.ToList().FindAll(d => d.Extension == format).Count < 1)
+                        if (records.ToList().FindAll(d => d.Extension == format).Count < 1 || resolution > 1080)
                         {
-                            // If there are no records with native format, download in mp4...
+                            // If there are no records with native format, download in webm...
 
                             List<int> l = new List<int>() { 0 };
-                            l = records.ToList().FindAll(a => a.Extension == "mp4").Select(a => a.Height ?? 0).ToList();
+                            l = records.ToList().FindAll(a => a.Extension == "webm").Select(a => a.Height ?? 0).ToList();
                             int scoped = l.Min(i => (Math.Abs(resolution - i), i)).i;
 
                             records.ToList().FindAll(a => a.Height == scoped).ForEach(a =>
                             {
-                                formatraw = "mp4";
+                                formatraw = "webm";
                                 record = a;
                             });
                         }
@@ -516,17 +513,7 @@ namespace Ripper.MVVM.View
             {
                 // Set and run FFmpeg commands and get output...
 
-                string console;
-
-                switch (format)
-                {
-                    case "webm":
-                        console = string.Format($"-i \"{file1}\"  -i \"{file2}\" -c:v copy -c:a libvorbis \"{final}\"");
-                        break;
-                    default:
-                        console = string.Format($"-i \"{file1}\" -i \"{file2}\" -c:v copy -c:a aac \"{final}\"");
-                        break;
-                }
+                string console = string.Format($"-i \"{file1}\"  -i \"{file2}\" -c copy -f mp4 -strict experimental \"{final}\"");
 
                 ffmpeg.Run(file1, final, console, token);
             }
@@ -555,16 +542,10 @@ namespace Ripper.MVVM.View
                 switch (format)
                 {
                     case "webm":
-                        console = string.Format($"-i \"{file1}\" -c:v vp9 -c:a libvorbis \"{final}\"");
-                        break;
-                    case "flv":
-                        console = string.Format($"-i \"{file1}\" -c:v libx264 -crf 20 \"{final}\"");
-                        break;
-                    case "mov":
-                        console = string.Format($"-i \"{file1}\" -c:v copy -c:a copy -f mov \"{final}\"");
+                        console = string.Format($"-i \"{file1}\" -crf 20 -b:v 0 -b:a 128k -c:v libvpx-vp9 -c:a libvorbis \"{final}\"");
                         break;
                     case "mp3":
-                        console = string.Format($"-i \"{file1}\" -c:a libmp3lame \"{final}\"");
+                        console = string.Format($"-i \"{file1}\" -c:a libmp3lame -q:a {Math.Round(Globals.Quality / 5.5)} \"{final}\"");
                         break;
                     case "wav":
                         console = string.Format($"-i \"{file1}\" -c:a pcm_s16le \"{final}\"");
@@ -573,10 +554,10 @@ namespace Ripper.MVVM.View
                         console = string.Format($"-i \"{file1}\" -c:a libvorbis \"{final}\"");
                         break;
                     case "pcm":
-                        console = string.Format($"-i \"{file1}\" -c:a pcm_s16le -f s16le -ac 1 -ar 16000 \"{final}\"");
+                        console = string.Format($"-i \"{file1}\" -c:a pcm_s16le -f s16le \"{final}\"");
                         break;
                     default:
-                        console = string.Format($"-i \"{file1}\" -c:v copy -c:a copy \"{final}\"");
+                        console = string.Format($"-i \"{file1}\" -c copy -f mp4  -strict experimental \"{final}\"");
                         break;
                 }
 
@@ -647,8 +628,11 @@ namespace Ripper.MVVM.View
             try
             {
                 Dispatcher.Invoke(delegate () {
-                    Status.Text = Math.Round(Convert.ToDouble(e.ReceivedBytesSize) / 1024.0 / 1024.0, 0) + 
-                    $"/{size}MB ({Math.Round(Convert.ToDouble(e.BytesPerSecondSpeed) / 1024.0 / 1024.0, 1)}MB/s)";
+                    //Status.Text = Math.Round(Convert.ToDouble(e.ReceivedBytesSize) / 1024.0 / 1024.0, 0) + 
+                    //$"/{size}MB ({Math.Round(Convert.ToDouble(e.BytesPerSecondSpeed) / 1024.0 / 1024.0, 1)}MB/s)";
+
+                    Status.Text = Math.Round(Convert.ToDouble(e.ReceivedBytesSize) / 1024.0 / 1024.0, 0) +
+                    $"/{size}@{Math.Round(Convert.ToDouble(e.BytesPerSecondSpeed) / 1024.0 / 1024.0, 1)}";
 
                     Progress.IsIndeterminate = false;
                     Progress.Value = (Int32)e.ProgressPercentage;

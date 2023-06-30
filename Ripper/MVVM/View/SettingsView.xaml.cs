@@ -19,6 +19,7 @@ namespace Ripper.MVVM.View
             ChunkText.Text = Globals.Chunks.ToString();
             TriesText.Text = Globals.Tries.ToString();
             BufferText.Text = Globals.Buffer.ToString();
+            QualityText.Text = Globals.Quality.ToString();
         }
 
         #region Firewall Fix UI...
@@ -87,6 +88,15 @@ namespace Ripper.MVVM.View
         private void BufferText_TextChanged(object sender, TextChangedEventArgs e)
         {
             try { Globals.Buffer = int.Parse(BufferText.Text); } catch { }
+            Json.Write();
+        }
+        #endregion
+
+        #region FFmpeg Settings...
+        private void QualityText_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try { Globals.Quality = int.Parse(QualityText.Text); } catch { }
+
             Json.Write();
         }
         #endregion
