@@ -385,7 +385,8 @@ namespace Ripper.MVVM.View
                     {
                         Status.Text = "Processing...";
 
-                        Progress.IsIndeterminate = true;
+                        ProgressGreen.Offset = 0;
+                        ProgressGrey.Offset = 0.01;
                     });
 
                     Json.Read();
@@ -490,9 +491,8 @@ namespace Ripper.MVVM.View
                 {
                     Status.Text = "Completed!";
 
-                    Progress.IsIndeterminate = false;
-                    Progress.Opacity = 0;
-                    Progress.Value = 0;
+                    ProgressGreen.Offset = 1;
+                    ProgressGrey.Offset = 1.01;
                 });
                 #endregion
             }
@@ -634,8 +634,8 @@ namespace Ripper.MVVM.View
                     Status.Text = Math.Round(Convert.ToDouble(e.ReceivedBytesSize) / 1024.0 / 1024.0, 0) +
                     $"/{size}@{Math.Round(Convert.ToDouble(e.BytesPerSecondSpeed) / 1024.0 / 1024.0, 1)}";
 
-                    Progress.IsIndeterminate = false;
-                    Progress.Value = (Int32)e.ProgressPercentage;
+                    ProgressGreen.Offset = e.ProgressPercentage / 100;
+                    ProgressGrey.Offset = (e.ProgressPercentage + 1) / 100;
                 });
             }
             catch (Exception ex)
@@ -651,8 +651,8 @@ namespace Ripper.MVVM.View
             try
             {
                 Dispatcher.Invoke(delegate () {
-                    Progress.IsIndeterminate = false;
-                    Progress.Value = e.ProcessedDuration.TotalMilliseconds / e.TotalDuration.TotalMilliseconds * 100;
+                    ProgressGreen.Offset = e.ProcessedDuration.TotalMilliseconds / e.TotalDuration.TotalMilliseconds;
+                    ProgressGrey.Offset = (e.ProcessedDuration.TotalMilliseconds / e.TotalDuration.TotalMilliseconds) + 0.01;
                 });
             }
             catch (Exception ex)

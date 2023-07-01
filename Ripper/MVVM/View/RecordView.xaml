@@ -15,8 +15,7 @@
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="2*"/>
-                <RowDefinition Height="2*"/>
+                <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
@@ -31,18 +30,32 @@
                        Margin="5,0,0,0" Text="Retrieving..." x:Name="Title"/>
 
 
-            <Border CornerRadius="3" Grid.Column="1" Grid.Row="1" Margin="5,2,5,4" Background="#FF3D3D3D">
+            <Border CornerRadius="3" Grid.Column="1" Grid.Row="1" Margin="5,4,5,8" Background="#FF3D3D3D">
                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center"
                            Foreground="#FFBBBBBB" Text="Retrieving..." x:Name="Author"/>
             </Border>
 
-            <Border CornerRadius="3" Grid.Column="2" Grid.Row="1" Margin="5,2,5,4" Background="#FF06B025">
+            <Border CornerRadius="3" Grid.Column="2" Grid.Row="1" Margin="5,4,5,8">
+                <Border.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" SpreadMethod="Pad" Opacity="1">
+                        <LinearGradientBrush.RelativeTransform>
+                            <TransformGroup>
+                                <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleX="1" ScaleY="1"/>
+                                <SkewTransform CenterX="0.5" CenterY="0.5"/>
+                                <RotateTransform Angle="-90" CenterX="0.5" CenterY="0.5"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </LinearGradientBrush.RelativeTransform>
+                        <GradientStop Color="#FF27F8C5" Offset="0.0"/>
+                        <GradientStop Color="#FF841DF2" Offset="0.001" x:Name="ProgressGreen"/>
+
+                        <!--<GradientStop Color="#FF1CC823" Offset="0.0" x:Name="ProgressGreen"/>-->
+                        <GradientStop Color="#FF3D3D3D" Offset="0.01" x:Name="ProgressGrey"/>
+                    </LinearGradientBrush>
+                </Border.Background>
                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center"
                            Foreground="White" Text="Retrieving..." x:Name="Status"/>
             </Border>
-
-            <ProgressBar Margin="5,0,5,4" x:Name="Progress" Grid.Column="1" Grid.Row="2" Height="4"
-                         VerticalAlignment="Center"  Grid.ColumnSpan="2" IsIndeterminate="True"/>
 
             <Border Grid.Column="3" Height="25" Grid.RowSpan="2" Width="25" Margin="0,3,0,0"
                     VerticalAlignment="Top" HorizontalAlignment="Center">
