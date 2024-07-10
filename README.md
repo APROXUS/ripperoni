@@ -1,5 +1,5 @@
-# Ripper
+# Ripperoni
 
-*(WPF, YT-DLP, FFmpeg)*
+*(MAUI, YT-DLP, FFmpeg)*
 
-KPNC Technology: Ripper: A simple, robust, and fast way to download online video/audio media...
+KPNC Technology: Ripperoni is an online media downloader supporting a pethora of formats and useful features...

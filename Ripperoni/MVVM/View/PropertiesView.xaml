@@ -1,0 +1,166 @@
+﻿<UserControl x:Class="Ripperoni.MVVM.View.PropertiesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" d:DesignHeight="555" d:DesignWidth="400">
+    <StackPanel>
+        <Label Margin="3" Foreground="White">Output Folder Location:</Label>
+        
+        <Label Foreground="#969696" FontSize="10" Margin="3,-10,0,0"
+               Content='*Takes direct paths like "C:\Videos\"'/>
+
+        <Border Margin="10" BorderBrush="#3D3D3D" BorderThickness="0,1,0,1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox Padding="5" VerticalAlignment="Center" Grid.Column="0" x:Name="OutputText"
+                         Foreground="#969696" BorderThickness="0" Margin="0,1,5,1" 
+                         Background="Transparent" CaretBrush="#969696" TextChanged="TextBox_TextChanged"/>
+
+                <Button Padding="5" VerticalAlignment="Center" Grid.Column="1"
+                        BorderThickness="0" Margin="5,1,0,1" Content="Browse" Click="Button_Click">
+                    <Button.Resources>
+                        <Style TargetType="{x:Type Button}">
+                            <Setter Property="Foreground" Value="#969696"/>
+                            
+                            <Setter Property="Background" Value="Transparent"/>
+                            
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border Background="{TemplateBinding Background}">
+                                            <ContentPresenter HorizontalAlignment="Center"
+                                                              VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Foreground" Value="White"/>
+                                    
+                                    <Setter Property="Background" Value="Transparent"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+            </Grid>
+        </Border>
+
+        <Label Margin="3" Foreground="White">Output Format:</Label>
+        
+        <Label Foreground="#969696" FontSize="10" Margin="3,-10,0,0"
+               Content="*Non-native formats will be converted after download"/>
+
+        <Border Margin="10" Height="60" BorderBrush="#3D3D3D"
+                BorderThickness="0,1,0,1" Padding="0,1,0,1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <RadioButton Content=".mp4" Grid.Column="0" Grid.Row="0" x:Name="mp4"
+                             Style="{StaticResource MenuButtonTheme}" Checked="MP4_Checked"/>
+
+                <RadioButton Content=".webm" Grid.Column="1" Grid.Row="0" x:Name="webm"
+                             Style="{StaticResource MenuButtonTheme}" Checked="WebM_Checked"/>
+
+                <RadioButton Content=".mov" Grid.Column="2" Grid.Row="0" x:Name="mov"
+                             Style="{StaticResource MenuButtonTheme}" Checked="MOV_Checked"/>
+
+                <RadioButton Content=".avi" Grid.Column="3" Grid.Row="0" x:Name="avi"
+                             Style="{StaticResource MenuButtonTheme}" Checked="AVI_Checked"/>
+
+                <RadioButton Content=".mkv" Grid.Column="4" Grid.Row="0" x:Name="mkv"
+                             Style="{StaticResource MenuButtonTheme}" Checked="MKV_Checked"/>
+
+                <RadioButton Content=".mp3" Grid.Column="0" Grid.Row="1" x:Name="mp3"
+                             Style="{StaticResource MenuButtonTheme}" Checked="MP3_Checked"/>
+
+                <RadioButton Content=".m4a" Grid.Column="1" Grid.Row="1" x:Name="m4a"
+                             Style="{StaticResource MenuButtonTheme}" Checked="M4A_Checked"/>
+
+                <RadioButton Content=".wav" Grid.Column="2" Grid.Row="1" x:Name="wav"
+                             Style="{StaticResource MenuButtonTheme}" Checked="WAV_Checked"/>
+
+                <RadioButton Content=".ogg" Grid.Column="3" Grid.Row="1" x:Name="ogg"
+                             Style="{StaticResource MenuButtonTheme}" Checked="OGG_Checked"/>
+
+                <RadioButton Content=".pcm" Grid.Column="4" Grid.Row="1" x:Name="pcm"
+                             Style="{StaticResource MenuButtonTheme}" Checked="PCM_Checked"/>
+            </Grid>
+        </Border>
+
+        <Label Margin="3" Foreground="White">Output Resolution:</Label>
+
+        <Label Foreground="#969696" FontSize="10" Margin="3,-10,0,0">
+            *If set resolution does not match any available, the closest resolution will be choosen
+        </Label>
+
+        <Label Foreground="#969696" FontSize="10" Margin="3,-10,0,0">
+            *Use the WebP format for the best quality downloads (especially above 1080p)
+        </Label>
+
+        <Label Foreground="#969696" FontSize="10" Margin="3,-10,0,0">
+            *All audio is downloaded at the highest available bitrate
+        </Label>
+
+        <Border Margin="10" Height="60" BorderBrush="#3D3D3D" BorderThickness="0,1,0,1"  Padding="0,1,0,1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <RadioButton Content="4320p (8K)" Grid.Column="0" Grid.Row="0" x:Name="p4320"
+                             Style="{StaticResource MenuButtonTheme}" Checked="P4320_Checked"/>
+
+                <RadioButton Content="2160p (4K)" Grid.Column="1" Grid.Row="0" x:Name="p2160"
+                             Style="{StaticResource MenuButtonTheme}" Checked="P2160_Checked"/>
+
+                <RadioButton Content="1440p (QHD)" Grid.Column="2" Grid.Row="0" x:Name="p1440"
+                             Style="{StaticResource MenuButtonTheme}" Checked="P1440_Checked"/>
+
+                <RadioButton Content="1080p (FHD)" Grid.Column="3" Grid.Row="0" x:Name="p1080"
+                             Style="{StaticResource MenuButtonTheme}" Checked="P1080_Checked"/>
+
+                <RadioButton Content="720p (HD)" Grid.Column="0" Grid.Row="1" x:Name="p720"
+                             Style="{StaticResource MenuButtonTheme}" Checked="P720_Checked"/>
+
+                <RadioButton Content="480p (SD)" Grid.Column="1" Grid.Row="1" x:Name="p480"
+                             Style="{StaticResource MenuButtonTheme}" Checked="P480_Checked"/>
+
+                <RadioButton Content="360p" Grid.Column="2" Grid.Row="1" x:Name="p360"
+                             Style="{StaticResource MenuButtonTheme}" Checked="P360_Checked"/>
+
+                <RadioButton Content="240p" Grid.Column="3" Grid.Row="1" x:Name="p240"
+                             Style="{StaticResource MenuButtonTheme}" Checked="P240_Checked"/>
+            </Grid>
+        </Border>
+
+        <Label Foreground="#969696" FontSize="10" Margin="0,-10,0,0" Height="190"
+               HorizontalAlignment="Center" VerticalContentAlignment="Bottom"
+               Content="*YouTube video and audio default to .webm (.mp4 ≤ FHD) and .m4a respectively..."/>
+    </StackPanel>
+</UserControl>
