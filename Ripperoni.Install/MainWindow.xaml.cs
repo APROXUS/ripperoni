@@ -7,7 +7,6 @@ using System.Windows.Input;
 using System.IO.Compression;
 using System.Threading.Tasks;
 using System.Windows.Threading;
-using System.Windows.Media.Animation;
 
 using Microsoft.Win32;
 using IWshRuntimeLibrary;
@@ -16,17 +15,16 @@ namespace Ripperoni.Install
 {
     public partial class MainWindow : Window
     {
-        private readonly bool silent;
-
         private readonly string start;
         private readonly string path;
         private readonly string zip;
+        private readonly bool silent;
 
         public MainWindow()
         {
             string[] args = Environment.GetCommandLineArgs();
 
-            if (args.Length > 1) if (args[1] == "-silent") silent = true;
+            if (args.Length > 1) if (args[1] == "silent") silent = true;
 
             InitializeComponent();
 
@@ -43,15 +41,9 @@ namespace Ripperoni.Install
         {
             try
             {
-                int expected = 0;
-
-                if (silent) expected = 1;
-
-                while (Process.GetProcessesByName("Ripperoni.exe").Length > expected)
+                while (Process.GetProcessesByName("Ripperoni").Length > 0)
                 {
                     Error("You must close all instances of Ripperoni before installing...", false);
-
-                    System.Threading.Thread.Sleep(100);
                 }
             }
             catch
@@ -63,9 +55,26 @@ namespace Ripperoni.Install
 
             try
             {
+                Stat("Uninstalling current installation...");
+                if (System.IO.File.Exists(path + "Uninstall.exe"))
+                {
+                    Process process = Process.Start(path + "Uninstall.exe", "silent");
+                    process.WaitForExit();
+                }
+
+                Progression(8);
+            }
+            catch
+            {
+                Error("Could not uninstall current installation...", true);
+            }
+
+            try
+            {
                 Stat("Creating temporary directory...");
                 Directory.CreateDirectory(System.IO.Path.GetTempPath() + "KPNCIO");
-                Progression(4);
+
+                Progression(16);
             }
             catch
             {
@@ -76,25 +85,13 @@ namespace Ripperoni.Install
             {
                 Stat("Extracting compressed media...");
                 System.IO.File.WriteAllBytes(zip, Properties.Resources.Release);
-                Progression(16);
+
+                Progression(22);
             }
             catch
             {
                 Error("Could not extract compressed...", true);
             }
-
-            //try
-            //{
-            //    Stat("Uninstalling current installation...");
-            //    Process process = Process.Start(path + "Uninstall.exe");
-            //    process.WaitForExit();
-
-            //    Progression(22);
-            //}
-            //catch
-            //{
-            //    Error("Could not uninstall current installation...", true);
-            //}
 
             try
             {
@@ -113,6 +110,7 @@ namespace Ripperoni.Install
             {
                 Stat("Extracting installation media...");
                 ZipFile.ExtractToDirectory(zip, path);
+
                 Progression(40);
             }
             catch
@@ -124,6 +122,7 @@ namespace Ripperoni.Install
             {
                 Stat("Extracting compressed executable...");
                 System.IO.File.WriteAllBytes(path + "Uninstall.exe", Properties.Resources.Ripperoni_Uninstall);
+
                 Progression(52);
             }
             catch
@@ -149,20 +148,20 @@ namespace Ripperoni.Install
                 Error("Could not add start menu icon...", false);
             }
 
-            try
-            {
-                Stat("Adding uninstall shortcut to start menu...");
-                IWshShortcut shortuninstall = shell.CreateShortcut(start + "Uninstall.lnk");
-                shortuninstall.Description = "KPNC Ripperoni Uninstaller";
-                shortuninstall.IconLocation = path + "Uninstall.exe";
-                shortuninstall.TargetPath = path + "Uninstall.exe";
-                shortuninstall.Save();
-                Progression(76);
-            }
-            catch
-            {
-                Error("Could not add start menu uninstall icon...", false);
-            }
+            //try
+            //{
+            //    Stat("Adding uninstall shortcut to start menu...");
+            //    IWshShortcut shortuninstall = shell.CreateShortcut(start + "Uninstall.lnk");
+            //    shortuninstall.Description = "KPNC Ripperoni Uninstaller";
+            //    shortuninstall.IconLocation = path + "Uninstall.exe";
+            //    shortuninstall.TargetPath = path + "Uninstall.exe";
+            //    shortuninstall.Save();
+            //    Progression(76);
+            //}
+            //catch
+            //{
+            //    Error("Could not add start menu uninstall icon...", false);
+            //}
 
             try
             {
@@ -185,14 +184,19 @@ namespace Ripperoni.Install
                 Stat("Adding application to registry...");
                 long size = new FileInfo(zip).Length / 1024;
                 RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Ripperoni");
-                key.SetValue("DisplayIcon", path + "Uninstall.exe");
+                key.SetValue("DisplayIcon", path + "Uninstall.exe,0");
                 key.SetValue("DisplayName", "KPNC Ripperoni");
-                key.SetValue("EstimatedSize", size.ToString(), RegistryValueKind.DWord);
-                key.SetValue("NoModify", "1", RegistryValueKind.DWord);
-                key.SetValue("NoRepair", "1", RegistryValueKind.DWord);
+                key.SetValue("DisplayVersion", "1.4.1");
+                key.SetValue("EstimatedSize", size, RegistryValueKind.DWord);
+                key.SetValue("HelpLink", "https://github.com/kpncio/ripperoni");
+                key.SetValue("InstallLocation", path);
+                key.SetValue("NoModify", 1, RegistryValueKind.DWord);
+                key.SetValue("NoRepair", 1, RegistryValueKind.DWord);
                 key.SetValue("Publisher", "KPNC Technology");
                 key.SetValue("QuietUninstallString", "\"" + path + "Uninstall.exe" + "\" -silent");
                 key.SetValue("UninstallString", "\"" + path + "Uninstall.exe" + "\"");
+                key.SetValue("URLInfoAbout", "https://github.com/kpncio/ripperoni");
+                key.SetValue("URLUpdateInfo", "https://github.com/kpncio/ripperoni/releases");
                 key.Close();
             }
             catch
@@ -200,9 +204,9 @@ namespace Ripperoni.Install
                 Error("Could not add uninstaller to registry...", false);
             }
 
-            Stat("Cleaning up...");
+            Stat("Installed...");
             Progression(100);
-            System.Threading.Thread.Sleep(1000);
+            System.Threading.Thread.Sleep(2000);
 
             if (!silent)
             {
@@ -288,9 +292,7 @@ namespace Ripperoni.Install
         #region Handle Bar UI...
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var a = new DoubleAnimation(0, TimeSpan.FromSeconds(0.5));
-            a.Completed += (s, _) => Close();
-            BeginAnimation(OpacityProperty, a);
+            Close();
         }
 
         private void DragBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

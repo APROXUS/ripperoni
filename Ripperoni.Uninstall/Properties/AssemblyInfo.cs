@@ -1,18 +1,16 @@
-﻿using System.Reflection;
-using System.Resources;
-using System.Runtime.CompilerServices;
+﻿using System.Windows;
+using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Windows;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Ripperoni.Uninstall")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Ripperoni Uninstaller")]
+[assembly: AssemblyDescription("Uninstaller for the KPNC Ripperoni app...")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Ripperoni.Uninstall")]
-[assembly: AssemblyCopyright("Copyright ©  2022")]
+[assembly: AssemblyCompany("KPNC Technology")]
+[assembly: AssemblyProduct("KPNC Ripperoni Uninstaller")]
+[assembly: AssemblyCopyright("Copyright © KPNC Technology 2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

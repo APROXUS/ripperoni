@@ -1,18 +1,20 @@
-﻿<Window x:Class="Ripperoni.MainWindow" mc:Ignorable="d" Title="KPNC Ripperoni"
+﻿<Window x:Class="Ripperoni.MainWindow" mc:Ignorable="d"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:Ripperoni.MVVM.ViewModel"
-        Height="710" Width="410" WindowStyle="None" ResizeMode="NoResize"
-        Background="Transparent" AllowsTransparency="True" WindowStartupLocation="CenterScreen">
+        Height="710" Width="410" Title="KPNC Ripperoni" WindowStyle="None"
+        ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
 
     <Border Margin="10" Background="#202020" CornerRadius="8">
         <Border.Effect>
-            <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>
+            <DropShadowEffect BlurRadius="15" Direction="-90" ShadowDepth="2"
+                              RenderingBias="Quality"/>
         </Border.Effect>
 
         <Grid>
@@ -24,8 +26,8 @@
                 <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
 
-            <Border Grid.Row="0" MouseLeftButtonDown="DragBar_MouseLeftButtonDown"
-                    CornerRadius="8" x:Name="DragBar" Background="#202020">
+            <Border x:Name="DragBar" Background="#202020" CornerRadius="8"
+                    MouseLeftButtonDown="DragBar_MouseLeftButtonDown">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="35"/>
@@ -34,13 +36,15 @@
                         <ColumnDefinition Width="40"/>
                     </Grid.ColumnDefinitions>
 
-                    <Image Grid.Column="0" Margin="9,4,9,4" Source="Images/Rip.png"/>
+                    <Image Margin="9,4" Source="Images/Rip.png"/>
 
-                    <TextBlock Text="KPNC Ripperoni" Grid.Column="1" FontSize="12" Foreground="White"
-                               VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                    <TextBlock Text="KPNC Ripperoni" Grid.Column="1" Foreground="White"
+                               FontSize="12" HorizontalAlignment="Left"
+                               VerticalAlignment="Center"/>
 
-                    <Button Grid.Column="2" FontFamily="Segoe MDL2 Assets" Click="Button_Click_1"
-                            Content="&#xE108;" BorderThickness="0" Foreground="White">
+                    <Button Content="&#xE108;" Grid.Column="2" Click="Button_Click_1"
+                            Height="25" Foreground="White" BorderThickness="0"
+                            FontFamily="Segoe MDL2 Assets">
                         <Button.Resources>
                             <Style TargetType="{x:Type Button}">
                                 <Setter Property="Background" Value="Transparent"/>
@@ -63,8 +67,9 @@
                         </Button.Resources>
                     </Button>
 
-                    <Button Grid.Column="3" FontFamily="Segoe MDL2 Assets" Content="&#xE10A;" BorderThickness="0" 
-                            Foreground="White" Height="25" VerticalAlignment="Top" Click="Button_Click">
+                    <Button Content="&#xE10A;" Grid.Column="3" Click="Button_Click"
+                            Height="25" Foreground="White" BorderThickness="0"
+                            VerticalAlignment="Top" FontFamily="Segoe MDL2 Assets">
                         <Button.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="0,8,0,0"/>
@@ -93,7 +98,7 @@
                 </Grid>
             </Border>
 
-            <Border Grid.Row="1" BorderBrush="#3D3D3D" BorderThickness="0,1,0,1">
+            <Border Grid.Row="1" BorderThickness="0,1" BorderBrush="#3D3D3D">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -138,16 +143,17 @@
                     </ScrollViewer.Style>
                     
                     <Grid>
-                        <TextBlock Text="There are no currently active downloads..."
-                                   IsHitTestVisible="False" Foreground="White"
-                                   HorizontalAlignment="Center" Margin="10"/>
+                        <TextBlock Text="Currently, there are no active downloads..."
+                                   Margin="10" IsHitTestVisible="False"
+                                   Foreground="White" HorizontalAlignment="Center"/>
 
                         <StackPanel x:Name="Records"></StackPanel>
                     </Grid>
                 </ScrollViewer>
             </Grid>
 
-            <Border Grid.Row="3" BorderBrush="#3D3D3D" BorderThickness="0,1,0,1" Padding="5,0,5,0">
+            <Border Grid.Row="3" Padding="5,0" BorderThickness="0,1"
+                    BorderBrush="#3D3D3D">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -166,7 +172,11 @@
                                 <EventTrigger RoutedEvent="Loaded">
                                     <BeginStoryboard>
                                         <Storyboard>
-                                            <DoubleAnimation To="360" Duration="0:0:1" RepeatBehavior="Forever" Storyboard.TargetProperty="(Image.RenderTransform).(RotateTransform.Angle)"/>
+                                            <DoubleAnimation To="360" Duration="0:0:1"
+                                                             RepeatBehavior="Forever"
+                                                             Storyboard.TargetProperty="
+                                                             (Image.RenderTransform).
+                                                             (RotateTransform.Angle)"/>
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </EventTrigger>
@@ -174,22 +184,24 @@
                         </Image>
                     </Grid>
 
-                    <Border Grid.Column="0" CornerRadius="15" Height="30" Margin="5"
-                            BorderBrush="White" BorderThickness="1" Background="#191919">
+                    <Border Height="30" Grid.Column="0" Margin="5" CornerRadius="15"
+                            BorderThickness="1" BorderBrush="White" Background="#191919">
                         <Grid>
-                            <TextBox Padding="10,0,10,0" VerticalAlignment="Center"
-                                     Foreground="White" BorderThickness="0"
-                                     Background="Transparent" Margin="1"
-                                     x:Name="Input" CaretBrush="White" PreviewKeyDown="Input_PreviewKeyDown"/>
+                            <TextBox x:Name="Input" Margin="1" Padding="10,0"
+                                     Foreground="White" Background="Transparent"
+                                     CaretBrush="White" BorderThickness="0"
+                                     PreviewKeyDown="Input_PreviewKeyDown"
+                                     VerticalAlignment="Center"/>
 
                             <TextBlock Text="Search query or direct link..."
-                                       IsHitTestVisible="False" Margin="13,0,0,0"
-                                       VerticalAlignment="Center" Foreground="#969696"
-                                       HorizontalAlignment="Left">
+                                       Margin="13,0,0,0" Foreground="DarkGray"
+                                       IsHitTestVisible="False" HorizontalAlignment="Left"
+                                       VerticalAlignment="Center">
                                 <TextBlock.Style>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Text, ElementName=Input}" Value="">
+                                            <DataTrigger Binding="{Binding Text, ElementName=Input}"
+                                                         Value="">
                                                 <Setter Property="Visibility" Value="Visible"/>
                                             </DataTrigger>
                                         </Style.Triggers>
@@ -201,10 +213,11 @@
                         </Grid>
                     </Border>
 
-                    <Border Grid.Column="1" CornerRadius="15" Height="30" Margin="5"
-                            BorderBrush="White" BorderThickness="1">
-                        <Button Grid.Column="3" FontFamily="Segoe MDL2 Assets" Background="#191919"
-                                Content="&#xE896;" BorderThickness="0" Foreground="White" Click="Button_Click_2">
+                    <Border Height="30" Grid.Column="1" Margin="5" CornerRadius="15"
+                            BorderThickness="1" BorderBrush="White">
+                        <Button Content="&#xE896;" Grid.Column="3" Foreground="White"
+                                Background="#191919" BorderThickness="0"
+                                Click="Button_Click_2" FontFamily="Segoe MDL2 Assets">
                             <Button.Resources>
                                 <Style TargetType="{x:Type Border}">
                                     <Setter Property="CornerRadius" Value="15"/>
@@ -247,15 +260,15 @@
                            Text="KPNC Ⓒ 2022" MouseDown="TextBlock_MouseDown"/>
 
                 <TextBlock Grid.Column="1" VerticalAlignment="Center" FontSize="10"
-                           HorizontalAlignment="Center" Foreground="#007ACC"
+                           HorizontalAlignment="Center" Style="{StaticResource BlueLink}"
                            Text="Project Website" MouseDown="TextBlock_MouseDown_1"/>
 
                 <TextBlock Grid.Column="2" VerticalAlignment="Center" FontSize="10"
-                           HorizontalAlignment="Center" Foreground="#007ACC"
+                           HorizontalAlignment="Center" Style="{StaticResource BlueLink}"
                            Text="Git Repository" MouseDown="TextBlock_MouseDown_2"/>
 
                 <TextBlock Grid.Column="3" VerticalAlignment="Center" FontSize="10"
-                           HorizontalAlignment="Center" Foreground="#007ACC"
+                           HorizontalAlignment="Center" Style="{StaticResource BlueLink}"
                            Text="Open Output" MouseDown="TextBlock_MouseDown_3"/>
             </Grid>
         </Grid>

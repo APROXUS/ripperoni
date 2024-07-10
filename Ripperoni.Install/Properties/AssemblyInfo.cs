@@ -1,18 +1,16 @@
-﻿using System.Reflection;
-using System.Resources;
-using System.Runtime.CompilerServices;
+﻿using System.Windows;
+using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Windows;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Ripperoni.Install")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Ripperoni Installer")]
+[assembly: AssemblyDescription("Installer for the KPNC Ripperoni app...")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Ripperoni.Install")]
-[assembly: AssemblyCopyright("Copyright ©  2022")]
+[assembly: AssemblyCompany("KPNC Technology")]
+[assembly: AssemblyProduct("KPNC Ripperoni Installer")]
+[assembly: AssemblyCopyright("Copyright © KPNC Technology 2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

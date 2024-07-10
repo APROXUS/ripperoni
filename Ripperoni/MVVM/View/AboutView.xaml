@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="Ripperoni.MVVM.View.AboutView" xml:space="preserve"
+﻿<UserControl x:Class="Ripperoni.MVVM.View.AboutView" mc:Ignorable="d"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             mc:Ignorable="d" d:DesignHeight="555" d:DesignWidth="400">
+             d:DesignHeight="555" d:DesignWidth="400" xml:space="preserve">
     <Grid>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -12,76 +12,75 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Margin="10">
-                <Image Source="/Images/Ripperoni.png" Margin="5">
+                <Image Margin="5" Source="/Images/Ripperoni.png">
                     <Image.Effect>
                         <DropShadowEffect/>
                     </Image.Effect>
                 </Image>
-                <Image Source="/Images/Newtonsoft.png" Margin="5">
+                <Image Margin="5" Source="/Images/Newtonsoft.png">
                     <Image.Effect>
                         <DropShadowEffect/>
                     </Image.Effect>
                 </Image>
-                <Image Source="/Images/WebP.png" Margin="5">
+                <Image Margin="5" Source="/Images/Downloader.png">
                     <Image.Effect>
                         <DropShadowEffect/>
                     </Image.Effect>
                 </Image>
-                <Image Source="/Images/YoutubeDL.png" Margin="5">
+                <Image Margin="5" Source="/Images/WebP.png">
                     <Image.Effect>
                         <DropShadowEffect/>
                     </Image.Effect>
                 </Image>
-                <Image Source="/Images/YTDLP.png" Margin="5">
+                <Image Margin="5" Source="/Images/YoutubeDL.png">
                     <Image.Effect>
                         <DropShadowEffect/>
                     </Image.Effect>
                 </Image>
-                <Image Source="/Images/Downloader.png" Margin="5">
+                <Image Margin="5" Source="/Images/Javi.png">
                     <Image.Effect>
                         <DropShadowEffect/>
                     </Image.Effect>
                 </Image>
-                <Image Source="/Images/Javi.png" Margin="5">
+                <Image Margin="5" Source="/Images/YTDLP.png">
                     <Image.Effect>
                         <DropShadowEffect/>
                     </Image.Effect>
                 </Image>
             </StackPanel>
 
-            <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="1">
+            <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
                 <StackPanel Margin="10">
-                    <TextBlock Background="Transparent" Foreground="White" x:Name="Handle" FontWeight="Bold"
-                               TextAlignment="Justify" TextWrapping="Wrap" Margin="0,5,0,5">KPNC Technology: Ripperoni:
-                               </TextBlock>
+                    <TextBlock x:Name="Handle" Margin="0,5" Foreground="White" Background="Transparent"
+                               TextAlignment="Justify" TextWrapping="Wrap" FontWeight="Bold"
+                               >KPNC Technology: Ripperoni:</TextBlock>
 
-                    <TextBlock Background="Transparent" Foreground="White"
-                               TextAlignment="Justify" TextWrapping="Wrap" Margin="0,5,0,5"><Bold>About:</Bold> Ripperoni is an open source project that aims to download online media (mainly from YouTube) quickly. While it mainly serves to download media, it also includes many quality-of-life functionalities.</TextBlock>
-
-                    <TextBlock Background="Transparent" Foreground="White"
-                               TextAlignment="Justify" TextWrapping="Wrap" Margin="0,5,0,5"><Bold>Introduction:</Bold> There are four main tabs. In the “Downloads” tab you can see the progress of media being downloaded. In the “Properties” tab you can change the default output folder, the preferred format, and the preferred resolution. In the “Settings” tab you can tune downloader options like temporary file folder, enable memory caching, maximum transfer speed, timeout delay, concurrent threads, reattempts before hard fail, and buffer size. You may also find other custom solutions for fixes with network problems such as those within the Charter Communication network. In the “About” tab you will find this message along with the links to the open source projects used in this application. The lower interface includes the text box where you can input a direct link by clicking the download button or search keywords that will be queried through YouTube Search by clicking the search button. Finally, you may find useful links in the application's footer.</TextBlock> 
-
-                    <TextBlock Background="Transparent" Foreground="White"
-                               TextAlignment="Justify" TextWrapping="Wrap" Margin="0,5,0,5"><Bold>Further Information:</Bold> For bug reports, feature requests, documentation, and/or contact information, please check out the project’s repository below...</TextBlock>
-
+                    <TextBlock Margin="0,10" Foreground="White" Background="Transparent" TextAlignment="Justify" TextWrapping="Wrap"
+                               ><Bold>About:</Bold> Ripperoni is an online media downloader featuring a plethora of formats and useful utilities. Ripperoni supports five popular video containers, along with, five common audio formats. Ripperoni does not currently support specific encoding and compression; however, there are plans for basic reencoding and compression through FFmpeg (which is already used by Ripperoni). There are also plans to automatically tag music, as well as, parse YouTube and Spotify playlists.</TextBlock>
+                    
+                    <TextBlock Margin="0,10" Foreground="White" Background="Transparent" TextAlignment="Justify" TextWrapping="Wrap"
+                               ><Bold>Introduction:</Bold> There are four main tabs. In the "Downloads" tab, you can see the progress of media being downloaded. In the "Properties" tab, you can change the default output folder, the output format, and the preferred resolution. In the "Settings" tab, you can tune Downloader options like the temporary folder location, in-memory caching, maximum transfer speed, timeout delay, concurrent threads, reattempts before fail, and buffer size. In the "Settings" tab, you will also find FFmpeg options to tune like the CRF value used. More information about Downloader and FFmpeg can be found linked below. In the "About" tab, you will find this message along with links to other projects utilized in this application. In the lower interface, you will find a textbox that accepts both direct links to YouTube content and YouTube search queries (any non-URL string will open a searchbox). Finally, in the footer, you will find a link to Ripperoni's website, repository, and configured output folder.</TextBlock>
+                    
+                    <TextBlock Margin="0,10" Foreground="White" Background="Transparent" TextAlignment="Justify" TextWrapping="Wrap"
+                               ><Bold>More Information:</Bold> For bug reports, feature requests, documentation, and/or other information, please check out the project’s repository...</TextBlock>
+                    
                     <Label />
-                    <Label Foreground="#007ACC" Content="James Newton-King: Newtonsoft.JSON"
-                           x:Name="n" MouseDown="N_MouseDown"/>
-                    <Label Foreground="#007ACC" Content="Behzad Khosravifar: Downloader"
-                           x:Name="d" MouseDown="D_MouseDown"/>
-                    <Label Foreground="#007ACC" Content="Jose M. Piñeiro: WebPWrapper"
-                           x:Name="w" MouseDown="W_MouseDown"/>
-                    <Label Foreground="#007ACC" Content="Bluegrams: YoutubeDLSharp"
-                           x:Name="y" MouseDown="Y_MouseDown"/>
-                    <Label Foreground="#007ACC" Content="Jaco Vis: Javi.FFmpeg"
-                           x:Name="j" MouseDown="J_MouseDown"/>
-                    <Label Foreground="#007ACC" Content="FFmpeg: FFmpeg"
-                           x:Name="f" MouseDown="F_MouseDown"/>
-                    <Label Foreground="#007ACC" Content="YT-DLP: YT-DLP"
-                           x:Name="p" MouseDown="P_MouseDown"/>
+                    <TextBlock x:Name="n" Text="James Newton-King: Newtonsoft.JSON" Margin="0,5"
+                               MouseDown="N_MouseDown" Style="{StaticResource BlueLink}"/>
+                    <TextBlock x:Name="d" Text="Behzad Khosravifar: Downloader" Margin="0,5"
+                               MouseDown="D_MouseDown" Style="{StaticResource BlueLink}"/>
+                    <TextBlock x:Name="w" Text="Jose M. Piñeiro: WebPWrapper" Margin="0,5"
+                               MouseDown="W_MouseDown" Style="{StaticResource BlueLink}"/>
+                    <TextBlock x:Name="y" Text="Bluegrams: YoutubeDLSharp" Margin="0,5"
+                               MouseDown="Y_MouseDown" Style="{StaticResource BlueLink}"/>
+                    <TextBlock x:Name="j" Text="Jaco Vis: Javi.FFmpeg" Margin="0,5"
+                               MouseDown="J_MouseDown" Style="{StaticResource BlueLink}"/>
+                    <TextBlock x:Name="f" Text="FFmpeg: FFmpeg" Margin="0,5"
+                               MouseDown="F_MouseDown" Style="{StaticResource BlueLink}"/>
+                    <TextBlock x:Name="p" Text="YT-DLP: YT-DLP" Margin="0,5"
+                               MouseDown="P_MouseDown" Style="{StaticResource BlueLink}"/>
                 </StackPanel>
             </ScrollViewer>
         </Grid>
     </Grid>
 </UserControl>
-

@@ -3,12 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        Title="Search Results" Height="480" Width="360" WindowStyle="None"
-        ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True"
-        Icon="Images/Info.png" WindowStartupLocation="CenterOwner">
+        Height="480" Width="360" Title="Search Results" Icon="Images/Info.png"
+        WindowStyle="None" ResizeMode="NoResize" Background="Transparent"
+        AllowsTransparency="True" WindowStartupLocation="CenterOwner">
     <Border Margin="10" Background="#202020" CornerRadius="8">
         <Border.Effect>
-            <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>
+            <DropShadowEffect BlurRadius="15" Direction="-90" ShadowDepth="2"
+                              RenderingBias="Quality"/>
         </Border.Effect>
 
         <Grid>
@@ -18,20 +19,21 @@
                 <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
 
-            <Border Grid.Row="0" x:Name="DragBar" Background="#202020"
-                    MouseLeftButtonDown="DragBar_MouseLeftButtonDown" CornerRadius="8">
+            <Border x:Name="DragBar" Background="#202020" CornerRadius="8"
+                    MouseLeftButtonDown="DragBar_MouseLeftButtonDown">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="40"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="Search Results" Margin="10,0,0,0" VerticalAlignment="Center"
-                               FontSize="12" HorizontalAlignment="Left" Foreground="White"/>
+                    <TextBlock Text="Search Results" Margin="10,0,0,0" Foreground="White"
+                               FontSize="12" HorizontalAlignment="Left"
+                               VerticalAlignment="Center"/>
 
-                    <Button Grid.Column="1" FontFamily="Segoe MDL2 Assets" Content="&#xE10A;"
-                            BorderThickness="0" Foreground="White" VerticalAlignment="Top"
-                            Height="25" Click="Button_Click">
+                    <Button Height="25" Content="&#xE10A;" Click="Button_Click" Grid.Column="1"
+                            Foreground="White" BorderThickness="0" VerticalAlignment="Top"
+                            FontFamily="Segoe MDL2 Assets">
                         <Button.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="0,8,0,0"/>
@@ -39,6 +41,7 @@
 
                             <Style TargetType="{x:Type Button}">
                                 <Setter Property="Background" Value="Transparent"/>
+                                
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="{x:Type Button}">
@@ -49,6 +52,7 @@
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
+                                
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter Property="Background" Value="Red"/>
@@ -66,8 +70,10 @@
 
                     <ScrollViewer Background="#202020" VerticalScrollBarVisibility="Auto">
                         <Grid>
-                            <TextBlock Text="No videos found in search..." IsHitTestVisible="False"
-                                       Foreground="White" HorizontalAlignment="Center" Margin="10"/>
+                            <TextBlock Foreground="White" Margin="10" IsHitTestVisible="False"
+                                       HorizontalAlignment="Center">
+                                No videos found in search...
+                            </TextBlock>
 
                             <StackPanel x:Name="Results"></StackPanel>
                         </Grid>
@@ -75,8 +81,11 @@
                 </Grid>
             </Border>
 
-            <TextBlock Grid.Row="2" VerticalAlignment="Center" FontSize="10" HorizontalAlignment="Center"
-                       Foreground="#007ACC" Text="View this query on YouTube.com" MouseDown="TextBlock_MouseDown"/>
+            <TextBlock Grid.Row="2" Style="{StaticResource BlueLink}" FontSize="10"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                       MouseDown="TextBlock_MouseDown">
+                View this query on YouTube.com
+            </TextBlock>
         </Grid>
     </Border>
 </Window>

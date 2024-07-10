@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Windows.Input;
 using System.Windows.Forms;
 using System.Threading.Tasks;
-using System.Windows.Media.Animation;
 
 using Microsoft.Win32;
 
@@ -13,26 +12,25 @@ namespace Ripperoni.Uninstall
 {
     public partial class MainWindow : Window
     {
-        private readonly bool silent;
-
         private readonly string start;
         private readonly string real;
         private readonly string path;
         private readonly string temp;
+        private readonly bool silent;
 
         public MainWindow()
         {
             string[] args = Environment.GetCommandLineArgs();
 
-            if (args.Length > 1) if (args[1] == "-silent") silent = true;
+            if (args.Length > 1) if (args[1] == "silent") silent = true;
 
             InitializeComponent();
 
             if (silent) Opacity = 0;
 
+            temp = Path.GetTempPath() + @"KPNCIO\";
             real = AppDomain.CurrentDomain.BaseDirectory;
             path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\KPNCIO\Ripperoni\";
-            temp = Path.GetTempPath() + @"KPNCIO\";
             start = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Microsoft\Windows\Start Menu\Programs\KPNCIO\";
 
             Task.Factory.StartNew(() => Uninstallation());
@@ -40,6 +38,20 @@ namespace Ripperoni.Uninstall
 
         private void Uninstallation()
         {
+            try
+            {
+                while (Process.GetProcessesByName("Ripperoni").Length > 0)
+                {
+                    Error("You must close all instances of Ripperoni before uninstalling...", false);
+                }
+            }
+            catch
+            {
+                Error("Could not determine if Ripperoni is running...", false);
+            }
+
+            Progression(0);
+
             try
             {
                 if (real == path)
@@ -61,22 +73,9 @@ namespace Ripperoni.Uninstall
 
             try
             {
-                while (Process.GetProcessesByName("Ripperoni").Length > 0)
-                {
-                    Error("You must close all instances of Ripperoni before installing...", false);
-                }
-            }
-            catch
-            {
-                Error("Could not determine if Ripperoni is running...", false);
-            }
-
-            Progression(0);
-
-            try
-            {
                 Stat("Deleting installation directory...");
                 if (Directory.Exists(path)) Directory.Delete(path, true);
+
                 Progression(20);
             }
             catch
@@ -88,6 +87,7 @@ namespace Ripperoni.Uninstall
             {
                 Stat("Removing shortcut from start menu...");
                 File.Delete(start + "Ripperoni.lnk");
+
                 Progression(40);
             }
             catch
@@ -99,6 +99,7 @@ namespace Ripperoni.Uninstall
             {
                 Stat("Removing uninstall shortcut from start menu...");
                 File.Delete(start + "Uninstall.lnk");
+
                 Progression(60);
             }
             catch
@@ -111,6 +112,7 @@ namespace Ripperoni.Uninstall
                 Stat("Removing shortcut from desktop...");
                 string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\Ripperoni.lnk";
                 File.Delete(desktop);
+
                 Progression(80);
             }
             catch
@@ -138,8 +140,9 @@ namespace Ripperoni.Uninstall
                 Error("Could not remove uninstaller from registry...", false);
             }
 
-            Stat("Cleaning up...");
+            Stat("Uninstalled...");
             Progression(100);
+            System.Threading.Thread.Sleep(2000);
 
             Dispatcher.Invoke(delegate ()
             {
@@ -162,7 +165,7 @@ namespace Ripperoni.Uninstall
                 if (f) i = MessageBoxIcon.Error;
                 else i = MessageBoxIcon.Warning;
 
-                System.Windows.Forms.MessageBox.Show(m, "Error!", MessageBoxButtons.OK, i);
+                if (!silent) System.Windows.Forms.MessageBox.Show(m, "Error", MessageBoxButtons.OK, i);
 
                 if (f) Close();
 
@@ -212,9 +215,7 @@ namespace Ripperoni.Uninstall
         #region Handle Bar UI...
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var a = new DoubleAnimation(0, TimeSpan.FromSeconds(0.5));
-            a.Completed += (s, _) => Close();
-            BeginAnimation(OpacityProperty, a);
+            Close();
         }
 
         private void DragBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

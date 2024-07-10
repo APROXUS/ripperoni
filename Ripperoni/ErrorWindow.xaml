@@ -3,12 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        Title="Error" Height="200" Width="360" WindowStyle="None"
+        Height="200" Width="360" Title="Error" Icon="Images/Error.png" WindowStyle="None"
         ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True"
-        Icon="Images/Error.png" Topmost="True" WindowStartupLocation="CenterOwner">
+        Topmost="True" WindowStartupLocation="CenterOwner">
     <Border Margin="10" Background="#202020" CornerRadius="8">
         <Border.Effect>
-            <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>
+            <DropShadowEffect BlurRadius="15" Direction="-90" ShadowDepth="2"
+                              RenderingBias="Quality"/>
         </Border.Effect>
 
         <Grid>
@@ -18,19 +19,21 @@
                 <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
 
-            <Border Grid.Row="0" x:Name="DragBar" Background="#202020"
-                    MouseLeftButtonDown="DragBar_MouseLeftButtonDown" CornerRadius="8">
+            <Border x:Name="DragBar" Background="#202020" CornerRadius="8"
+                    MouseLeftButtonDown="DragBar_MouseLeftButtonDown">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="40"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="Error" Margin="10,0,0,0" x:Name="Titled" FontSize="12" Foreground="White"
-                               VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                    <TextBlock x:Name="Titled" Text="Error" Margin="10,0,0,0" Foreground="White"
+                               FontSize="12" HorizontalAlignment="Left"
+                               VerticalAlignment="Center"/>
 
-                    <Button Grid.Column="1" FontFamily="Segoe MDL2 Assets" Content="&#xE10A;" Height="25"
-                            BorderThickness="0" Foreground="White" VerticalAlignment="Top" Click="Button_Click">
+                    <Button Height="25" Content="&#xE10A;" Click="Button_Click" Grid.Column="1"
+                            Foreground="White" BorderThickness="0" VerticalAlignment="Top"
+                            FontFamily="Segoe MDL2 Assets"> 
                         <Button.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="0,8,0,0"/>
@@ -38,18 +41,18 @@
 
                             <Style TargetType="{x:Type Button}">
                                 <Setter Property="Background" Value="Transparent"/>
-                                
+
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="{x:Type Button}">
                                             <Border Background="{TemplateBinding Background}">
                                                 <ContentPresenter HorizontalAlignment="Center"
-                                                                  VerticalAlignment="Center"/>
+                                                      VerticalAlignment="Center"/>
                                             </Border>
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
-                                
+
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter Property="Background" Value="Red"/>
@@ -61,23 +64,27 @@
                 </Grid>
             </Border>
 
-            <Border Grid.Row="1" BorderBrush="#3D3D3D" BorderThickness="0,1,0,1">
+            <Border Grid.Row="1" BorderThickness="0,1" BorderBrush="#3D3D3D">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="3*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Image Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center"
-                           Source="/Images/Info.png" x:Name="Fatal"/>
+                    <Image x:Name="Fatal" Margin="10" Source="/Images/Info.png"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-                    <TextBlock Foreground="White" TextAlignment="Left" Margin="10" VerticalAlignment="Center"
-                               Text="There was an error..." Grid.Column="1" x:Name="Message"/>
+                    <TextBlock x:Name="Message" Text="There was an error..."
+                               Grid.Column="1" Margin="10" Foreground="White"
+                               TextAlignment="Left" VerticalAlignment="Center"/>
                 </Grid>
             </Border>
 
-            <TextBlock Grid.Row="2" VerticalAlignment="Center" FontSize="10" HorizontalAlignment="Center"
-                       Foreground="#007ACC" Text="Repeatable bug? Report issue on Github..." MouseDown="TextBlock_MouseDown"/>
+            <TextBlock Grid.Row="2" Foreground="#007ACC" FontSize="10"
+                       MouseDown="TextBlock_MouseDown" HorizontalAlignment="Center"
+                       VerticalAlignment="Center">
+                Repeatable bug? Report issue on Github..."
+            </TextBlock>
         </Grid>
     </Border>
 </Window>

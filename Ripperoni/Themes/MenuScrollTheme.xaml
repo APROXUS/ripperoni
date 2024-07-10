@@ -4,18 +4,18 @@
             <Setter.Value>
                 <ControlTemplate>
                     <Grid x:Name="Grid">
-                        <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" 
-                                           Height="Auto" Fill="Transparent"/>
-                        
-                        <Border x:Name="Rectangle1" CornerRadius="2" HorizontalAlignment="Stretch" 
-                                        VerticalAlignment="Stretch" Width="Auto" Height="Auto"
-                                        Background="{TemplateBinding Background}" Margin="0,5,0,5"/>
+                        <Rectangle Height="Auto" Width="Auto" Fill="Transparent"
+                                   HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+
+                        <Border x:Name="Rectangle" Width="Auto" Height="Auto" Margin="0,5"
+                                CornerRadius="2" Background="{TemplateBinding Background}"
+                                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                     </Grid>
+                    
                     <ControlTemplate.Triggers>
                         <Trigger Property="Tag" Value="Horizontal">
-                            <Setter TargetName="Rectangle1" Property="Width" Value="Auto"/>
-                            
-                            <Setter TargetName="Rectangle1" Property="Height" Value="5"/>
+                            <Setter TargetName="Rectangle" Property="Height" Value="5"/>
+                            <Setter TargetName="Rectangle" Property="Width" Value="Auto"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -74,13 +74,9 @@
                             </Setter>
                             
                             <Setter Property="Width" Value="Auto"/>
-                            
                             <Setter Property="Height" Value="12"/>
-                            
                             <Setter TargetName="Thumb" Property="Tag" Value="Horizontal"/>
-                            
                             <Setter TargetName="PageDown" Property="Command" Value="ScrollBar.PageLeftCommand"/>
-                            
                             <Setter TargetName="PageUp" Property="Command" Value="ScrollBar.PageRightCommand"/>
                         </Trigger>
                     </ControlTemplate.Triggers>

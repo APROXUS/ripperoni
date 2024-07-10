@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace Ripperoni.MVVM.View
 {
@@ -21,27 +19,6 @@ namespace Ripperoni.MVVM.View
             BufferText.Text = Globals.Buffer.ToString();
             QualityText.Text = Globals.Quality.ToString();
         }
-
-        #region Firewall Fix UI...
-        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            // Try running firewall configuration script (Firewall.bat) as admin...
-
-            try
-            {
-                ProcessStartInfo psi = new ProcessStartInfo
-                {
-                    FileName = "Firewall.bat",
-                    Verb = "runas"
-                };
-                Process.Start(psi);
-            }
-            catch (Exception ex)
-            {
-                Utilities.Error("Could not run batch script as administrator...", "Executable Error", "021", false, ex);
-            }
-        }
-        #endregion
 
         #region Temperary Folder UI...
         private void TempText_TextChanged(object sender, TextChangedEventArgs e)

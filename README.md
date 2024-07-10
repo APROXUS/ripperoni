@@ -1,5 +1,5 @@
 # Ripperoni
 
-*(MAUI, YT-DLP, FFmpeg)*
+*(WPF, YT-DLP, FFmpeg)*
 
-KPNC Technology: Ripperoni is an online media downloader supporting a pethora of formats and useful features...
+KPNC Technology: Ripperoni is an online media downloader featuring a plethora of formats and useful utilities...

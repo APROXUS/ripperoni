@@ -3,7 +3,6 @@ using System.IO;
 using System.Net;
 using System.Linq;
 using System.Threading;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -133,21 +132,21 @@ namespace Ripperoni.MVVM.View
 
                 DownloadConfiguration DownloadOption = new DownloadConfiguration()
                 {
-                    BufferBlockSize = Globals.Buffer,
-                    ChunkCount = Globals.Chunks,
                     MaximumBytesPerSecond = Globals.Bytes,
                     MaxTryAgainOnFailover = Globals.Tries,
-                    ParallelDownload = true,
+                    BufferBlockSize = Globals.Buffer,
+                    ChunkCount = Globals.Chunks,
                     Timeout = Globals.Timeout,
+                    ParallelDownload = true,
                     RequestConfiguration = {
-                        Accept = "*/*",
+                        UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
                         AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
                         CookieContainer =  new CookieContainer(),
-                        Headers = new WebHeaderCollection(),
-                        KeepAlive = false,
                         ProtocolVersion = HttpVersion.Version11,
+                        Headers = new WebHeaderCollection(),
                         UseDefaultCredentials = false,
-                        UserAgent = $"DownloaderSample/{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}"
+                        KeepAlive = false,
+                        Accept = "*/*"
                     }
                 };
 
@@ -282,7 +281,7 @@ namespace Ripperoni.MVVM.View
                 #region Get Base...
                 // Download the base requested media...
 
-                temp = Globals.Temp + "\\" + video.getTitle() + "." + epoch1 + "." + formatraw;
+                temp = $"{Globals.Temp}\\{video.getTitle()}.{epoch1}.{formatraw}";
 
                 size = FileSize(new Uri(url));
 
@@ -337,8 +336,7 @@ namespace Ripperoni.MVVM.View
 
                     url = record.Url;
 
-                    temp = Globals.Temp + "\\" + video.getTitle() + "." + epoch1 + ".m4a";
-
+                    temp = $"{Globals.Temp}\\{video.getTitle()}.{epoch1}.m4a";
                     size = FileSize(new Uri(url));
 
                     Json.Read();
@@ -372,7 +370,7 @@ namespace Ripperoni.MVVM.View
                     token.ThrowIfCancellationRequested();
                 }
 
-                final = Globals.Temp + "\\" + video.getTitle() + "." + epoch1 + "." + formatraw;
+                final = $"{Globals.Temp}\\{video.getTitle()}.{epoch1}.{formatraw}";
 
                 if (formatraw != format || !audio)
                 {
@@ -397,7 +395,7 @@ namespace Ripperoni.MVVM.View
                     {
                         // If media need multiplexing then multiplex...
 
-                        file2 = Globals.Temp + "\\" + video.getTitle() + "." + epoch1 + ".m4a";
+                        file2 = $"{Globals.Temp}\\{video.getTitle()}.{epoch1}.m4a";
 
                         Dispatcher.Invoke(delegate ()
                         {
@@ -406,7 +404,7 @@ namespace Ripperoni.MVVM.View
 
                         processing = true;
 
-                        final = Globals.Temp + "\\" + video.getTitle() + "." + epoch2 + "." + formatraw;
+                        final = $"{Globals.Temp}\\{video.getTitle()}.{epoch2}.{formatraw}";
 
                         Task.Factory.StartNew(() => GetMultiplex());
 
@@ -433,8 +431,7 @@ namespace Ripperoni.MVVM.View
 
                         file1 = final;
 
-                        final = Globals.Temp + "\\" + video.getTitle() + "." + epoch2 + "." + format;
-
+                        final = $"{Globals.Temp}\\{video.getTitle()}.{epoch2}.{format}";
                         Task.Factory.StartNew(() => GetConvert());
 
                         while (processing)
@@ -461,10 +458,23 @@ namespace Ripperoni.MVVM.View
                 {
                     // Move final files to the output directory...
 
-                    string outputted = output + "\\" + video.getTitle() + "." + format;
-
-                    File.Delete(outputted);
-                    File.Move(final, outputted);
+                    int attempt = 1;
+                    bool completed = false;
+                    string outputted = $"{output}\\{video.getTitle()}.{format}";
+                    
+                    while (!completed)
+                    {
+                        try
+                        {
+                            File.Move(final, outputted);
+                            completed = true;
+                        }
+                        catch
+                        {
+                            outputted = $"{output}\\{video.getTitle()} ({attempt}).{format}";
+                            attempt++;
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -477,10 +487,10 @@ namespace Ripperoni.MVVM.View
                 {
                     // Deleted all created temperary files...
 
-                    File.Delete(Globals.Temp + "\\" + video.getTitle() + "." + epoch1 + "." + formatraw);
-                    File.Delete(Globals.Temp + "\\" + video.getTitle() + "." + epoch1 + ".m4a");
-                    File.Delete(Globals.Temp + "\\" + video.getTitle() + "." + epoch2 + "." + formatraw);
-                    File.Delete(Globals.Temp + "\\" + video.getTitle() + "." + epoch2 + "." + format);
+                    File.Delete($"{Globals.Temp}\\{video.getTitle()}.{epoch1}.{formatraw}");
+                    File.Delete($"{Globals.Temp}\\{video.getTitle()}.{epoch1}.m4a");
+                    File.Delete($"{Globals.Temp}\\{video.getTitle()}.{epoch2}.{formatraw}");
+                    File.Delete($"{Globals.Temp}\\{video.getTitle()}.{epoch2}.{format}");
                 }
                 catch (Exception ex)
                 {

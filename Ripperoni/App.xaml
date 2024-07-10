@@ -9,6 +9,7 @@
                 <ResourceDictionary Source="Themes/MenuButtonTheme.xaml"/>
                 <ResourceDictionary Source="Themes/MenuScrollTheme.xaml"/>
                 <ResourceDictionary Source="Themes/MenuBorderTheme.xaml"/>
+                <ResourceDictionary Source="Themes/MenuLinkTheme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate DataType="{x:Type vm:PropertiesViewModel}">

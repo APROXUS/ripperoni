@@ -1,15 +1,16 @@
-﻿<Window x:Class="Ripperoni.Install.MainWindow"
+﻿<Window x:Class="Ripperoni.Install.MainWindow" mc:Ignorable="d"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Ripperoni.Install" mc:Ignorable="d"
-        Title="Ripperoni Setup" Height="110" Width="410" WindowStyle="None" WindowStartupLocation="CenterScreen"
-        ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True" Topmost="True">
+        xmlns:local="clr-namespace:Ripperoni.Install"
+        Height="110" Width="410" Title="Ripperoni Setup" WindowStyle="None"
+        ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True" 
+        WindowStartupLocation="CenterScreen" Topmost="True">
     <Border Margin="10" Background="#202020" CornerRadius="8">
         <Border.Effect>
-            <DropShadowEffect BlurRadius="15" Direction="-90"
-                              RenderingBias="Quality" ShadowDepth="2"/>
+            <DropShadowEffect BlurRadius="15" Direction="-90" ShadowDepth="2"
+                              RenderingBias="Quality"/>
         </Border.Effect>
 
         <Grid>
@@ -18,8 +19,8 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <Border Grid.Row="0" x:Name="DragBar" Background="#202020"
-                    MouseLeftButtonDown="DragBar_MouseLeftButtonDown" CornerRadius="8">
+            <Border x:Name="DragBar" Background="#202020" CornerRadius="8"
+                    MouseLeftButtonDown="DragBar_MouseLeftButtonDown">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="35"/>
@@ -27,15 +28,16 @@
                         <ColumnDefinition Width="40"/>
                     </Grid.ColumnDefinitions>
 
-                    <Image Grid.Column="0" Margin="9,4,9,4" Source="/Ripperoni.ico"/>
+                    <Image Margin="9,4" Source="/Ripperoni.ico"/>
 
                     <TextBlock Text="KPNC Ripperoni Installer" Grid.Column="1"
-                           VerticalAlignment="Center" FontSize="12"
-                           HorizontalAlignment="Left" Foreground="White"/>
+                               Foreground="White" FontSize="12"
+                               VerticalAlignment="Center"/>
 
-                    <Button Grid.Column="3" FontFamily="Segoe MDL2 Assets"
-                            Content="&#xE10A;" BorderThickness="0" Foreground="White"
-                            Height="25" VerticalAlignment="Top" Click="Button_Click">
+                    <Button Height="25" Content="&#xE10A;" Grid.Column="3"
+                            Foreground="White" BorderThickness="0"
+                            Click="Button_Click" VerticalAlignment="Top"
+                            FontFamily="Segoe MDL2 Assets">
                         <Button.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="0,8,0,0"/>
@@ -48,7 +50,7 @@
                                         <ControlTemplate TargetType="{x:Type Button}">
                                             <Border Background="{TemplateBinding Background}">
                                                 <ContentPresenter HorizontalAlignment="Center"
-                                                              VerticalAlignment="Center"/>
+                                                                  VerticalAlignment="Center"/>
                                             </Border>
                                         </ControlTemplate>
                                     </Setter.Value>
@@ -64,13 +66,13 @@
                 </Grid>
             </Border>
 
-            <Border Grid.Row="1" BorderBrush="#3D3D3D" BorderThickness="0,1,0,0">
+            <Border Grid.Row="1" BorderThickness="0,1,0,0" BorderBrush="#3D3D3D">
                 <StackPanel>
-                    <TextBlock x:Name="Status" Text="Starting..." Foreground="White"
-                               TextAlignment="Center" Margin="10"/>
+                    <TextBlock x:Name="Status" Text="Starting..." Margin="10"
+                               Foreground="White" TextAlignment="Center"/>
 
-                    <ProgressBar x:Name="Progress" Height="5" Margin="20,5,20,5"
-                                 VerticalAlignment="Center" IsIndeterminate="True"/>
+                    <ProgressBar x:Name="Progress" Height="5" Margin="20,5"
+                                 IsIndeterminate="True" VerticalAlignment="Center"/>
                 </StackPanel>
             </Border>
         </Grid>

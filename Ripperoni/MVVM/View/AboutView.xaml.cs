@@ -23,14 +23,9 @@ namespace Ripperoni.MVVM.View
         #region Packages, Repositories, Licenses...
         // Link handlers...
 
-        private void Y_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void N_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Process.Start("https://github.com/Bluegrams/YoutubeDLSharp");
-        }
-
-        private void W_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            Process.Start("https://github.com/JosePineiro/WebP-wrapper");
+            Process.Start("https://github.com/JamesNK/Newtonsoft.Json");
         }
 
         private void D_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -38,24 +33,18 @@ namespace Ripperoni.MVVM.View
             Process.Start("https://github.com/bezzad/Downloader");
         }
 
+        private void W_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Process.Start("https://github.com/JosePineiro/WebP-wrapper");
+        }
+
+        private void Y_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Process.Start("https://github.com/Bluegrams/YoutubeDLSharp");
+        }
         private void J_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Process.Start("https://github.com/jacovis/Javi.FFmpeg");
-        }
-
-        private void N_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            Process.Start("https://github.com/JamesNK/Newtonsoft.Json");
-        }
-
-        private void E_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            Process.Start("https://github.com/tonerdo/dotnet-env");
-        }
-
-        private void G_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            Process.Start("https://github.com/googleapis/google-api-dotnet-client");
         }
 
         private void F_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)

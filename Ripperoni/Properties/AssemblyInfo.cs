@@ -1,13 +1,13 @@
-﻿using System.Reflection;
+﻿using System.Windows;
+using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Windows;
 
 [assembly: AssemblyTitle("Ripperoni")]
-[assembly: AssemblyDescription("Download online media quickly with ease")]
+[assembly: AssemblyDescription("An online media downloader supporting a plethora of formats and useful features...")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("KPNC Technology")]
 [assembly: AssemblyProduct("KPNC Ripperoni")]
-[assembly: AssemblyCopyright("Copyright © KPNC 2022")]
+[assembly: AssemblyCopyright("Copyright © KPNC Technology 2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -15,5 +15,5 @@ using System.Windows;
 
 [assembly: ThemeInfo(ResourceDictionaryLocation.None, ResourceDictionaryLocation.SourceAssembly)]
 
-[assembly: AssemblyVersion("1.3.7.*")]
+[assembly: AssemblyVersion("1.4.1.*")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
